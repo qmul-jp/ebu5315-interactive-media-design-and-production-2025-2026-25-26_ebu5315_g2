@@ -10,4 +10,4 @@ Guanqiao Li, 2024213586, 241118234, jp2024213586@qmul.ac.uk
 
 Yubo Sun, 2024213612, 241118432, jp2024213612@qmul.ac.uk
 
-Bingyao Lu, unknown, unknown, unknown
+Bingyao Lu, 2023213509, 231224804, jp2023213509@qmul.ac.uk
