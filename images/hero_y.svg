@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <rect width="800" height="500" fill="#eef4ff"/>
+  <circle cx="300" cy="250" r="150" fill="none" stroke="#0d3273" stroke-width="9"/>
+  <line x1="300" y1="250" x2="430" y2="135" stroke="#4471c2" stroke-width="7"/>
+  <line x1="430" y1="135" x2="430" y2="350" stroke="#0d3273" stroke-width="7"/>
+  <text x="470" y="246" font-size="36" fill="#0d3273" font-family="Trebuchet MS">90° check</text>
+  <text x="80" y="440" font-size="34" fill="#4471c2" font-family="Trebuchet MS">Practice first, then verify</text>
+</svg>
