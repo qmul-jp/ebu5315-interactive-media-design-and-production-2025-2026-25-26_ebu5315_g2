@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Circle Geometry Studio - Game</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="doc_page">
+  <div class="doc_container">
+    <div class="doc_top_bar"></div>
+    <div class="doc_layout">
+      <aside class="doc_sidebar">
+        <a href="index.html" class="doc_nav_item">Home / 首页</a>
+        <a href="game.html" class="doc_nav_item active">Game / 游戏</a>
+        <a href="quiz.html" class="doc_nav_item">Quiz / 测验</a>
+        <button id="toggle_lang" class="doc_nav_item" type="button"><span id="lang_label">中文</span></button>
+        <button id="toggle_mode" class="doc_nav_item" type="button"><span id="mode_label">白天</span></button>
+      </aside>
+
+      <article class="doc_main">
+        <div class="page_main" style="margin: 0; width: 100%;">
+          <section class="hero">
+            <div>
+              <h1>Game Path</h1>
+              <p>把规则放进图形挑战：用判断与即时反馈把概念变成习惯。</p>
+            </div>
+            <div class="hero_media">
+              <img src="../images/hero_y.svg" alt="game visual" />
+            </div>
+          </section>
+
+          <section class="grid_two">
+            <article class="challenge_card">
+              <h3>挑战 1：切线角度判断</h3>
+              <p>问题：切线与过切点半径的夹角是多少度？</p>
+              <div class="form_grid">
+                <select id="game_answer">
+                  <option value="">请选择</option>
+                  <option value="45">45°</option>
+                  <option value="60">60°</option>
+                  <option value="90">90°</option>
+                </select>
+                <button id="check_game_answer" class="btn btn_primary" type="button">检查答案</button>
+                <p id="game_result"></p>
+              </div>
+            </article>
+
+            <article class="challenge_card">
+              <h3>挑战 2：面积变化快算</h3>
+              <p>当半径从 r 变为 2r 时，面积会变成原来的多少倍？</p>
+              <p><strong>提示：</strong>面积公式 A = pi * r^2。</p>
+            </article>
+          </section>
+        </div>
+
+        <footer class="page_footer">
+          返回主页可继续查看规则轮播与导学入口。
+        </footer>
+      </article>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

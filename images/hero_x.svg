@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <rect width="800" height="500" fill="#f7faff"/>
+  <circle cx="290" cy="260" r="130" fill="none" stroke="#4471c2" stroke-width="8"/>
+  <path d="M420 260 L670 260" stroke="#0d3273" stroke-width="8"/>
+  <circle cx="420" cy="260" r="8" fill="#e8a0bf"/>
+  <text x="100" y="90" font-size="44" fill="#0d3273" font-family="Trebuchet MS">Learning Spot</text>
+  <text x="100" y="135" font-size="28" fill="#4471c2" font-family="Trebuchet MS">Ad or course recommendation area</text>
+</svg>
