@@ -12,18 +12,14 @@
 
 <div class="quiz-box">
 
-<p>What is the angle in a semicircle?</p>
+<h2 id="question"></h2>
 
-<label><input type="radio" name="q1" value="A"> 90°</label><br>
-<label><input type="radio" name="q1" value="B"> 60°</label><br>
-<label><input type="radio" name="q1" value="C"> 180°</label><br>
-<label><input type="radio" name="q1" value="D"> 45°</label><br>
+<div id="answers"></div>
 
-<br>
+<button onclick="submitAnswer()">Submit</button>
 
-<button onclick="checkAnswer()">Submit</button>
-
-<p id="result"></p>
+<p id="feedback"></p>
+<p id="score"></p>
 
 </div>
 
