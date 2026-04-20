@@ -1,0 +1,81 @@
+/* 外部CSS（课程要求必须使用） */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #f5f7fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* 面包屑导航样式 */
+.breadcrumb {
+    padding: 1rem 2rem;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.breadcrumb a {
+    color: #2c3e50;
+    text-decoration: none;
+}
+
+.breadcrumb .separator {
+    margin: 0 0.5rem;
+    color: #95a5a6;
+}
+
+.breadcrumb .current {
+    color: #3498db;
+}
+
+.game-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.game-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.game-header h1 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    color: #7f8c8d;
+}
+
+.canvas-wrapper {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 1rem;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+#gameCanvas {
+    border: 2px solid #ecf0f1;
+    border-radius: 4px;
+}
+
+.info-panel {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.info-panel h3 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
