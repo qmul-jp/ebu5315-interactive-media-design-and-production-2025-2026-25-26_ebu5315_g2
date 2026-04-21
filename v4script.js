@@ -54,6 +54,205 @@ document.addEventListener('DOMContentLoaded', () => {
     let draggingPoint = null;
     let levelPoints = {};
     const circle = { x: 400, y: 300, radius: 200 };
+    const canvasContainer = document.querySelector('.canvas-container');
+
+const LEVEL_META = {
+    1: {
+        tag: { zh: '角度观察', en: 'Angle Discovery' },
+        diff: { zh: '入门', en: 'Easy' },
+        goal: {
+            zh: '观察同弧对应的圆心角与圆周角关系',
+            en: 'Observe the relationship between central and inscribed angles'
+        },
+        mastery: {
+            zh: '你掌握了：同弧圆心角等于圆周角的两倍',
+            en: 'You mastered: central angle = 2 × inscribed angle'
+        }
+    },
+    2: {
+        tag: { zh: '切线校准', en: 'Tangent Tuning' },
+        diff: { zh: '进阶', en: 'Medium' },
+        goal: {
+            zh: '把切线调整到与半径形成直角',
+            en: 'Calibrate the tangent to be perpendicular to the radius'
+        },
+        mastery: {
+            zh: '你掌握了：切线与过切点半径垂直',
+            en: 'You mastered: tangent is perpendicular to the radius'
+        }
+    },
+    3: {
+        tag: { zh: '同弦规律', en: 'Chord Pattern' },
+        diff: { zh: '进阶', en: 'Medium' },
+        goal: {
+            zh: '观察同弦所对圆周角始终相等',
+            en: 'Observe equal inscribed angles subtended by the same chord'
+        },
+        mastery: {
+            zh: '你掌握了：同弦所对圆周角相等',
+            en: 'You mastered: equal inscribed angles on the same chord'
+        }
+    },
+    4: {
+        tag: { zh: '四边形挑战', en: 'Quad Challenge' },
+        diff: { zh: '进阶', en: 'Medium' },
+        goal: {
+            zh: '验证圆内接四边形对角和为 180°',
+            en: 'Verify opposite angles sum to 180°'
+        },
+        mastery: {
+            zh: '你掌握了：圆内接四边形对角互补',
+            en: 'You mastered: opposite angles in a cyclic quadrilateral are supplementary'
+        }
+    },
+    5: {
+        tag: { zh: '综合冒险', en: 'Final Quest' },
+        diff: { zh: '挑战', en: 'Hard' },
+        goal: {
+            zh: '连续完成 4 个几何规律验证阶段',
+            en: 'Complete 4 geometry-discovery stages in one level'
+        },
+        mastery: {
+            zh: '你掌握了：多个圆定理的综合运用',
+            en: 'You mastered: combined application of circle theorems'
+        }
+    }
+};
+
+let feedbackState = 'idle';
+let hintTier = 0;
+let failCount = 0;
+let microMilestones = {};
+let lastEncourageKey = '';
+
+function resetInteractionEnhancers() {
+    feedbackState = 'idle';
+    hintTier = 0;
+    failCount = 0;
+    microMilestones = {};
+    lastEncourageKey = '';
+    canvasContainer.classList.remove('on-track', 'near-target', 'milestone');
+    aiHintBox.classList.remove('hint-normal', 'hint-encourage', 'hint-deep', 'show-bump');
+}
+
+function setCanvasMood(state) {
+    canvasContainer.classList.remove('on-track', 'near-target');
+    if (state === 'on-track') canvasContainer.classList.add('on-track');
+    if (state === 'near-target') canvasContainer.classList.add('near-target');
+}
+
+function pulseMilestone() {
+    canvasContainer.classList.remove('milestone');
+    void canvasContainer.offsetWidth;
+    canvasContainer.classList.add('milestone');
+}
+
+function showHintMessage(text, type = 'normal', duration = 2200) {
+    aiHintBox.textContent = text;
+    aiHintBox.classList.remove('hidden', 'hint-normal', 'hint-encourage', 'hint-deep', 'show-bump');
+    aiHintBox.classList.add(`hint-${type}`, 'show-bump');
+    clearTimeout(showHintMessage._timer);
+    showHintMessage._timer = setTimeout(() => {
+        aiHintBox.classList.add('hidden');
+        aiHintBox.classList.remove('show-bump');
+    }, duration);
+}
+
+function addRichScore(points, text = '+10', kind = 'explore') {
+    levelScore += points;
+    currentScore.textContent = `🎯 得分：${levelScore}`;
+    popFeedback.textContent = text;
+    popFeedback.classList.remove('hidden', 'feedback-explore', 'feedback-milestone', 'feedback-perfect');
+    popFeedback.classList.add(`feedback-${kind}`);
+    playBeep(kind === 'perfect' ? 1300 : 1000, 160);
+    setTimeout(() => popFeedback.classList.add('hidden'), 850);
+}
+
+function getNearTargetInfo() {
+    if (currentLevel === 1) {
+        const diff = Math.abs(calcCentralAngle() - 2 * calcInscribedAngleAtC());
+        return { value: diff, near: diff < 8, onTrack: diff < 15 };
+    }
+    if (currentLevel === 2) {
+        const diff = Math.abs(calcTangentAngle() - 90);
+        return { value: diff, near: diff < 3, onTrack: diff < 8 };
+    }
+    if (currentLevel === 3) {
+        const diff = Math.abs(calcInscribedAngleAtC() - calcInscribedAngleAtD());
+        return { value: diff, near: diff < 2.5, onTrack: diff < 6 };
+    }
+    if (currentLevel === 4) {
+        const diff = Math.abs(calcQuadSum() - 180);
+        return { value: diff, near: diff < 4, onTrack: diff < 10 };
+    }
+    if (currentLevel === 5) {
+        const s1 = Math.abs(calcSemicircleAngle() - 90);
+        const [t1, t2] = calcTangentLengths();
+        const s2 = Math.abs(t1 - t2);
+        const s3 = Math.abs(calcInscribedAngleAtC() + calcInscribedAngleAtD() - 180);
+        const s4 = Math.abs(calcFinalQuadSum() - 180);
+        const best = Math.min(s1, s2, s3, s4);
+        return { value: best, near: best < 3, onTrack: best < 8 };
+    }
+    return { value: 999, near: false, onTrack: false };
+}
+
+function maybeEncouragePlayer() {
+    const info = getNearTargetInfo();
+    if (info.near && lastEncourageKey !== 'near') {
+        lastEncourageKey = 'near';
+        setCanvasMood('near-target');
+        showHintMessage(
+            currentLang === 'zh' ? '很接近了，再微调一下位置！' : 'You are very close — try a tiny adjustment!',
+            'encourage',
+            1800
+        );
+    } else if (info.onTrack && !info.near && lastEncourageKey !== 'track') {
+        lastEncourageKey = 'track';
+        setCanvasMood('on-track');
+        showHintMessage(
+            currentLang === 'zh' ? '方向对了，继续观察图形变化。' : 'Good direction — keep observing the shape.',
+            'normal',
+            1500
+        );
+    } else if (!info.onTrack) {
+        lastEncourageKey = '';
+        setCanvasMood('idle');
+    }
+}
+
+function checkMicroMilestones() {
+    if (currentLevel === 1) {
+        const diff = Math.abs(calcCentralAngle() - 2 * calcInscribedAngleAtC());
+        if (!microMilestones.l1a && diff < 12) {
+            microMilestones.l1a = true;
+            addRichScore(2, currentLang === 'zh' ? '发现规律 +2' : 'Pattern found +2', 'explore');
+            showHintMessage(currentLang === 'zh' ? '你已经观察到角度比例的稳定性。' : 'You are noticing a stable angle ratio.', 'normal');
+        }
+    }
+    if (currentLevel === 2) {
+        const diff = Math.abs(calcTangentAngle() - 90);
+        if (!microMilestones.l2a && diff < 6) {
+            microMilestones.l2a = true;
+            addRichScore(3, currentLang === 'zh' ? '校准接近 +3' : 'Almost calibrated +3', 'explore');
+            showHintMessage(currentLang === 'zh' ? '切线快和半径形成直角了。' : 'The tangent is almost perpendicular to the radius.', 'encourage');
+        }
+    }
+    if (currentLevel === 3) {
+        const diff = Math.abs(calcInscribedAngleAtC() - calcInscribedAngleAtD());
+        if (!microMilestones.l3a && diff < 4) {
+            microMilestones.l3a = true;
+            addRichScore(2, currentLang === 'zh' ? '同弦发现 +2' : 'Same chord found +2', 'explore');
+        }
+    }
+    if (currentLevel === 4) {
+        const diff = Math.abs(calcQuadSum() - 180);
+        if (!microMilestones.l4a && diff < 8) {
+            microMilestones.l4a = true;
+            addRichScore(3, currentLang === 'zh' ? '对角接近 +3' : 'Opposite angles close +3', 'explore');
+        }
+    }
+}
 
     // ========== 数学函数 ==========
     function getDistance(p1,p2){ return Math.hypot(p2.x-p1.x, p2.y-p1.y); }
@@ -256,18 +455,36 @@ document.addEventListener('DOMContentLoaded', () => {
     function loadGameData(){ const saved=localStorage.getItem('circleGameData'); if(saved){ gameData=JSON.parse(saved); updateTotalScore(); } }
     function updateTotalScore(){ totalScoreText.textContent=langPack[currentLang].totalScore+gameData.totalScore; let totalStars=0; gameData.levels.forEach(l=>totalStars+=l.stars); starCountSpan.textContent=langPack[currentLang].starCount+totalStars+"/15"; }
 
-    function renderLevelGrid(){
-        levelGrid.innerHTML='';
-        levelConfig.forEach((level,idx)=>{
-            const levelData=gameData.levels[idx];
-            const isUnlocked=level.id<=gameData.unlockedLevel;
-            const card=document.createElement('div');
-            card.className=`level-card ${isUnlocked?'':'locked'}`;
-            card.innerHTML=`<div class="level-number">${level.id}</div><div class="level-name">${level.name[currentLang]}</div><div class="level-stars">${'⭐'.repeat(levelData.stars)}${'☆'.repeat(3-levelData.stars)}</div>${!isUnlocked?'<div class="lock-icon">🔒</div>':''}`;
-            if(isUnlocked) card.addEventListener('click',()=>startLevel(level.id));
-            levelGrid.appendChild(card);
-        });
-    }
+   function renderLevelGrid() {
+    levelGrid.innerHTML = '';
+    levelConfig.forEach((level, idx) => {
+        const levelData = gameData.levels[idx];
+        const isUnlocked = level.id <= gameData.unlockedLevel;
+        const meta = LEVEL_META[level.id];
+        const card = document.createElement('div');
+        card.className = `level-card ${isUnlocked ? '' : 'locked'}`;
+
+        const diffClass =
+            meta.diff[currentLang] === '入门' || meta.diff[currentLang] === 'Easy'
+                ? 'diff-easy'
+                : (meta.diff[currentLang] === '挑战' || meta.diff[currentLang] === 'Hard' ? 'diff-hard' : 'diff-mid');
+
+        card.innerHTML = `
+            <div class="level-number">${level.id}</div>
+            <div class="level-name">${level.name[currentLang]}</div>
+            <div class="level-meta">
+                <span class="level-tag">${meta.tag[currentLang]}</span>
+                <span class="level-diff ${diffClass}">${meta.diff[currentLang]}</span>
+            </div>
+            <div class="level-goal">${meta.goal[currentLang]}</div>
+            <div class="level-stars">${'⭐'.repeat(levelData.stars)}${'☆'.repeat(3 - levelData.stars)}</div>
+            ${!isUnlocked ? `<div class="lock-tip">${currentLang === 'zh' ? '继续收集星星来解锁' : 'Collect more stars to unlock'}</div>` : ''}
+        `;
+
+        if (isUnlocked) card.addEventListener('click', () => startLevel(level.id));
+        levelGrid.appendChild(card);
+    });
+}
 
     function startLevel(levelId){
         enableAudio();
@@ -277,6 +494,7 @@ document.addEventListener('DOMContentLoaded', () => {
         challengeProgress={stage1:false,stage2:false,stage3:false,stage4:false};
         const level=levelConfig[levelId-1];
         levelPoints=level.initPoints();
+        resetInteractionEnhancers();
         levelTitle.textContent=`关卡 ${levelId}: ${level.name[currentLang]}`;
         missionTitle.textContent=level.mission.title[currentLang];
         missionDesc.textContent=level.mission.desc[currentLang];
@@ -317,16 +535,39 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.lineWidth=2;
         ctx.stroke();
     }
-    function drawPoints(){
-        Object.values(levelPoints).forEach(p=>{
+    function drawPoints() {
+    Object.values(levelPoints).forEach(p => {
+        const isDragging = p === draggingPoint;
+
+        if (isDragging) {
             ctx.beginPath();
-            ctx.arc(p.x,p.y,8,0,Math.PI*2);
-            ctx.fillStyle=p.fixed?'#666':(p===draggingPoint?'#f72585':'#3a0ca3');
+            ctx.arc(p.x, p.y, 16, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(244, 90, 166, 0.16)';
             ctx.fill();
-            ctx.fillStyle='#000';
-            ctx.fillText(p.name,p.x+12,p.y-10);
-        });
-    }
+
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 24, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(244, 90, 166, 0.22)';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, isDragging ? 10 : 8, 0, Math.PI * 2);
+        ctx.fillStyle = p.fixed ? '#666' : (isDragging ? '#f45aa6' : '#3a0ca3');
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, isDragging ? 10 : 8, 0, Math.PI * 2);
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.fillStyle = '#1f2a44';
+        ctx.font = 'bold 16px Quicksand, sans-serif';
+        ctx.fillText(p.name, p.x + 12, p.y - 10);
+    });
+}
 
     function drawLevel1() {
         ctx.beginPath();
@@ -499,10 +740,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateChallengeProgress(){
         const level=levelConfig[4];
-        if(!challengeProgress.stage1 && level.checkStage1()){ challengeProgress.stage1=true; addScore(15,"阶段1完成！+15"); }
-        if(!challengeProgress.stage2 && level.checkStage2()){ challengeProgress.stage2=true; addScore(15,"阶段2完成！+15"); }
-        if(!challengeProgress.stage3 && level.checkStage3()){ challengeProgress.stage3=true; addScore(15,"阶段3完成！+15"); }
-        if(!challengeProgress.stage4 && level.checkStage4()){ challengeProgress.stage4=true; addScore(15,"阶段4完成！+15"); }
+        if (!challengeProgress.stage1 && level.checkStage1()) {
+    challengeProgress.stage1 = true;
+    addRichScore(15, currentLang === 'zh' ? '直角发现！+15' : 'Right angle found! +15', 'milestone');
+    pulseMilestone();
+    showHintMessage(currentLang === 'zh' ? '第一阶段完成，继续挑战下一条规律。' : 'Stage 1 cleared — move on to the next theorem.', 'encourage', 2200);
+}
+if (!challengeProgress.stage2 && level.checkStage2()) {
+    challengeProgress.stage2 = true;
+    addRichScore(15, currentLang === 'zh' ? '切线定理！+15' : 'Tangent theorem! +15', 'milestone');
+    pulseMilestone();
+}
+if (!challengeProgress.stage3 && level.checkStage3()) {
+    challengeProgress.stage3 = true;
+    addRichScore(15, currentLang === 'zh' ? '同弦规律！+15' : 'Chord pattern! +15', 'milestone');
+    pulseMilestone();
+}
+if (!challengeProgress.stage4 && level.checkStage4()) {
+    challengeProgress.stage4 = true;
+    addRichScore(15, currentLang === 'zh' ? '终极验证！+15' : 'Final verification! +15', 'perfect');
+    pulseMilestone();
+}
         let completedCount=[challengeProgress.stage1,challengeProgress.stage2,challengeProgress.stage3,challengeProgress.stage4].filter(Boolean).length;
         const progEl=document.getElementById('data-progress');
         if(progEl) progEl.textContent=`${completedCount}/4 ${langPack[currentLang].completed}`;
@@ -526,36 +784,161 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     canvas.addEventListener('mousedown',(e)=>{ let m=getCanvasCoords(e); for(let p of Object.values(levelPoints)){ if(!p.fixed && getDistance(m,p)<15){ draggingPoint=p; break; } } });
-    canvas.addEventListener('mousemove',(e)=>{ if(!draggingPoint) return; let m=getCanvasCoords(e); interactionCount++; if(currentLevel===5 && draggingPoint.name==='P'){ draggingPoint.x=m.x; draggingPoint.y=m.y; } else { let ang=Math.atan2(m.y-circle.y,m.x-circle.x); draggingPoint.x=circle.x+circle.radius*Math.cos(ang); draggingPoint.y=circle.y+circle.radius*Math.sin(ang); } if(interactionCount%10===0 && levelScore<80) addScore(1,"+1"); draw(); });
+    canvas.addEventListener('mousemove',(e)=>{ if(!draggingPoint) return; let m=getCanvasCoords(e); interactionCount++; if(currentLevel===5 && draggingPoint.name==='P'){ draggingPoint.x=m.x; draggingPoint.y=m.y; } else { let ang=Math.atan2(m.y-circle.y,m.x-circle.x); draggingPoint.x=circle.x+circle.radius*Math.cos(ang); draggingPoint.y=circle.y+circle.radius*Math.sin(ang); } if(interactionCount%10===0 && levelScore<80) addScore(1,"+1");maybeEncouragePlayer();
+checkMicroMilestones(); draw(); });
     canvas.addEventListener('mouseup',()=>{ draggingPoint=null; });
     canvas.addEventListener('touchstart',(e)=>{ e.preventDefault(); let touch=e.touches[0]; let m=getCanvasCoords(touch); for(let p of Object.values(levelPoints)){ if(!p.fixed && getDistance(m,p)<20){ draggingPoint=p; break; } } },{passive:false});
-    canvas.addEventListener('touchmove',(e)=>{ e.preventDefault(); if(!draggingPoint) return; let touch=e.touches[0]; let m=getCanvasCoords(touch); interactionCount++; if(currentLevel===5 && draggingPoint.name==='P'){ draggingPoint.x=m.x; draggingPoint.y=m.y; } else { let ang=Math.atan2(m.y-circle.y,m.x-circle.x); draggingPoint.x=circle.x+circle.radius*Math.cos(ang); draggingPoint.y=circle.y+circle.radius*Math.sin(ang); } if(interactionCount%10===0 && levelScore<80) addScore(1,"+1"); draw(); },{passive:false});
+    canvas.addEventListener('touchmove',(e)=>{ e.preventDefault(); if(!draggingPoint) return; let touch=e.touches[0]; let m=getCanvasCoords(touch); interactionCount++; if(currentLevel===5 && draggingPoint.name==='P'){ draggingPoint.x=m.x; draggingPoint.y=m.y; } else { let ang=Math.atan2(m.y-circle.y,m.x-circle.x); draggingPoint.x=circle.x+circle.radius*Math.cos(ang); draggingPoint.y=circle.y+circle.radius*Math.sin(ang); } if(interactionCount%10===0 && levelScore<80) addScore(1,"+1");canvas.addEventListener('mousemove', (e) => {
+    if (!draggingPoint) return;
+    let m = getCanvasCoords(e);
+    interactionCount++;
+
+    if (currentLevel === 5 && draggingPoint.name === 'P') {
+        draggingPoint.x = m.x;
+        draggingPoint.y = m.y;
+    } else {
+        let ang = Math.atan2(m.y - circle.y, m.x - circle.x);
+        draggingPoint.x = circle.x + circle.radius * Math.cos(ang);
+        draggingPoint.y = circle.y + circle.radius * Math.sin(ang);
+    }
+
+    if (interactionCount % 10 === 0 && levelScore < 80) addScore(1, "+1");
+
+    maybeEncouragePlayer();
+    checkMicroMilestones();
+    draw();
+}); draw(); },{passive:false});
     canvas.addEventListener('touchend',(e)=>{ e.preventDefault(); draggingPoint=null; });
 
-    submitBtn.addEventListener('click',()=>{
-        const level=levelConfig[currentLevel-1];
-        const isComplete=level.checkComplete();
-        const isPrecise=level.checkPrecision();
-        if(!isComplete){ aiHintBox.textContent=langPack[currentLang].tryAgain; aiHintBox.classList.remove('hidden'); setTimeout(()=>aiHintBox.classList.add('hidden'),3000); playBeep(400,300); return; }
-        let finalScore=60; if(interactionCount>=20) finalScore+=20; if(isPrecise) finalScore+=20;
-        levelScore=finalScore; currentScore.textContent=`🎯 得分：${levelScore}`;
-        let stars=1; if(finalScore>=80) stars=2; if(finalScore>=95) stars=3;
-        levelStar.textContent='⭐'.repeat(stars)+'☆'.repeat(3-stars);
-        const levelData=gameData.levels[currentLevel-1];
-        if(finalScore>levelData.score){ gameData.totalScore+=(finalScore-levelData.score); levelData.score=finalScore; levelData.stars=stars; }
-        if(currentLevel<levelConfig.length && currentLevel>=gameData.unlockedLevel) gameData.unlockedLevel=currentLevel+1;
-        saveGameData(); updateTotalScore();
-        resultTitle.textContent=langPack[currentLang].levelComplete; resultStar.textContent='⭐'.repeat(stars); resultScore.textContent=`最终得分：${finalScore} / 100`; resultDesc.textContent=langPack[currentLang].greatJob; nextLevelBtn.style.display=currentLevel<levelConfig.length?'inline-block':'none'; resultModal.classList.remove('hidden'); playBeep(1200,200);
-        updateFooterLanguage();
-        renderAchievements();
-    });
+    submitBtn.addEventListener('click', () => {
+    const level = levelConfig[currentLevel - 1];
+    const isComplete = level.checkComplete();
+    const isPrecise = level.checkPrecision();
+
+    // 防止 failCount 未定义时报错
+    if (typeof window.failCount !== 'number') {
+        window.failCount = 0;
+    }
+
+    // 失败反馈：从“静默失败”改成“轻提示 + 多次失败后更明确引导”
+    if (!isComplete) {
+        window.failCount++;
+
+        const failText = window.failCount >= 3
+            ? (currentLang === 'zh'
+                ? '还差一点点，先观察右侧数据变化，再试一次。'
+                : 'Very close — watch the data panel and try again.')
+            : langPack[currentLang].tryAgain;
+
+        // 如果你前面已经加了 showHintMessage，就优先用它
+        if (typeof showHintMessage === 'function') {
+            showHintMessage(
+                failText,
+                window.failCount >= 3 ? 'deep' : 'normal',
+                2800
+            );
+        } else {
+            aiHintBox.textContent = failText;
+            aiHintBox.classList.remove('hidden');
+            setTimeout(() => aiHintBox.classList.add('hidden'), 3000);
+        }
+
+        playBeep(400, 300);
+        return;
+    }
+
+    // 成功后重置失败次数
+    window.failCount = 0;
+
+    // 基础评分逻辑保持不变
+    let finalScore = 60;
+    if (interactionCount >= 20) finalScore += 20;
+    if (isPrecise) finalScore += 20;
+
+    levelScore = finalScore;
+    currentScore.textContent = `🎯 得分：${levelScore}`;
+
+    // 星级判定保持不变
+    let stars = 1;
+    if (finalScore >= 80) stars = 2;
+    if (finalScore >= 95) stars = 3;
+
+    levelStar.textContent = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
+
+    // 存档逻辑保持不变
+    const levelData = gameData.levels[currentLevel - 1];
+    if (finalScore > levelData.score) {
+        gameData.totalScore += (finalScore - levelData.score);
+        levelData.score = finalScore;
+        levelData.stars = stars;
+    }
+
+    if (currentLevel < levelConfig.length && currentLevel >= gameData.unlockedLevel) {
+        gameData.unlockedLevel = currentLevel + 1;
+    }
+
+    saveGameData();
+    updateTotalScore();
+
+    // 完成反馈增强：优先使用 richer feedback
+    if (typeof addRichScore === 'function') {
+        addRichScore(
+            0,
+            stars === 3
+                ? (currentLang === 'zh' ? '完美通关！' : 'Perfect Clear!')
+                : (currentLang === 'zh' ? '挑战完成！' : 'Challenge Clear!'),
+            stars === 3 ? 'perfect' : 'milestone'
+        );
+    }
+
+    // 结果弹窗文案增强
+    resultTitle.textContent = langPack[currentLang].levelComplete;
+    resultStar.textContent = '⭐'.repeat(stars);
+    resultScore.textContent =
+        currentLang === 'zh'
+            ? `最终得分：${finalScore} / 100`
+            : `Final Score: ${finalScore} / 100`;
+
+    // 如果你前面已经加了 LEVEL_META，就展示“你掌握了什么”
+    if (typeof LEVEL_META !== 'undefined' && LEVEL_META[currentLevel] && LEVEL_META[currentLevel].mastery) {
+        resultDesc.textContent = `${langPack[currentLang].greatJob}｜${LEVEL_META[currentLevel].mastery[currentLang]}`;
+    } else {
+        // 没有 LEVEL_META 时的兜底文案
+        resultDesc.textContent = stars === 3
+            ? (currentLang === 'zh'
+                ? '太棒了！你不仅完成了挑战，还实现了精准验证！'
+                : 'Excellent! You cleared the challenge with precision!')
+            : (currentLang === 'zh'
+                ? '恭喜完成挑战！你已经成功验证了本关的重要规律。'
+                : 'Great job! You successfully verified the key pattern in this level.');
+    }
+
+    nextLevelBtn.style.display = currentLevel < levelConfig.length ? 'inline-block' : 'none';
+    resultModal.classList.remove('hidden');
+
+    playBeep(1200, 200);
+
+    updateFooterLanguage();
+    renderAchievements();
+});
 
     resetLevelBtn.addEventListener('click',()=>{ startLevel(currentLevel); });
     backBtn.addEventListener('click',()=>{ gameScreen.classList.add('hidden'); levelSelect.classList.remove('hidden'); renderLevelGrid(); });
     nextLevelBtn.addEventListener('click',()=>{ resultModal.classList.add('hidden'); if(currentLevel<levelConfig.length) startLevel(currentLevel+1); else { gameScreen.classList.add('hidden'); levelSelect.classList.remove('hidden'); renderLevelGrid(); } });
     backToSelectBtn.addEventListener('click',()=>{ resultModal.classList.add('hidden'); gameScreen.classList.add('hidden'); levelSelect.classList.remove('hidden'); renderLevelGrid(); });
-    aiHintBtn.addEventListener('click',()=>{ const level=levelConfig[currentLevel-1]; let hintText=''; if(currentLevel===5){ if(!challengeProgress.stage1) hintText=level.hint[currentLang].stage1; else if(!challengeProgress.stage2) hintText=level.hint[currentLang].stage2; else if(!challengeProgress.stage3) hintText=level.hint[currentLang].stage3; else hintText=level.hint[currentLang].stage4; } else { hintText=level.hint[currentLang]; } aiHintBox.textContent=hintText; aiHintBox.classList.remove('hidden'); setTimeout(()=>aiHintBox.classList.add('hidden'),6000); });
-    howToPlayBtn.addEventListener('click',()=>{ updateRuleContent(); ruleModal.classList.remove('hidden'); });
+    aiHintBtn.addEventListener('click',()=>{
+    const level=levelConfig[currentLevel-1];
+    if(currentLevel===5){
+        if(!challengeProgress.stage1) aiHintBox.textContent=level.hint[currentLang].stage1;
+        else if(!challengeProgress.stage2) aiHintBox.textContent=level.hint[currentLang].stage2;
+        else if(!challengeProgress.stage3) aiHintBox.textContent=level.hint[currentLang].stage3;
+        else aiHintBox.textContent=level.hint[currentLang].stage4;
+    }else{
+        aiHintBox.textContent=level.hint[currentLang];
+    }
+    aiHintBox.classList.remove('hidden');
+    setTimeout(()=>aiHintBox.classList.add('hidden'),5000);
+});
     modalClose.addEventListener('click',()=>{ ruleModal.classList.add('hidden'); });
     window.addEventListener('click',(e)=>{ if(e.target===ruleModal) ruleModal.classList.add('hidden'); });
     contrastBtn.addEventListener('click',()=>{ document.body.classList.toggle('high-contrast'); });
