@@ -1,0 +1,89 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f5f7fa;
+    color: #333;
+}
+
+.breadcrumb {
+    padding: 15px 30px;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-size: 16px;
+}
+
+.breadcrumb a {
+    color: #2c3e50;
+    text-decoration: none;
+}
+
+.game-container {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.game-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.canvas-wrapper {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+#gameCanvas {
+    border: 2px solid #eee;
+    border-radius: 6px;
+}
+
+.info-panel {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.angle-display {
+    margin: 20px 0;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 6px;
+}
+
+.item {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+.item span:last-child {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.btn {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: #2980b9;
+}
