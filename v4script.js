@@ -1040,3 +1040,361 @@ checkMicroMilestones(); draw(); });
         }
     }, 800);
 });
+/* =========================================
+   探索中心 / 游戏大厅增强
+========================================= */
+
+const HUB_FACTS = {
+    zh: [
+        '你知道吗？半圆所对的圆周角恒为 90°。',
+        '现实中的车轮、钟表和轨道设计都离不开圆几何。',
+        '同弦所对的圆周角相等，是很多证明题的核心入口。',
+        '切线与过切点半径垂直，是圆几何里最经典的关系之一。',
+        '圆内接四边形的对角和为 180°，常用于快速判断。'
+    ],
+    en: [
+        'Did you know? An angle subtended by a diameter is always 90°.',
+        'Circle geometry appears in wheels, clocks, and track design.',
+        'Equal inscribed angles on the same chord are a key proof shortcut.',
+        'A tangent is perpendicular to the radius at the point of tangency.',
+        'Opposite angles in a cyclic quadrilateral always sum to 180°.'
+    ]
+};
+
+const HUB_TODAY = {
+    1: {
+        zh: ['角度观察', '观察同弧对应的圆心角与圆周角关系'],
+        en: ['Angle Discovery', 'Observe the relationship between central and inscribed angles']
+    },
+    2: {
+        zh: ['切线的秘密', '让切线与半径形成完美直角'],
+        en: ['Secret of Tangency', 'Make the tangent perfectly perpendicular to the radius']
+    },
+    3: {
+        zh: ['同弦规律', '比较不同位置的圆周角是否保持一致'],
+        en: ['Chord Pattern', 'Compare whether inscribed angles stay equal']
+    },
+    4: {
+        zh: ['四边形挑战', '验证圆内接四边形对角和的秘密'],
+        en: ['Quadrilateral Quest', 'Verify the opposite-angle rule']
+    },
+    5: {
+        zh: ['终极探索', '连续完成四个几何规律的综合验证'],
+        en: ['Final Quest', 'Complete a combined four-step verification']
+    }
+};
+
+function getCompletedLevels() {
+    if (!window.gameData || !Array.isArray(gameData.levels)) return 0;
+    return gameData.levels.filter(level => (level.score || 0) > 0).length;
+}
+
+function getTotalStars() {
+    if (!window.gameData || !Array.isArray(gameData.levels)) return 0;
+    return gameData.levels.reduce((sum, level) => sum + (level.stars || 0), 0);
+}
+
+function getTodayLevelId() {
+    if (!window.gameData || !gameData.unlockedLevel) return 1;
+    return Math.min(gameData.unlockedLevel, 5);
+}
+
+function updateHubProgress() {
+    const completed = getCompletedLevels();
+    const totalLevels = window.levelConfig ? levelConfig.length : 5;
+    const stars = getTotalStars();
+    const maxStars = totalLevels * 3;
+    const t = HUB_LANG[currentLang] || HUB_LANG.zh;
+
+    const levelProgressText = document.getElementById('levelProgressText');
+    const starProgressText = document.getElementById('starProgressText');
+    const progressFill = document.getElementById('progressFill');
+    const progressTip = document.getElementById('progressTip');
+
+    if (levelProgressText) levelProgressText.textContent = `${completed} / ${totalLevels}`;
+    if (starProgressText) starProgressText.textContent = `${stars} / ${maxStars}`;
+
+    const progress = maxStars ? Math.round((stars / maxStars) * 100) : 0;
+    if (progressFill) progressFill.style.width = `${progress}%`;
+
+    if (progressTip) {
+        progressTip.textContent = stars === maxStars
+            ? t.progressAllDone
+            : t.progressLeft(maxStars - stars);
+    }
+}
+
+function updateTodayChallenge() {
+    const levelId = getTodayLevelId();
+    const todayTitle = document.getElementById('todayTitle');
+    const todayDesc = document.getElementById('todayDesc');
+    const todayBtn = document.getElementById('todayChallengeBtn');
+
+    if (!todayTitle || !todayDesc || !todayBtn) return;
+
+    const meta = HUB_TODAY[levelId] || HUB_TODAY[1];
+    todayTitle.textContent = meta[currentLang][0];
+    todayDesc.textContent = meta[currentLang][1];
+    todayBtn.textContent = (HUB_LANG[currentLang] || HUB_LANG.zh).todayBtn;
+
+    todayBtn.onclick = () => {
+        if (typeof startLevel === 'function') {
+            startLevel(levelId);
+        }
+    };
+}
+
+function rotateFunFacts() {
+    const sideFact = document.getElementById('sideFact');
+    if (!sideFact) return;
+
+    const facts = HUB_FACTS[currentLang] || HUB_FACTS.zh;
+    let currentIndex = Math.floor(Math.random() * facts.length);
+
+    sideFact.textContent = facts[currentIndex];
+
+    setInterval(() => {
+        currentIndex = (currentIndex + 1) % facts.length;
+        sideFact.classList.add('is-switching');
+        setTimeout(() => {
+            sideFact.textContent = facts[currentIndex];
+            sideFact.classList.remove('is-switching');
+        }, 220);
+    }, 5000);
+}
+
+function updateAchievementSummary() {
+    const box = document.querySelector('.achievements-compact');
+    const completed = getCompletedLevels();
+    const stars = getTotalStars();
+    const t = HUB_LANG[currentLang] || HUB_LANG.zh;
+
+    if (!box) return;
+
+    let tip = '';
+    if (completed === 0) {
+        tip = t.achievementStart;
+    } else if (completed < 3) {
+        tip = t.achievementMid(completed);
+    } else {
+        tip = t.achievementHigh(stars);
+    }
+
+    box.setAttribute('data-achievement-tip', tip);
+}
+
+function highlightLevelPath() {
+    const nodes = document.querySelectorAll('.level-path-strip .path-node');
+    const unlocked = window.gameData?.unlockedLevel || 1;
+    nodes.forEach((node, index) => {
+        node.classList.toggle('active', index < unlocked);
+    });
+}
+
+function addHubPointerEffect() {
+    const hub = document.getElementById('exploreHub');
+    if (!hub) return;
+
+    hub.addEventListener('mousemove', (e) => {
+        const panels = hub.querySelectorAll('.hero-panel');
+        panels.forEach(panel => {
+            const rect = panel.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width - 0.5) * 6;
+            const y = ((e.clientY - rect.top) / rect.height - 0.5) * 6;
+            panel.style.transform = `translateY(-2px) rotateX(${-y}deg) rotateY(${x}deg)`;
+        });
+    });
+
+    hub.addEventListener('mouseleave', () => {
+        hub.querySelectorAll('.hero-panel').forEach(panel => {
+            panel.style.transform = '';
+        });
+    });
+}
+
+function initExploreHub() {
+    updateExploreHubLanguage();
+    updateHubProgress();
+    updateTodayChallenge();
+    updateAchievementSummary();
+    highlightLevelPath();
+    addHubPointerEffect();
+    rotateFunFacts();
+}
+
+/* 初始执行 */
+window.addEventListener('load', () => {
+    initExploreHub();
+});
+
+/* 如果你已有这些更新函数，补一层联动刷新 */
+const _originRenderAchievements = window.renderAchievements;
+if (typeof _originRenderAchievements === 'function') {
+    window.renderAchievements = function (...args) {
+        const result = _originRenderAchievements.apply(this, args);
+        updateHubProgress();
+        updateAchievementSummary();
+        highlightLevelPath();
+        return result;
+    };
+}
+
+const _originUpdateTotalScore = window.updateTotalScore;
+if (typeof _originUpdateTotalScore === 'function') {
+    window.updateTotalScore = function (...args) {
+        const result = _originUpdateTotalScore.apply(this, args);
+        updateHubProgress();
+        return result;
+    };
+}
+const HUB_LANG = {
+    zh: {
+        todayBadge: '🎯 今日挑战',
+        progressBadge: '🌟 学习进度',
+        guideBadge: '🧭 快速引导',
+        todayBtn: '立即挑战',
+
+        levelProgressLabel: '已完成关卡',
+        starProgressLabel: '已收集星星',
+
+        guide1: '拖动点，观察图形和角度变化',
+        guide2: '查看右侧数据，寻找几何规律',
+        guide3: '卡住时可以使用 AI 提示',
+
+        path0: '起点',
+        path1: '角度观察',
+        path2: '切线校准',
+        path3: '同弦规律',
+        path4: '终极挑战',
+
+        progressAllDone: '你已经点亮全部几何星图，太厉害了！',
+        progressLeft: (n) => `继续探索，距离全满星还差 ${n} 颗`,
+
+        achievementStart: '🏆 开始你的第一场几何探险，解锁首个成就吧！',
+        achievementMid: (n) => `🏆 最新进展：你已完成 ${n} 关，继续冲击下一个成就！`,
+        achievementHigh: (n) => `🏆 探索者状态良好：已收集 ${n} 颗星，距离满星更近一步。`
+    },
+
+    en: {
+        todayBadge: '🎯 Today\'s Challenge',
+        progressBadge: '🌟 Learning Progress',
+        guideBadge: '🧭 Quick Guide',
+        todayBtn: 'Start Now',
+
+        levelProgressLabel: 'Completed Levels',
+        starProgressLabel: 'Collected Stars',
+
+        guide1: 'Drag points to observe changes in shapes and angles',
+        guide2: 'Watch the data panel and look for geometry patterns',
+        guide3: 'Use AI Hint when you get stuck',
+
+        path0: 'Start',
+        path1: 'Angle Discovery',
+        path2: 'Tangent Tuning',
+        path3: 'Chord Pattern',
+        path4: 'Final Quest',
+
+        progressAllDone: 'You have lit up every geometry star map!',
+        progressLeft: (n) => `${n} stars left to complete the whole map`,
+
+        achievementStart: '🏆 Start your first geometry quest to unlock your first achievement!',
+        achievementMid: (n) => `🏆 Progress update: you have cleared ${n} levels. Keep going!`,
+        achievementHigh: (n) => `🏆 Explorer status: ${n} stars collected, getting closer to full mastery.`
+    }
+};
+function updateExploreHubLanguage() {
+    const t = HUB_LANG[currentLang] || HUB_LANG.zh;
+
+    const setText = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+    };
+
+    setText('todayBadge', t.todayBadge);
+    setText('progressBadge', t.progressBadge);
+    setText('guideBadge', t.guideBadge);
+    setText('levelProgressLabel', t.levelProgressLabel);
+    setText('starProgressLabel', t.starProgressLabel);
+
+    setText('guideItem1', t.guide1);
+    setText('guideItem2', t.guide2);
+    setText('guideItem3', t.guide3);
+
+    setText('pathNode0', t.path0);
+    setText('pathNode1', t.path1);
+    setText('pathNode2', t.path2);
+    setText('pathNode3', t.path3);
+    setText('pathNode4', t.path4);
+
+    const todayBtn = document.getElementById('todayChallengeBtn');
+    if (todayBtn) todayBtn.textContent = t.todayBtn;
+}
+langSelect.addEventListener('change', (e) => {
+    currentLang = e.target.value;
+
+    // 你原本已有的语言更新函数
+    if (typeof updateFooterLanguage === 'function') updateFooterLanguage();
+    if (typeof renderLevelGrid === 'function') renderLevelGrid();
+    if (typeof renderAchievements === 'function') renderAchievements();
+
+    // 新增模块同步切换
+    updateExploreHubLanguage();
+    updateHubProgress();
+    updateTodayChallenge();
+    updateAchievementSummary();
+    highlightLevelPath();
+});
+/* =========================================
+   按关卡切换底部主题
+========================================= */
+
+function applyLevelTheme(levelId = null) {
+    const body = document.body;
+    if (!body) return;
+
+    body.classList.remove(
+        'home-theme',
+        'level-theme-1',
+        'level-theme-2',
+        'level-theme-3',
+        'level-theme-4',
+        'level-theme-5'
+    );
+
+    if (!levelId) {
+        body.classList.add('home-theme');
+        return;
+    }
+
+    const safeId = Math.max(1, Math.min(5, Number(levelId) || 1));
+    body.classList.add(`level-theme-${safeId}`);
+}
+
+/* 页面初始加载：首页默认风格 */
+window.addEventListener('load', () => {
+    applyLevelTheme(null);
+});
+
+/* 进入关卡时切换主题 */
+if (typeof startLevel === 'function') {
+    const __originalStartLevel = startLevel;
+    startLevel = function(levelId) {
+        applyLevelTheme(levelId);
+        return __originalStartLevel.call(this, levelId);
+    };
+}
+
+/* 返回首页时切回首页风格 */
+const backBtnEl = document.getElementById('backBtn');
+if (backBtnEl) {
+    backBtnEl.addEventListener('click', () => {
+        setTimeout(() => applyLevelTheme(null), 50);
+    });
+}
+
+const backToSelectBtnEl = document.getElementById('backToSelectBtn');
+if (backToSelectBtnEl) {
+    backToSelectBtnEl.addEventListener('click', () => {
+        setTimeout(() => applyLevelTheme(null), 50);
+    });
+}

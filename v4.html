@@ -28,6 +28,53 @@
 
     <div id="levelSelect" class="level-select">
         <h2 id="selectTitle">🗺️ 选择关卡 · 开启几何之旅</h2>
+       <div class="explore-hub" id="exploreHub">
+    <div class="hero-panel today-panel">
+        <div class="hero-badge" id="todayBadge"></div>
+        <h3 id="todayTitle"></h3>
+        <p id="todayDesc"></p>
+        <button id="todayChallengeBtn"></button>
+    </div>
+
+    <div class="hero-panel progress-panel">
+        <div class="hero-badge" id="progressBadge"></div>
+        <div class="progress-stats">
+            <div class="progress-item">
+                <span class="progress-label" id="levelProgressLabel"></span>
+                <strong id="levelProgressText">0 / 5</strong>
+            </div>
+            <div class="progress-item">
+                <span class="progress-label" id="starProgressLabel"></span>
+                <strong id="starProgressText">0 / 15</strong>
+            </div>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-tip" id="progressTip"></div>
+    </div>
+
+    <div class="hero-panel guide-panel">
+        <div class="hero-badge" id="guideBadge"></div>
+        <ul class="quick-guide">
+            <li id="guideItem1"></li>
+            <li id="guideItem2"></li>
+            <li id="guideItem3"></li>
+        </ul>
+    </div>
+</div>
+
+<div class="level-path-strip" id="levelPathStrip">
+    <span class="path-node active" id="pathNode0"></span>
+    <span class="path-line"></span>
+    <span class="path-node" id="pathNode1"></span>
+    <span class="path-line"></span>
+    <span class="path-node" id="pathNode2"></span>
+    <span class="path-line"></span>
+    <span class="path-node" id="pathNode3"></span>
+    <span class="path-line"></span>
+    <span class="path-node" id="pathNode4"></span>
+</div>
         <div class="level-grid" id="levelGrid"></div>
 
         <div class="footer-rich">

@@ -1,0 +1,102 @@
+<svg viewBox="0 0 1600 260" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="hillLeft" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#E7F9F6"></stop>
+      <stop offset="1" stop-color="#D4F0EA"></stop>
+    </linearGradient>
+
+    <linearGradient id="hillRight" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#E8F3FF"></stop>
+      <stop offset="1" stop-color="#D8EBFA"></stop>
+    </linearGradient>
+
+    <linearGradient id="crystalA" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#C8F6FF"></stop>
+      <stop offset="1" stop-color="#7FD9FF"></stop>
+    </linearGradient>
+
+    <linearGradient id="crystalB" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#D8F8F6"></stop>
+      <stop offset="1" stop-color="#87E6D7"></stop>
+    </linearGradient>
+
+    <linearGradient id="arcLine" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#BFEFFF"></stop>
+      <stop offset="0.5" stop-color="#D9F8FF"></stop>
+      <stop offset="1" stop-color="#BFEFFF"></stop>
+    </linearGradient>
+
+    <filter id="softGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="5" result="blur"></feGaussianBlur>
+      <feMerge>
+        <feMergeNode in="blur"></feMergeNode>
+        <feMergeNode in="SourceGraphic"></feMergeNode>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- 柔和草坡 -->
+  <path d="M0 198C160 170 320 170 470 196C620 222 760 224 900 198C1040 172 1190 170 1340 194C1450 212 1520 214 1600 202V260H0V198Z" fill="url(#hillLeft)"></path>
+
+  <path d="M0 220C160 198 330 200 500 220C690 242 900 240 1080 220C1240 202 1410 202 1600 220V260H0V220Z" fill="url(#hillRight)" opacity="0.92"></path>
+
+  <!-- 左侧晶体群 -->
+  <polygon points="86,226 108,170 132,226" fill="url(#crystalA)" opacity="0.92"></polygon>
+  <polygon points="118,232 142,186 166,232" fill="url(#crystalB)" opacity="0.88"></polygon>
+  <polygon points="58,232 78,192 98,232" fill="url(#crystalA)" opacity="0.82"></polygon>
+  <polygon points="156,236 174,198 192,236" fill="url(#crystalA)" opacity="0.78"></polygon>
+
+  <!-- 右侧晶体群（对称） -->
+  <polygon points="1514,226 1492,170 1468,226" fill="url(#crystalA)" opacity="0.92"></polygon>
+  <polygon points="1482,232 1458,186 1434,232" fill="url(#crystalB)" opacity="0.88"></polygon>
+  <polygon points="1542,232 1522,192 1502,232" fill="url(#crystalA)" opacity="0.82"></polygon>
+  <polygon points="1444,236 1426,198 1408,236" fill="url(#crystalA)" opacity="0.78"></polygon>
+
+  <!-- 左侧少量草地/灌木 -->
+  <circle cx="118" cy="232" r="18" fill="#CDEFE6" opacity="0.9"></circle>
+  <circle cx="88" cy="238" r="11" fill="#BDE8DD" opacity="0.86"></circle>
+  <circle cx="148" cy="240" r="10" fill="#DDF7F0" opacity="0.86"></circle>
+
+  <!-- 右侧少量草地/灌木 -->
+  <circle cx="1482" cy="232" r="18" fill="#CDEFE6" opacity="0.9"></circle>
+  <circle cx="1512" cy="238" r="11" fill="#BDE8DD" opacity="0.86"></circle>
+  <circle cx="1452" cy="240" r="10" fill="#DDF7F0" opacity="0.86"></circle>
+
+  <!-- 小花（很少量） -->
+  <circle cx="204" cy="228" r="7" fill="#FFF7D8"></circle>
+  <circle cx="198" cy="232" r="4" fill="#E8FBFF"></circle>
+  <circle cx="210" cy="232" r="4" fill="#E8FBFF"></circle>
+  <circle cx="204" cy="236" r="3" fill="#FFE8A8"></circle>
+
+  <circle cx="1396" cy="228" r="7" fill="#FFF7D8"></circle>
+  <circle cx="1390" cy="232" r="4" fill="#E8FBFF"></circle>
+  <circle cx="1402" cy="232" r="4" fill="#E8FBFF"></circle>
+  <circle cx="1396" cy="236" r="3" fill="#FFE8A8"></circle>
+
+  <!-- 对称主弧线 -->
+  <path d="M280 220C470 150 650 138 800 142C950 138 1130 150 1320 220" fill="none" stroke="url(#arcLine)" stroke-width="4" stroke-linecap="round" opacity="0.62"></path>
+
+  <!-- 次弧线 -->
+  <path d="M320 220C500 166 662 158 800 160C938 158 1100 166 1280 220" fill="none" stroke="#D9F8FF" stroke-width="3" stroke-linecap="round" opacity="0.34"></path>
+
+  <!-- 双节点装饰 -->
+  <circle cx="585" cy="164" r="8" fill="#EFFFFF" opacity="0.95" filter="url(#softGlow)"></circle>
+  <circle cx="585" cy="164" r="14" fill="none" stroke="#AEEBFF" stroke-width="2" opacity="0.55"></circle>
+
+  <circle cx="1015" cy="164" r="8" fill="#EFFFFF" opacity="0.95" filter="url(#softGlow)"></circle>
+  <circle cx="1015" cy="164" r="14" fill="none" stroke="#AEEBFF" stroke-width="2" opacity="0.55"></circle>
+
+  <!-- 中央微弱呼应点 -->
+  <circle cx="800" cy="154" r="5" fill="#F6FFFF" opacity="0.78" filter="url(#softGlow)"></circle>
+
+  <!-- 星点 -->
+  <circle cx="258" cy="188" r="2.5" fill="#FFFFFF" opacity="0.72" filter="url(#softGlow)"></circle>
+  <circle cx="336" cy="196" r="2.5" fill="#DDFBFF" opacity="0.72" filter="url(#softGlow)"></circle>
+  <circle cx="520" cy="186" r="2.5" fill="#FFF4C8" opacity="0.68" filter="url(#softGlow)"></circle>
+  <circle cx="1080" cy="186" r="2.5" fill="#FFF4C8" opacity="0.68" filter="url(#softGlow)"></circle>
+  <circle cx="1264" cy="196" r="2.5" fill="#DDFBFF" opacity="0.72" filter="url(#softGlow)"></circle>
+  <circle cx="1342" cy="188" r="2.5" fill="#FFFFFF" opacity="0.72" filter="url(#softGlow)"></circle>
+
+  <!-- 底部雾感高光 -->
+  <ellipse cx="800" cy="246" rx="420" ry="18" fill="#F4FFFF" opacity="0.24"></ellipse>
+</svg>

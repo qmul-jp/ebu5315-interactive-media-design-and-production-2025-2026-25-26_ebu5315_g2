@@ -1,0 +1,74 @@
+<svg viewBox="0 0 1600 260" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- 草坡 -->
+    <linearGradient id="hillA" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F3EFE6"></stop>
+      <stop offset="1" stop-color="#E7E1D2"></stop>
+    </linearGradient>
+
+    <linearGradient id="hillB" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#E8ECF9"></stop>
+      <stop offset="1" stop-color="#DDE4F5"></stop>
+    </linearGradient>
+
+    <!-- 暖金色 -->
+    <linearGradient id="goldSoft" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFE6A8"></stop>
+      <stop offset="1" stop-color="#F4C978"></stop>
+    </linearGradient>
+
+    <!-- 几何晶体 -->
+    <linearGradient id="crystal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#D5E4FF"></stop>
+      <stop offset="1" stop-color="#AFC8FF"></stop>
+    </linearGradient>
+
+    <!-- 发光 -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4"></feGaussianBlur>
+    </filter>
+  </defs>
+
+  <!-- 草坡 -->
+  <path d="M0 190C200 150 400 160 600 190C800 220 1000 210 1200 180C1400 150 1500 160 1600 180V260H0V190Z" fill="url(#hillA)"></path>
+
+  <path d="M0 220C200 190 400 200 600 220C800 240 1000 230 1200 210C1400 190 1500 200 1600 220V260H0V220Z" fill="url(#hillB)" opacity="0.9"></path>
+
+  <!-- 左侧菱形群 -->
+  <polygon points="160,220 190,190 220,220 190,250" fill="url(#crystal)" opacity="0.85"></polygon>
+  <polygon points="210,230 235,200 260,230 235,255" fill="url(#crystal)" opacity="0.75"></polygon>
+
+  <!-- 右侧菱形群 -->
+  <polygon points="1440,220 1410,190 1380,220 1410,250" fill="url(#crystal)" opacity="0.85"></polygon>
+  <polygon points="1390,230 1365,200 1340,230 1365,255" fill="url(#crystal)" opacity="0.75"></polygon>
+
+  <!-- 四边形结构（核心） -->
+  <polygon points="600,200 800,150 1000,200 820,230" fill="none" stroke="url(#goldSoft)" stroke-width="3" opacity="0.6"></polygon>
+
+  <!-- 几何轨道 -->
+  <path d="M450 210C650 160 950 160 1150 210" fill="none" stroke="#C9D4FF" stroke-width="3" opacity="0.35"></path>
+
+  <path d="M520 220C700 185 900 185 1080 220" fill="none" stroke="#F6D9A6" stroke-width="2.5" opacity="0.4"></path>
+
+  <!-- 节点 -->
+  <circle cx="600" cy="200" r="5" fill="#FFF3C8"></circle>
+  <circle cx="800" cy="150" r="6" fill="#FFE4A8" filter="url(#glow)"></circle>
+  <circle cx="1000" cy="200" r="5" fill="#FFF3C8"></circle>
+
+  <!-- 小花 -->
+  <circle cx="260" cy="230" r="6" fill="#FFF0C8"></circle>
+  <circle cx="260" cy="235" r="3" fill="#FFDDE8"></circle>
+
+  <circle cx="1340" cy="230" r="6" fill="#FFF0C8"></circle>
+  <circle cx="1340" cy="235" r="3" fill="#FFDDE8"></circle>
+
+  <!-- 路径点 -->
+  <circle cx="700" cy="190" r="3" fill="#FFF3C8"></circle>
+  <circle cx="900" cy="190" r="3" fill="#FFF3C8"></circle>
+
+  <!-- 星点 -->
+  <circle cx="500" cy="170" r="2.5" fill="#FFFFFF" opacity="0.7"></circle>
+  <circle cx="800" cy="160" r="3" fill="#FFE6A8" opacity="0.7"></circle>
+  <circle cx="1100" cy="175" r="2.5" fill="#FFDDE8" opacity="0.7"></circle>
+
+</svg>
