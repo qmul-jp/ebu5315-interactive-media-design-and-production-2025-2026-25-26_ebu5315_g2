@@ -1,0 +1,146 @@
+<svg viewBox="0 0 1600 260" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="hillBaseA" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#EEE9F8"></stop>
+      <stop offset="1" stop-color="#DDD7F1"></stop>
+    </linearGradient>
+
+    <linearGradient id="hillBaseB" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#EEF6FF"></stop>
+      <stop offset="1" stop-color="#DCEBFA"></stop>
+    </linearGradient>
+
+    <linearGradient id="goldArc" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#FFE8B0"></stop>
+      <stop offset="0.5" stop-color="#FFF4D6"></stop>
+      <stop offset="1" stop-color="#FFD998"></stop>
+    </linearGradient>
+
+    <linearGradient id="crystalCore" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFF8E8"></stop>
+      <stop offset="0.45" stop-color="#DFF1FF"></stop>
+      <stop offset="1" stop-color="#CDBFFF"></stop>
+    </linearGradient>
+
+    <linearGradient id="crystalBlue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#C7F0FF"></stop>
+      <stop offset="1" stop-color="#8FD6FF"></stop>
+    </linearGradient>
+
+    <linearGradient id="crystalPurple" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#E5D8FF"></stop>
+      <stop offset="1" stop-color="#B99EFF"></stop>
+    </linearGradient>
+
+    <linearGradient id="crystalGold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFF2C9"></stop>
+      <stop offset="1" stop-color="#F2CE7A"></stop>
+    </linearGradient>
+
+    <radialGradient id="altarGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#FFF7D8" stop-opacity="0.85"></stop>
+      <stop offset="0.45" stop-color="#F3E6FF" stop-opacity="0.45"></stop>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"></stop>
+    </radialGradient>
+
+    <filter id="softGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="6" result="blur"></feGaussianBlur>
+      <feMerge>
+        <feMergeNode in="blur"></feMergeNode>
+        <feMergeNode in="SourceGraphic"></feMergeNode>
+      </feMerge>
+    </filter>
+
+    <filter id="tinyGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="blur"></feGaussianBlur>
+      <feMerge>
+        <feMergeNode in="blur"></feMergeNode>
+        <feMergeNode in="SourceGraphic"></feMergeNode>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- 远景坡面 -->
+  <path d="M0 188C150 154 320 154 500 184C680 214 860 216 1040 188C1200 164 1380 158 1600 180V260H0V188Z" fill="url(#hillBaseA)"></path>
+
+  <path d="M0 218C180 192 380 194 590 216C790 238 980 236 1170 214C1350 194 1490 194 1600 208V260H0V218Z" fill="url(#hillBaseB)" opacity="0.92"></path>
+
+  <!-- 中央圣坛底部光 -->
+  <ellipse cx="800" cy="230" rx="280" ry="26" fill="url(#altarGlow)" opacity="0.75"></ellipse>
+  <ellipse cx="800" cy="236" rx="180" ry="14" fill="#FFF7DA" opacity="0.45"></ellipse>
+
+  <!-- 多层圆轨道 -->
+  <path d="M450 226C580 160 700 136 800 134C900 136 1020 160 1150 226" fill="none" stroke="url(#goldArc)" stroke-width="4" opacity="0.65" stroke-linecap="round"></path>
+  <path d="M510 226C620 176 712 158 800 156C888 158 980 176 1090 226" fill="none" stroke="#E8D8FF" stroke-width="3" opacity="0.48" stroke-linecap="round"></path>
+  <path d="M590 226C662 194 732 182 800 180C868 182 938 194 1010 226" fill="none" stroke="#CFE7FF" stroke-width="2.5" opacity="0.42" stroke-linecap="round"></path>
+
+  <!-- 横向轨道流线 -->
+  <path d="M320 212C470 182 640 176 800 190C960 176 1130 182 1280 212" fill="none" stroke="#F7DFAC" stroke-width="2.5" opacity="0.34" stroke-linecap="round"></path>
+  <path d="M360 220C500 198 650 194 800 202C950 194 1100 198 1240 220" fill="none" stroke="#D7E6FF" stroke-width="2" opacity="0.28" stroke-linecap="round"></path>
+
+  <!-- 轨道节点 -->
+  <circle cx="620" cy="158" r="6" fill="#FFF4C8" opacity="0.9" filter="url(#tinyGlow)"></circle>
+  <circle cx="980" cy="158" r="6" fill="#FFF4C8" opacity="0.9" filter="url(#tinyGlow)"></circle>
+  <circle cx="710" cy="147" r="5" fill="#DFF4FF" opacity="0.82" filter="url(#tinyGlow)"></circle>
+  <circle cx="890" cy="147" r="5" fill="#DFF4FF" opacity="0.82" filter="url(#tinyGlow)"></circle>
+  <circle cx="800" cy="140" r="7" fill="#FFF0B8" opacity="0.92" filter="url(#softGlow)"></circle>
+
+  <!-- 中央圣坛圆台 -->
+  <ellipse cx="800" cy="226" rx="92" ry="10" fill="#FFF4D2" opacity="0.62"></ellipse>
+  <ellipse cx="800" cy="226" rx="120" ry="14" fill="none" stroke="#F6D798" stroke-width="3" opacity="0.38"></ellipse>
+  <ellipse cx="800" cy="226" rx="150" ry="18" fill="none" stroke="#DCCBFF" stroke-width="2.5" opacity="0.24"></ellipse>
+
+  <!-- 中央主晶体 -->
+  <polygon points="800,210 822,146 846,210 823,234" fill="url(#crystalCore)" opacity="0.95"></polygon>
+  <polygon points="776,216 792,172 808,216 792,234" fill="url(#crystalBlue)" opacity="0.82"></polygon>
+  <polygon points="838,216 852,176 866,216 852,232" fill="url(#crystalPurple)" opacity="0.78"></polygon>
+  <polygon points="790,202 800,182 810,202 800,214" fill="#FFF9E8" opacity="0.96" filter="url(#softGlow)"></polygon>
+
+  <!-- 中央微光碎晶 -->
+  <polygon points="748,220 758,204 768,220 758,230" fill="url(#crystalGold)" opacity="0.68"></polygon>
+  <polygon points="874,220 884,206 894,220 884,230" fill="url(#crystalBlue)" opacity="0.64"></polygon>
+  <polygon points="724,232 732,220 740,232 732,240" fill="url(#crystalPurple)" opacity="0.56"></polygon>
+  <polygon points="906,232 914,220 922,232 914,240" fill="url(#crystalGold)" opacity="0.56"></polygon>
+
+  <!-- 左侧晶体群 -->
+  <polygon points="104,226 128,164 154,226" fill="url(#crystalPurple)" opacity="0.84"></polygon>
+  <polygon points="136,232 160,178 186,232" fill="url(#crystalBlue)" opacity="0.88"></polygon>
+  <polygon points="178,234 198,186 220,234" fill="url(#crystalCore)" opacity="0.82"></polygon>
+  <polygon points="260,232 276,202 292,232 276,244" fill="url(#crystalGold)" opacity="0.70"></polygon>
+  <polygon points="312,236 324,214 336,236 324,246" fill="url(#crystalBlue)" opacity="0.62"></polygon>
+
+  <!-- 右侧晶体群 -->
+  <polygon points="1496,226 1472,164 1446,226" fill="url(#crystalPurple)" opacity="0.84"></polygon>
+  <polygon points="1464,232 1440,178 1414,232" fill="url(#crystalBlue)" opacity="0.88"></polygon>
+  <polygon points="1422,234 1402,186 1380,234" fill="url(#crystalCore)" opacity="0.82"></polygon>
+  <polygon points="1340,232 1324,202 1308,232 1324,244" fill="url(#crystalGold)" opacity="0.70"></polygon>
+  <polygon points="1288,236 1276,214 1264,236 1276,246" fill="url(#crystalBlue)" opacity="0.62"></polygon>
+
+  <!-- 左右草丛 -->
+  <circle cx="180" cy="234" r="18" fill="#D9F1E5" opacity="0.92"></circle>
+  <circle cx="148" cy="240" r="10" fill="#C6EAD8" opacity="0.86"></circle>
+  <circle cx="212" cy="242" r="9" fill="#ECF8F1" opacity="0.86"></circle>
+
+  <circle cx="1420" cy="234" r="18" fill="#D9F1E5" opacity="0.92"></circle>
+  <circle cx="1452" cy="240" r="10" fill="#C6EAD8" opacity="0.86"></circle>
+  <circle cx="1388" cy="242" r="9" fill="#ECF8F1" opacity="0.86"></circle>
+
+  <!-- 终章感小道具：右侧圆规 -->
+  <path d="M1490 228L1502 188" stroke="#E9C97A" stroke-width="4" stroke-linecap="round" opacity="0.72"></path>
+  <path d="M1502 188L1516 228" stroke="#D9C0FF" stroke-width="4" stroke-linecap="round" opacity="0.62"></path>
+  <circle cx="1502" cy="188" r="5" fill="#FFF1B5" opacity="0.86"></circle>
+
+  <!-- 星点 -->
+  <circle cx="250" cy="188" r="3" fill="#FFFFFF" opacity="0.72" filter="url(#tinyGlow)"></circle>
+  <circle cx="338" cy="176" r="3" fill="#FFF1B5" opacity="0.68" filter="url(#tinyGlow)"></circle>
+  <circle cx="474" cy="168" r="2.5" fill="#FFDDE8" opacity="0.64" filter="url(#tinyGlow)"></circle>
+  <circle cx="680" cy="164" r="2.5" fill="#FFFFFF" opacity="0.72" filter="url(#tinyGlow)"></circle>
+  <circle cx="920" cy="164" r="2.5" fill="#FFFFFF" opacity="0.72" filter="url(#tinyGlow)"></circle>
+  <circle cx="1126" cy="168" r="2.5" fill="#FFDDE8" opacity="0.64" filter="url(#tinyGlow)"></circle>
+  <circle cx="1262" cy="176" r="3" fill="#FFF1B5" opacity="0.68" filter="url(#tinyGlow)"></circle>
+  <circle cx="1350" cy="188" r="3" fill="#FFFFFF" opacity="0.72" filter="url(#tinyGlow)"></circle>
+
+  <!-- 漂浮细星 -->
+  <path d="M566 178L570 170L574 178L582 182L574 186L570 194L566 186L558 182Z" fill="#FFF5D8" opacity="0.48"></path>
+  <path d="M1034 178L1038 170L1042 178L1050 182L1042 186L1038 194L1034 186L1026 182Z" fill="#FFF5D8" opacity="0.48"></path>
+</svg>

@@ -3199,32 +3199,32 @@ body.high-contrast .footer-rich::before {
 /* 默认：首页或未进入关卡 */
 body.home-theme #levelThemeBg,
 body:not(.level-theme-1):not(.level-theme-2):not(.level-theme-3):not(.level-theme-4):not(.level-theme-5) #levelThemeBg {
-    background-image: url("bottom-level1.svg");
+    background-image: url("bottom-level-1.svg");
 }
 
 /* 各关卡 */
 body.level-theme-1 #levelThemeBg {
-    background-image: url("bottom-level1.svg");
+    background-image: url("bottom-level-1.svg");
     filter: saturate(1) brightness(1);
 }
 
 body.level-theme-2 #levelThemeBg {
-    background-image: url("bottom-level2.svg");
+    background-image: url("bottom-level-2.svg");
     filter: saturate(1.03) brightness(1.01);
 }
 
 body.level-theme-3 #levelThemeBg {
-    background-image: url("bottom-level3.svg");
+    background-image: url("bottom-level-3.svg");
     filter: saturate(1.02) brightness(0.99);
 }
 
 body.level-theme-4 #levelThemeBg {
-    background-image: url("bottom-level4.svg");
+    background-image: url("bottom-level-4.svg");
     filter: saturate(1.04) brightness(1.01);
 }
 
 body.level-theme-5 #levelThemeBg {
-    background-image: url("bottom-level5.svg");
+    background-image: url("bottom-level-5.svg");
     filter: saturate(1.06) brightness(1.02);
 }
 
@@ -3718,4 +3718,558 @@ body.high-contrast.level-theme-3 .game-screen::after,
 body.high-contrast.level-theme-3 .canvas-container::before,
 body.high-contrast.level-theme-3 .canvas-container::after {
     display: none !important;
+}
+
+/* =========================================================
+   FINAL FIX PATCH — theme background + level 3 crystal cave
+   放在文件最末尾，覆盖前面冲突规则
+========================================================= */
+
+/* 1) 既然已经使用 #levelThemeBg，就关闭旧的 .game-container::after 底图方案 */
+body.home-theme .game-container::after,
+body.level-theme-1 .game-container::after,
+body.level-theme-2 .game-container::after,
+body.level-theme-3 .game-container::after,
+body.level-theme-4 .game-container::after,
+body.level-theme-5 .game-container::after {
+    background: none !important;
+    background-image: none !important;
+    animation: none !important;
+}
+
+/* 第3关保留极弱的轨道氛围，避免完全空 */
+body.level-theme-3 .game-container::after {
+    content: "" !important;
+    position: fixed !important;
+    inset: 0 !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+    opacity: 0.06 !important;
+    background:
+        radial-gradient(circle at 18% 24%, transparent 0 110px, rgba(120, 175, 255, 0.08) 111px 112px, transparent 113px),
+        radial-gradient(circle at 82% 22%, transparent 0 132px, rgba(180, 205, 255, 0.07) 133px 134px, transparent 135px) !important;
+}
+
+/* 2) 修正 #levelThemeBg 文件名（统一使用带连字符的 SVG 文件名） */
+body.home-theme #levelThemeBg,
+body:not(.level-theme-1):not(.level-theme-2):not(.level-theme-3):not(.level-theme-4):not(.level-theme-5) #levelThemeBg {
+    background-image: url("bottom-level-1.svg") !important;
+}
+
+body.level-theme-1 #levelThemeBg {
+    background-image: url("bottom-level-1.svg") !important;
+    filter: saturate(1) brightness(1) !important;
+}
+
+body.level-theme-2 #levelThemeBg {
+    background-image: url("bottom-level-2.svg") !important;
+    filter: saturate(1.03) brightness(1.01) !important;
+}
+
+body.level-theme-3 #levelThemeBg {
+    background-image: url("bottom-level-3.svg") !important;
+    filter: saturate(1.02) brightness(0.99) !important;
+}
+
+body.level-theme-4 #levelThemeBg {
+    background-image: url("bottom-level-4.svg") !important;
+    filter: saturate(1.04) brightness(1.01) !important;
+}
+
+body.level-theme-5 #levelThemeBg {
+    background-image: url("bottom-level-5.svg") !important;
+    filter: saturate(1.06) brightness(1.02) !important;
+}
+
+/* 3) 第3关：整体背景 */
+body.level-theme-3 {
+    background:
+        radial-gradient(circle at 50% 12%, rgba(255,255,255,0.34), transparent 22%),
+        radial-gradient(circle at 18% 18%, rgba(193, 241, 255, 0.28), transparent 20%),
+        radial-gradient(circle at 82% 18%, rgba(210, 226, 255, 0.22), transparent 20%),
+        radial-gradient(circle at 50% 100%, rgba(184, 234, 255, 0.12), transparent 28%),
+        linear-gradient(180deg, #eef7ff 0%, #e7f4fb 38%, #eef3ff 100%) !important;
+}
+
+body.level-theme-3::before {
+    background:
+        radial-gradient(circle at 22% 28%, rgba(255,255,255,0.76) 0 2px, transparent 2.8px),
+        radial-gradient(circle at 68% 24%, rgba(193,241,255,0.62) 0 2px, transparent 2.8px),
+        radial-gradient(circle at 80% 70%, rgba(206,232,255,0.56) 0 2px, transparent 2.8px),
+        radial-gradient(circle at 34% 78%, rgba(164,224,255,0.60) 0 2px, transparent 2.8px),
+        radial-gradient(circle at 52% 52%, rgba(255,255,255,0.48) 0 1.5px, transparent 2.2px) !important;
+    opacity: 0.82 !important;
+}
+
+body.level-theme-3::after {
+    background:
+        radial-gradient(circle at 50% 100%, rgba(183, 239, 255, 0.16), transparent 26%),
+        radial-gradient(circle at 14% 86%, rgba(126, 215, 255, 0.12), transparent 16%),
+        radial-gradient(circle at 86% 84%, rgba(170, 195, 255, 0.10), transparent 16%),
+        linear-gradient(to top, rgba(255,255,255,0.10), transparent 24%) !important;
+    opacity: 1 !important;
+}
+
+/* 4) 第3关主区域 */
+body.level-theme-3 .game-screen {
+    background:
+        linear-gradient(180deg, rgba(235, 246, 255, 0.58), rgba(232, 241, 255, 0.40)),
+        rgba(255,255,255,0.12) !important;
+    border: 1px solid rgba(140, 190, 255, 0.12) !important;
+    box-shadow:
+        0 28px 56px rgba(70, 108, 170, 0.12),
+        inset 0 1px 0 rgba(255,255,255,0.14) !important;
+}
+
+body.level-theme-3 .game-screen::before {
+    background:
+        radial-gradient(circle at 50% 56%, rgba(255,255,255,0.18), transparent 26%),
+        radial-gradient(circle at 12% 18%, rgba(206, 244, 255, 0.16), transparent 14%),
+        radial-gradient(circle at 88% 18%, rgba(206, 231, 255, 0.14), transparent 14%),
+        radial-gradient(circle at 50% 100%, rgba(173, 232, 255, 0.10), transparent 22%) !important;
+}
+
+body.level-theme-3 .game-screen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.16 !important;
+    background:
+        radial-gradient(circle at 50% 115%, transparent 0 260px, rgba(167, 226, 255, 0.16) 261px 263px, transparent 264px),
+        radial-gradient(circle at 50% 115%, transparent 0 340px, rgba(189, 210, 255, 0.12) 341px 343px, transparent 344px),
+        radial-gradient(circle at 28% 78%, rgba(255,255,255,0.40) 0 2px, transparent 2.8px),
+        radial-gradient(circle at 72% 78%, rgba(255,255,255,0.40) 0 2px, transparent 2.8px),
+        radial-gradient(circle at 36% 70%, rgba(190,236,255,0.32) 0 2px, transparent 2.8px),
+        radial-gradient(circle at 64% 70%, rgba(190,236,255,0.32) 0 2px, transparent 2.8px) !important;
+}
+
+/* 5) 第3关任务卡 */
+body.level-theme-3 .mission-box {
+    background:
+        linear-gradient(135deg, rgba(236, 248, 255, 0.92), rgba(231, 241, 255, 0.78)) !important;
+    border: 1px solid rgba(135, 194, 255, 0.18) !important;
+    box-shadow: 0 14px 28px rgba(104, 177, 224, 0.10) !important;
+}
+
+body.level-theme-3 .mission-box::before {
+    background: linear-gradient(180deg, #7ed7ff, #8b9cff) !important;
+    box-shadow: 0 0 16px rgba(126, 215, 255, 0.24) !important;
+}
+
+body.level-theme-3 #missionTitle,
+body.level-theme-3 .mission-box h4 {
+    color: #2f5d8a !important;
+}
+
+body.level-theme-3 #missionDesc,
+body.level-theme-3 .mission-box p {
+    color: #5d7394 !important;
+}
+
+/* 6) 第3关主舞台 */
+body.level-theme-3 .canvas-container {
+    background:
+        linear-gradient(180deg, rgba(233, 245, 255, 0.82), rgba(230, 239, 255, 0.60)),
+        rgba(255,255,255,0.14) !important;
+    border: 1px solid rgba(136, 190, 255, 0.20) !important;
+    box-shadow:
+        0 28px 54px rgba(75, 116, 186, 0.16),
+        0 0 0 1px rgba(164, 220, 255, 0.10),
+        inset 0 1px 0 rgba(255,255,255,0.18) !important;
+}
+
+/* 左下晶体感 */
+body.level-theme-3 .canvas-container::before {
+    content: "";
+    position: absolute;
+    left: -22px;
+    bottom: -16px;
+    width: 170px;
+    height: 140px;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.52 !important;
+    inset: auto !important;
+    background:
+        linear-gradient(135deg, transparent 38%, rgba(150, 226, 255, 0.72) 39% 53%, transparent 54%),
+        linear-gradient(45deg, transparent 42%, rgba(128, 206, 255, 0.58) 43% 57%, transparent 58%),
+        linear-gradient(155deg, transparent 44%, rgba(194, 221, 255, 0.46) 45% 57%, transparent 58%) !important;
+    filter: drop-shadow(0 10px 14px rgba(114, 186, 255, 0.10));
+    animation: level3CrystalFloat 7s ease-in-out infinite;
+}
+
+/* 右下晶体感：重置旧的描边蒙版 */
+body.level-theme-3 .canvas-container::after {
+    content: "";
+    position: absolute;
+    right: -18px;
+    bottom: -10px;
+    width: 170px;
+    height: 140px;
+    pointer-events: none;
+    z-index: 0;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    opacity: 0.46 !important;
+    -webkit-mask: none !important;
+    mask: none !important;
+    background:
+        linear-gradient(225deg, transparent 38%, rgba(150, 226, 255, 0.72) 39% 53%, transparent 54%),
+        linear-gradient(315deg, transparent 42%, rgba(162, 190, 255, 0.54) 43% 57%, transparent 58%),
+        radial-gradient(circle at 76% 80%, rgba(255, 247, 216, 0.64) 0 10px, transparent 11px),
+        radial-gradient(circle at 68% 88%, rgba(234, 248, 255, 0.54) 0 18px, transparent 19px) !important;
+    filter: drop-shadow(0 10px 14px rgba(114, 186, 255, 0.10));
+    animation: level3CrystalFloat 7s ease-in-out infinite reverse;
+}
+
+/* 画布内部 */
+body.level-theme-3 #gameCanvas {
+    background:
+        radial-gradient(circle at 50% 18%, rgba(255,255,255,0.96), rgba(238,247,255,0.98) 42%, rgba(229,239,252,1) 100%),
+        radial-gradient(circle at 50% 62%, rgba(205, 242, 255, 0.10), transparent 30%),
+        linear-gradient(transparent 95%, rgba(120,150,255,0.028) 95%),
+        linear-gradient(90deg, transparent 95%, rgba(120,150,255,0.028) 95%) !important;
+    background-size: auto, auto, 40px 40px, 40px 40px !important;
+    box-shadow:
+        inset 0 0 0 1px rgba(148, 194, 255, 0.08),
+        inset 0 -16px 30px rgba(92, 140, 214, 0.06) !important;
+}
+
+/* 7) 第3关右侧面板 */
+body.level-theme-3 .info-box {
+    background:
+        linear-gradient(180deg, rgba(236, 246, 255, 0.74), rgba(232, 239, 255, 0.58)),
+        rgba(255,255,255,0.14) !important;
+    border: 1px solid rgba(140, 195, 255, 0.16) !important;
+    box-shadow:
+        0 18px 36px rgba(88, 120, 184, 0.12),
+        inset 0 1px 0 rgba(255,255,255,0.18) !important;
+}
+
+body.level-theme-3 .info-box::before {
+    background: radial-gradient(circle, rgba(173, 231, 255, 0.18), transparent 70%) !important;
+}
+
+body.level-theme-3 .theorem-box {
+    background:
+        linear-gradient(135deg, rgba(225, 242, 255, 0.90), rgba(233, 240, 255, 0.76)) !important;
+    border: 1px solid rgba(139, 191, 255, 0.16) !important;
+    box-shadow: 0 10px 22px rgba(106, 173, 224, 0.10) !important;
+}
+
+body.level-theme-3 .data-panel {
+    background:
+        linear-gradient(135deg, rgba(232, 247, 255, 0.88), rgba(227, 239, 255, 0.74)) !important;
+    border: 1px solid rgba(118, 199, 255, 0.18) !important;
+    box-shadow: 0 12px 24px rgba(88, 159, 255, 0.08) !important;
+}
+
+body.level-theme-3 .data-item {
+    background:
+        linear-gradient(135deg, rgba(245, 251, 255, 0.72), rgba(232, 244, 255, 0.56)) !important;
+    border: 1px solid rgba(166, 217, 255, 0.12) !important;
+    box-shadow: 0 6px 14px rgba(77, 110, 191, 0.05) !important;
+}
+
+body.level-theme-3 .hint-box {
+    background:
+        linear-gradient(135deg, rgba(255, 244, 219, 0.92), rgba(241, 248, 255, 0.80)) !important;
+    border: 1px solid rgba(255, 204, 122, 0.20) !important;
+}
+
+@keyframes level3CrystalFloat {
+    0% { transform: translateY(0px) scale(1); }
+    50% { transform: translateY(-5px) scale(1.01); }
+    100% { transform: translateY(0px) scale(1); }
+}
+
+@media (max-width: 780px) {
+    body.level-theme-3 .game-screen::after {
+        opacity: 0.10 !important;
+    }
+
+    body.level-theme-3 .canvas-container::before,
+    body.level-theme-3 .canvas-container::after {
+        opacity: 0.24 !important;
+        transform: scale(0.82);
+    }
+}
+
+body.high-contrast.level-theme-3 .game-screen::after,
+body.high-contrast.level-theme-3 .canvas-container::before,
+body.high-contrast.level-theme-3 .canvas-container::after {
+    display: none !important;
+}
+body.level-theme-3 .game-screen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.18;
+    background:
+        radial-gradient(circle at 50% 110%, transparent 0 260px, rgba(167,226,255,0.18) 261px 263px, transparent 264px),
+        radial-gradient(circle at 50% 110%, transparent 0 340px, rgba(189,210,255,0.14) 341px 343px, transparent 344px);
+    animation: orbitFlow 18s linear infinite;
+}
+
+@keyframes orbitFlow {
+    0%   { transform: rotate(0deg) scale(1); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+.geo-particle {
+    position: fixed;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(180,220,255,0.6);
+    pointer-events: none;
+    z-index: 0;
+    animation: floatGeo 12s ease-in-out infinite;
+}
+
+@keyframes floatGeo {
+    0%   { transform: translateY(0px); opacity: 0.4; }
+    50%  { transform: translateY(-30px); opacity: 0.8; }
+    100% { transform: translateY(0px); opacity: 0.4; }
+}
+body.level-theme-3 .canvas-container {
+    animation: canvasGlow 4s ease-in-out infinite;
+}
+
+@keyframes canvasGlow {
+    0%   { box-shadow: 0 0 20px rgba(120,180,255,0.15); }
+    50%  { box-shadow: 0 0 40px rgba(120,180,255,0.25); }
+    100% { box-shadow: 0 0 20px rgba(120,180,255,0.15); }
+}
+.geo-ripple {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(120,180,255,0.6);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: ripple 1s ease-out forwards;
+}
+
+@keyframes ripple {
+    to {
+        transform: translate(-50%, -50%) scale(5);
+        opacity: 0;
+    }
+}
+.level-lore {
+    position: fixed;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255,255,255,0.2);
+    padding: 10px 20px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    animation: fadeIn 0.6s;
+}
+/* =========================================
+   Level 3 卡通角色：晶洞小精灵
+========================================= */
+
+body.level-theme-3 .canvas-container {
+    overflow: visible;
+}
+
+.level3-mascot {
+    position: absolute;
+    width: 78px;
+    height: 78px;
+    pointer-events: none;
+    z-index: 2;
+    animation: mascotFloat 4.8s ease-in-out infinite;
+}
+
+.level3-mascot .mascot-body {
+    position: absolute;
+    inset: 0;
+    border-radius: 46% 46% 42% 42%;
+    background:
+        radial-gradient(circle at 35% 30%, rgba(255,255,255,0.88), transparent 20%),
+        linear-gradient(180deg, rgba(196,239,255,0.95), rgba(158,214,255,0.82) 60%, rgba(179,196,255,0.72));
+    box-shadow:
+        0 10px 24px rgba(104, 176, 255, 0.20),
+        inset 0 2px 6px rgba(255,255,255,0.45);
+    border: 1px solid rgba(255,255,255,0.28);
+}
+
+.level3-mascot .eye-left,
+.level3-mascot .eye-right {
+    position: absolute;
+    top: 28px;
+    width: 6px;
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(66, 95, 150, 0.92);
+}
+
+.level3-mascot .eye-left {
+    left: 26px;
+}
+
+.level3-mascot .eye-right {
+    right: 26px;
+}
+
+.level3-mascot .blush-left,
+.level3-mascot .blush-right {
+    position: absolute;
+    top: 42px;
+    width: 10px;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(255, 183, 210, 0.52);
+    filter: blur(0.5px);
+}
+
+.level3-mascot .blush-left {
+    left: 18px;
+}
+
+.level3-mascot .blush-right {
+    right: 18px;
+}
+
+.mascot-left {
+    left: -18px;
+    bottom: 18px;
+}
+
+.mascot-right {
+    right: -14px;
+    bottom: 30px;
+    animation-delay: -1.8s;
+}
+
+.mascot-top {
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation-delay: -0.6s;
+}
+
+.mascot-bottom {
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation-delay: -2.4s;
+}
+
+.mascot-top-left {
+    top: -18px;
+    left: 20px;
+    animation-delay: -1.2s;
+}
+
+.mascot-top-right {
+    top: -18px;
+    right: 20px;
+    animation-delay: -3.0s;
+}
+
+body.level-theme-3 .mascot-left .mascot-body {
+    clip-path: polygon(50% 0%, 78% 18%, 100% 54%, 82% 100%, 18% 100%, 0% 54%, 22% 18%);
+}
+
+body.level-theme-3 .mascot-right .mascot-body {
+    clip-path: polygon(50% 0%, 76% 16%, 100% 50%, 84% 100%, 16% 100%, 0% 50%, 24% 16%);
+    background:
+        radial-gradient(circle at 35% 30%, rgba(255,255,255,0.88), transparent 20%),
+        linear-gradient(180deg, rgba(221,235,255,0.95), rgba(185,210,255,0.82) 60%, rgba(182,188,255,0.72));
+}
+
+body.level-theme-3 .mascot-top .mascot-body {
+    clip-path: polygon(50% 0%, 100% 30%, 80% 100%, 20% 100%, 0% 30%);
+    background:
+        radial-gradient(circle at 50% 35%, rgba(255,255,255,0.88), transparent 20%),
+        linear-gradient(180deg, rgba(204,239,255,0.95), rgba(166,219,255,0.82) 60%, rgba(179,196,255,0.72));
+}
+
+body.level-theme-3 .mascot-bottom .mascot-body {
+    clip-path: polygon(50% 100%, 100% 70%, 80% 0%, 20% 0%, 0% 70%);
+    background:
+        radial-gradient(circle at 50% 65%, rgba(255,255,255,0.88), transparent 20%),
+        linear-gradient(180deg, rgba(221,235,255,0.95), rgba(185,210,255,0.82) 60%, rgba(182,188,255,0.72));
+}
+
+body.level-theme-3 .mascot-top-left .mascot-body {
+    clip-path: polygon(0% 0%, 100% 20%, 80% 100%, 0% 80%);
+    background:
+        radial-gradient(circle at 25% 25%, rgba(255,255,255,0.88), transparent 20%),
+        linear-gradient(180deg, rgba(204,239,255,0.95), rgba(166,219,255,0.82) 60%, rgba(179,196,255,0.72));
+}
+
+body.level-theme-3 .mascot-top-right .mascot-body {
+    clip-path: polygon(100% 0%, 0% 20%, 20% 100%, 100% 80%);
+    background:
+        radial-gradient(circle at 75% 25%, rgba(255,255,255,0.88), transparent 20%),
+        linear-gradient(180deg, rgba(221,235,255,0.95), rgba(185,210,255,0.82) 60%, rgba(182,188,255,0.72));
+}
+
+.level3-helper {
+    position: absolute;
+    right: -12px;
+    bottom: -10px;
+    width: 54px;
+    height: 54px;
+    pointer-events: none;
+    z-index: 2;
+    animation: helperBob 5.6s ease-in-out infinite;
+}
+
+.level3-helper .helper-star {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 50% 50%, rgba(255,248,210,0.95), rgba(255,224,165,0.78));
+    clip-path: polygon(
+        50% 0%,
+        61% 35%,
+        98% 35%,
+        68% 57%,
+        79% 92%,
+        50% 70%,
+        21% 92%,
+        32% 57%,
+        2% 35%,
+        39% 35%
+    );
+    box-shadow: 0 8px 18px rgba(255, 193, 92, 0.20);
+}
+
+.level3-helper .eye-left,
+.level3-helper .eye-right {
+    position: absolute;
+    top: 20px;
+    width: 4px;
+    height: 7px;
+    border-radius: 999px;
+    background: rgba(105, 94, 124, 0.9);
+    z-index: 1;
+}
+
+.level3-helper .eye-left {
+    left: 18px;
+}
+
+.level3-helper .eye-right {
+    right: 18px;
+}
+
+@keyframes mascotFloat {
+    0% { transform: translateY(0px) rotate(-1deg); }
+    50% { transform: translateY(-7px) rotate(1deg); }
+    100% { transform: translateY(0px) rotate(-1deg); }
+}
+
+@keyframes helperBob {
+    0% { transform: translateY(0px) scale(1); }
+    50% { transform: translateY(-6px) scale(1.03); }
+    100% { transform: translateY(0px) scale(1); }
 }

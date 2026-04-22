@@ -487,6 +487,12 @@ function checkMicroMilestones() {
 }
 
     function startLevel(levelId){
+        applyLevelTheme(levelId);
+        if (Number(levelId) === 3) {
+    injectLevel3Mascots();
+} else {
+    removeLevel3Mascots();
+}
         enableAudio();
         currentLevel=levelId;
         levelScore=0;
@@ -923,9 +929,9 @@ checkMicroMilestones(); draw(); });
 });
 
     resetLevelBtn.addEventListener('click',()=>{ startLevel(currentLevel); });
-    backBtn.addEventListener('click',()=>{ gameScreen.classList.add('hidden'); levelSelect.classList.remove('hidden'); renderLevelGrid(); });
+    backBtn.addEventListener('click',()=>{ removeLevel3Mascots();gameScreen.classList.add('hidden'); levelSelect.classList.remove('hidden'); renderLevelGrid(); });
     nextLevelBtn.addEventListener('click',()=>{ resultModal.classList.add('hidden'); if(currentLevel<levelConfig.length) startLevel(currentLevel+1); else { gameScreen.classList.add('hidden'); levelSelect.classList.remove('hidden'); renderLevelGrid(); } });
-    backToSelectBtn.addEventListener('click',()=>{ resultModal.classList.add('hidden'); gameScreen.classList.add('hidden'); levelSelect.classList.remove('hidden'); renderLevelGrid(); });
+    backToSelectBtn.addEventListener('click',()=>{ removeLevel3Mascots();resultModal.classList.add('hidden'); gameScreen.classList.add('hidden'); levelSelect.classList.remove('hidden'); renderLevelGrid(); });
     aiHintBtn.addEventListener('click',()=>{
     const level=levelConfig[currentLevel-1];
     if(currentLevel===5){
@@ -1369,6 +1375,105 @@ function applyLevelTheme(levelId = null) {
     const safeId = Math.max(1, Math.min(5, Number(levelId) || 1));
     body.classList.add(`level-theme-${safeId}`);
 }
+/* ===== Level 3 卡通角色函数 ===== */
+
+function injectLevel3Mascots() {
+    removeLevel3Mascots();
+
+    const canvasContainer = document.querySelector('.canvas-container');
+    const infoBox = document.querySelector('.info-box');
+
+    if (!canvasContainer || !document.body.classList.contains('level-theme-3')) return;
+
+    // 左侧吉祥物
+    const leftMascot = document.createElement('div');
+    leftMascot.className = 'level3-mascot mascot-left';
+    leftMascot.innerHTML = `
+        <div class="mascot-body"></div>
+        <div class="eye-left"></div>
+        <div class="eye-right"></div>
+        <div class="blush-left"></div>
+        <div class="blush-right"></div>
+    `;
+
+    // 右侧吉祥物
+    const rightMascot = document.createElement('div');
+    rightMascot.className = 'level3-mascot mascot-right';
+    rightMascot.innerHTML = `
+        <div class="mascot-body"></div>
+        <div class="eye-left"></div>
+        <div class="eye-right"></div>
+        <div class="blush-left"></div>
+        <div class="blush-right"></div>
+    `;
+
+    // 顶部吉祥物
+    const topMascot = document.createElement('div');
+    topMascot.className = 'level3-mascot mascot-top';
+    topMascot.innerHTML = `
+        <div class="mascot-body"></div>
+        <div class="eye-left"></div>
+        <div class="eye-right"></div>
+        <div class="blush-left"></div>
+        <div class="blush-right"></div>
+    `;
+
+    // 底部吉祥物
+    const bottomMascot = document.createElement('div');
+    bottomMascot.className = 'level3-mascot mascot-bottom';
+    bottomMascot.innerHTML = `
+        <div class="mascot-body"></div>
+        <div class="eye-left"></div>
+        <div class="eye-right"></div>
+        <div class="blush-left"></div>
+        <div class="blush-right"></div>
+    `;
+
+    // 左上角吉祥物
+    const topLeftMascot = document.createElement('div');
+    topLeftMascot.className = 'level3-mascot mascot-top-left';
+    topLeftMascot.innerHTML = `
+        <div class="mascot-body"></div>
+        <div class="eye-left"></div>
+        <div class="eye-right"></div>
+        <div class="blush-left"></div>
+        <div class="blush-right"></div>
+    `;
+
+    // 右上角吉祥物
+    const topRightMascot = document.createElement('div');
+    topRightMascot.className = 'level3-mascot mascot-top-right';
+    topRightMascot.innerHTML = `
+        <div class="mascot-body"></div>
+        <div class="eye-left"></div>
+        <div class="eye-right"></div>
+        <div class="blush-left"></div>
+        <div class="blush-right"></div>
+    `;
+
+    // 添加所有吉祥物到容器
+    canvasContainer.appendChild(leftMascot);
+    canvasContainer.appendChild(rightMascot);
+    canvasContainer.appendChild(topMascot);
+    canvasContainer.appendChild(bottomMascot);
+    canvasContainer.appendChild(topLeftMascot);
+    canvasContainer.appendChild(topRightMascot);
+
+    if (infoBox) {
+        const helper = document.createElement('div');
+        helper.className = 'level3-helper';
+        helper.innerHTML = `
+            <div class="helper-star"></div>
+            <div class="eye-left"></div>
+            <div class="eye-right"></div>
+        `;
+        infoBox.appendChild(helper);
+    }
+}
+
+function removeLevel3Mascots() {
+    document.querySelectorAll('.level3-mascot, .level3-helper').forEach(el => el.remove());
+}
 
 /* 页面初始加载：首页默认风格 */
 window.addEventListener('load', () => {
@@ -1398,3 +1503,199 @@ if (backToSelectBtnEl) {
         setTimeout(() => applyLevelTheme(null), 50);
     });
 }
+/* =========================================================
+   Level 3 背景增强增量代码
+   粘贴到 v4script.js 最底部
+========================================================= */
+
+(function () {
+    let geoParticlesCreated = false;
+    let lastRippleTime = 0;
+    let currentLoreTimer = null;
+
+    function createGeoParticles() {
+        if (geoParticlesCreated) return;
+        geoParticlesCreated = true;
+
+        const particleCount = 18;
+        const frag = document.createDocumentFragment();
+
+        for (let i = 0; i < particleCount; i++) {
+            const p = document.createElement('div');
+            p.className = 'geo-particle';
+
+            const size = 4 + Math.random() * 6;
+            p.style.width = `${size}px`;
+            p.style.height = `${size}px`;
+            p.style.left = `${Math.random() * 100}vw`;
+            p.style.top = `${Math.random() * 100}vh`;
+            p.style.animationDelay = `${Math.random() * 10}s`;
+            p.style.animationDuration = `${10 + Math.random() * 8}s`;
+
+            frag.appendChild(p);
+        }
+
+        document.body.appendChild(frag);
+    }
+
+    function showLevelLore(text) {
+        const oldLore = document.querySelector('.level-lore');
+        if (oldLore) oldLore.remove();
+        if (currentLoreTimer) clearTimeout(currentLoreTimer);
+
+        const hint = document.createElement('div');
+        hint.className = 'level-lore';
+        hint.textContent = text;
+        document.body.appendChild(hint);
+
+        currentLoreTimer = setTimeout(() => {
+            hint.remove();
+        }, 3600);
+    }
+
+    function showRipple(x, y) {
+        const now = Date.now();
+        if (now - lastRippleTime < 90) return;
+        lastRippleTime = now;
+
+        const r = document.createElement('div');
+        r.className = 'geo-ripple';
+        r.style.left = `${x}px`;
+        r.style.top = `${y}px`;
+        document.body.appendChild(r);
+
+        setTimeout(() => r.remove(), 900);
+    }
+
+    function updateBackground(diff) {
+        const body = document.body;
+        if (!body.classList.contains('level-theme-3')) return;
+
+        const safeDiff = Number.isFinite(diff) ? Math.max(0, diff) : 30;
+        const intensity = Math.max(0, 1 - safeDiff / 30);
+
+        body.style.setProperty('--level3-brightness', (1 + intensity * 0.08).toFixed(3));
+        body.style.setProperty('--level3-saturate', (1 + intensity * 0.12).toFixed(3));
+
+        const screen = document.getElementById('gameScreen');
+        if (screen) {
+            screen.style.filter = `brightness(${1 + intensity * 0.04}) saturate(${1 + intensity * 0.05})`;
+        }
+    }
+
+    function attachParallax() {
+        let ticking = false;
+
+        document.addEventListener('mousemove', (e) => {
+            const gameScreen = document.getElementById('gameScreen');
+            if (!gameScreen || gameScreen.classList.contains('hidden')) return;
+            if (!document.body.classList.contains('level-theme-3')) return;
+
+            if (ticking) return;
+            ticking = true;
+
+            requestAnimationFrame(() => {
+                const x = (e.clientX / window.innerWidth - 0.5) * 6;
+                const y = (e.clientY / window.innerHeight - 0.5) * 6;
+
+                gameScreen.style.transform =
+                    `perspective(1200px) rotateX(${-y * 0.15}deg) rotateY(${x * 0.15}deg)`;
+
+                ticking = false;
+            });
+        });
+
+        document.addEventListener('mouseleave', () => {
+            const gameScreen = document.getElementById('gameScreen');
+            if (gameScreen) {
+                gameScreen.style.transform = '';
+            }
+        });
+    }
+
+    function attachRippleToCanvas() {
+        const canvas = document.getElementById('gameCanvas');
+        if (!canvas) return;
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (!document.body.classList.contains('level-theme-3')) return;
+            if (!(e.buttons & 1)) return;
+            showRipple(e.clientX, e.clientY);
+        });
+
+        canvas.addEventListener('touchmove', (e) => {
+            if (!document.body.classList.contains('level-theme-3')) return;
+            const touch = e.touches && e.touches[0];
+            if (!touch) return;
+            showRipple(touch.clientX, touch.clientY);
+        }, { passive: true });
+    }
+
+    function enhanceStartLevel() {
+        if (typeof window.startLevel !== 'function' || window.__level3EnhancedStartLevel) return;
+        window.__level3EnhancedStartLevel = true;
+
+        const originalStartLevel = window.startLevel;
+
+        window.startLevel = function (levelId) {
+            const result = originalStartLevel.apply(this, arguments);
+
+            createGeoParticles();
+
+            if (Number(levelId) === 3) {
+                showLevelLore('✨ 在晶洞中，相同弦对应的角保持不变...');
+            }
+
+            return result;
+        };
+    }
+
+    function enhanceUpdateDataDisplay() {
+        if (typeof window.updateDataDisplay !== 'function' || window.__level3EnhancedDataDisplay) return;
+        window.__level3EnhancedDataDisplay = true;
+
+        const originalUpdateDataDisplay = window.updateDataDisplay;
+
+        window.updateDataDisplay = function () {
+            const result = originalUpdateDataDisplay.apply(this, arguments);
+
+            try {
+                const dataText = document.getElementById('dataDisplay')?.innerText || '';
+                const match = dataText.match(/([0-9]+(?:\.[0-9]+)?)\s*°?\s*$/m);
+                if (match) {
+                    const diff = parseFloat(match[1]);
+                    updateBackground(diff);
+                }
+            } catch (err) {
+                console.warn('updateBackground skipped:', err);
+            }
+
+            return result;
+        };
+    }
+
+    function applyLevel3CSSVars() {
+        const style = document.createElement('style');
+        style.textContent = `
+            body.level-theme-3 {
+                filter: brightness(var(--level3-brightness, 1)) saturate(var(--level3-saturate, 1));
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    function initLevel3Enhancement() {
+        createGeoParticles();
+        attachParallax();
+        attachRippleToCanvas();
+        enhanceStartLevel();
+        enhanceUpdateDataDisplay();
+        applyLevel3CSSVars();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initLevel3Enhancement);
+    } else {
+        initLevel3Enhancement();
+    }
+})();
