@@ -348,6 +348,25 @@
       ggbApi.evalCommand(`SetCaption(A, "${pointLabel}")`);
     }
 
+    function updateGeoGebraContrast(isHighContrast) {
+      if (!ggbApi) return;
+      if (isHighContrast) {
+        ggbApi.evalCommand("SetColor(c, 255, 215, 0)");
+        ggbApi.evalCommand("SetColor(r, 255, 255, 255)");
+        ggbApi.evalCommand("SetColor(t, 255, 255, 255)");
+        ggbApi.evalCommand("SetColor(O, 255, 255, 255)");
+        ggbApi.evalCommand("SetColor(A, 255, 0, 0)");
+        ggbApi.evalCommand("SetColor(alpha, 255, 255, 255)");
+      } else {
+        ggbApi.evalCommand("SetColor(c, 0, 0, 0)");
+        ggbApi.evalCommand("SetColor(r, 0, 0, 0)");
+        ggbApi.evalCommand("SetColor(t, 0, 0, 0)");
+        ggbApi.evalCommand("SetColor(O, 0, 0, 0)");
+        ggbApi.evalCommand("SetColor(A, 255, 0, 0)");
+        ggbApi.evalCommand("SetColor(alpha, 0, 0, 0)");
+      }
+    }
+
     var parameters = {
       "id": "ggbApplet",
       "width": 600,
@@ -357,39 +376,46 @@
       "showMenuBar": false,
       "showAlgebraInput": false,
       "showToolBar": false,
-      "showResetIcon": true,
+      "showResetIcon": false,
       "enableLabelDrags": false,
       "enableShiftDragZoom": true,
       "enableRightClick": false,
-      "showZoomButtons": true,
+      "showZoomButtons": false,
       "useBrowserForJS": false,
       "language": "zh",
+      "borderColor": "none",
       "appletOnLoad": function(api) {
         ggbApi = api;
         
         api.evalCommand("O = (0,0)");
         api.evalCommand("SetCaption(O, \"圆心\")");
         api.evalCommand("ShowLabel(O, true)");
+        api.evalCommand("SetPointSize(O, 8)");
         
         api.evalCommand("c = Circle(O, 3)");
-        api.evalCommand("SetColor(c, 92, 108, 255)");
+        api.evalCommand("SetColor(c, 0, 0, 0)");
         api.evalCommand("SetLineThickness(c, 4)");
 
         api.evalCommand("A = Point(c)");
         api.evalCommand("SetCaption(A, \"切点\")");
         api.evalCommand("ShowLabel(A, true)");
+        api.evalCommand("SetPointSize(A, 8)");
+        api.evalCommand("SetColor(A, 255, 0, 0)");
 
         api.evalCommand("r = Segment(O, A)");
-        api.evalCommand("SetColor(r, 244, 90, 166)");
+        api.evalCommand("SetColor(r, 0, 0, 0)");
         api.evalCommand("SetLineThickness(r, 3)");
 
         api.evalCommand("t = Tangent(A, c)");
-        api.evalCommand("SetColor(t, 57, 201, 133)");
+        api.evalCommand("SetColor(t, 0, 0, 0)");
         api.evalCommand("SetLineThickness(t, 3)");
 
         api.evalCommand("B = A + (y(A), -x(A))"); 
         api.evalCommand("alpha = Angle(O, A, B)");
         api.evalCommand("SetColor(alpha, 0, 0, 0)");
+        
+        api.evalCommand("SetViewDirection((0, 0, 1))");
+        api.evalCommand("ZoomIn(1.5)");
       }
     };
     
