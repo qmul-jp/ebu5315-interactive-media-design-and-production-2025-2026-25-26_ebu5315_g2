@@ -250,8 +250,8 @@
           极简高效的交互式数学学习平台，让 GCSE 与中考的圆几何变得直观易懂。
         </p>
         <div class="hero-actions">
-          <button class="btn btn-primary" data-zh="开始学习" data-en="Start Learning">开始学习</button>
-          <button class="btn btn-secondary" data-zh="了解更多" data-en="Learn More">了解更多</button>
+          <button id="startLearningBtn" class="btn btn-primary" data-zh="开始学习" data-en="Start Learning">开始学习</button>
+          <button id="learnMoreBtn" class="btn btn-secondary" data-zh="了解更多" data-en="Learn More">了解更多</button>
         </div>
       </div>
 
@@ -264,7 +264,7 @@
     </section>
 
     <!-- Features Grid -->
-    <section class="features-grid">
+    <section id="featuresSection" class="features-grid">
       <article class="card">
         <div class="feature-icon">🎯</div>
         <h3 data-zh="极简无扰" data-en="Minimalism">极简无扰</h3>
@@ -315,7 +315,7 @@
         <p data-zh="你好！我是你的专属 AI 导师。我可以帮你解析圆定理规则，规划从基础到进阶的复习路线。想立刻开始吗？" data-en="Hello! I am your AI tutor. I can interpret circle rules and build your path from basics to advanced. Ready?">
           你好！我是你的专属 AI 导师。我可以帮你解析圆定理规则，规划从基础到进阶的复习路线。想立刻开始吗？
         </p>
-        <button class="btn btn-primary" data-zh="即刻对话" data-en="Start Chat">即刻对话</button>
+        <button id="aiChatBtn" class="btn btn-primary" data-zh="即刻对话" data-en="Start Chat">即刻对话</button>
       </article>
 
       <article class="card card-info">
@@ -408,6 +408,30 @@
             updateGeoGebraLabels(is_zh);
           }, 100);
         };
+      }
+
+      const startLearningBtn = document.getElementById('startLearningBtn');
+      if (startLearningBtn) {
+        startLearningBtn.addEventListener('click', function() {
+          window.location.href = 'game.html';
+        });
+      }
+
+      const learnMoreBtn = document.getElementById('learnMoreBtn');
+      if (learnMoreBtn) {
+        learnMoreBtn.addEventListener('click', function() {
+          const featuresSection = document.getElementById('featuresSection');
+          if (featuresSection) {
+            featuresSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      }
+
+      const aiChatBtn = document.getElementById('aiChatBtn');
+      if (aiChatBtn) {
+        aiChatBtn.addEventListener('click', function() {
+          alert(is_zh ? '🎉 AI 学习助理即将上线！\n\n我们正在开发智能导师功能，敬请期待。\n\n目前您可以：\n• 通过游戏学习圆几何定理\n• 完成测验检验学习成果' : '🎉 AI Assistant Coming Soon!\n\nWe are developing the AI tutor feature. Stay tuned!\n\nFor now, you can:\n• Learn circle geometry through games\n• Test your knowledge with quizzes');
+        });
       }
     });
   </script>
