@@ -1889,6 +1889,9 @@ body.high-contrast .compact-grid .achievement-card {
     box-shadow: 0 18px 34px rgba(78, 100, 184, 0.12);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
 }
 
 .hero-panel::before {
@@ -1946,6 +1949,7 @@ body.high-contrast .compact-grid .achievement-card {
 
 #todayChallengeBtn {
     min-height: 44px;
+    margin-top: auto;
 }
 
 .progress-stats {
@@ -4086,6 +4090,53 @@ body.level-theme-3 .canvas-container {
     animation: mascotFloat 4.8s ease-in-out infinite;
 }
 
+.mascot-left {
+    animation: mascotFloat 4.2s ease-in-out infinite;
+}
+
+.mascot-right {
+    animation: mascotBounce 3.8s ease-in-out infinite -1.8s;
+}
+
+.mascot-top {
+    animation: mascotSwing 5.2s ease-in-out infinite -0.6s;
+}
+
+.mascot-bottom {
+    animation: mascotWiggle 4.6s ease-in-out infinite -2.4s;
+}
+
+.mascot-top-left {
+    animation: mascotPulse 6.0s ease-in-out infinite -1.2s;
+}
+
+.mascot-top-right {
+    animation: mascotBounce 4.4s ease-in-out infinite -3.0s;
+}
+
+.level3-mascot::before {
+    content: "";
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(126, 185, 255, 0.15), transparent 70%);
+    animation: mascotGlow 3s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+@keyframes mascotGlow {
+    0% { 
+        opacity: 0.3;
+        transform: scale(0.9);
+        filter: blur(8px);
+    }
+    100% { 
+        opacity: 0.7;
+        transform: scale(1.2);
+        filter: blur(12px);
+    }
+}
+
 .level3-mascot .mascot-body {
     position: absolute;
     inset: 0;
@@ -4097,6 +4148,22 @@ body.level-theme-3 .canvas-container {
         0 10px 24px rgba(104, 176, 255, 0.20),
         inset 0 2px 6px rgba(255,255,255,0.45);
     border: 1px solid rgba(255,255,255,0.28);
+    animation: bodyColorShift 8s ease-in-out infinite alternate;
+}
+
+@keyframes bodyColorShift {
+    0% {
+        filter: hue-rotate(0deg) brightness(1) saturate(1);
+    }
+    33% {
+        filter: hue-rotate(10deg) brightness(1.05) saturate(1.1);
+    }
+    66% {
+        filter: hue-rotate(-5deg) brightness(0.98) saturate(0.95);
+    }
+    100% {
+        filter: hue-rotate(15deg) brightness(1.02) saturate(1.08);
+    }
 }
 
 .level3-mascot .eye-left,
@@ -4107,6 +4174,7 @@ body.level-theme-3 .canvas-container {
     height: 10px;
     border-radius: 999px;
     background: rgba(66, 95, 150, 0.92);
+    animation: eyeBlink 4s ease-in-out infinite;
 }
 
 .level3-mascot .eye-left {
@@ -4126,6 +4194,7 @@ body.level-theme-3 .canvas-container {
     border-radius: 999px;
     background: rgba(255, 183, 210, 0.52);
     filter: blur(0.5px);
+    animation: blushPulse 3s ease-in-out infinite;
 }
 
 .level3-mascot .blush-left {
@@ -4144,33 +4213,28 @@ body.level-theme-3 .canvas-container {
 .mascot-right {
     right: -14px;
     bottom: 30px;
-    animation-delay: -1.8s;
 }
 
 .mascot-top {
     top: -20px;
     left: 50%;
     transform: translateX(-50%);
-    animation-delay: -0.6s;
 }
 
 .mascot-bottom {
     bottom: -20px;
     left: 50%;
     transform: translateX(-50%);
-    animation-delay: -2.4s;
 }
 
 .mascot-top-left {
     top: -18px;
     left: 20px;
-    animation-delay: -1.2s;
 }
 
 .mascot-top-right {
     top: -18px;
     right: 20px;
-    animation-delay: -3.0s;
 }
 
 body.level-theme-3 .mascot-left .mascot-body {
@@ -4220,7 +4284,7 @@ body.level-theme-3 .mascot-top-right .mascot-body {
     height: 54px;
     pointer-events: none;
     z-index: 2;
-    animation: helperBob 5.6s ease-in-out infinite;
+    animation: helperBob 4.2s ease-in-out infinite;
 }
 
 .level3-helper .helper-star {
@@ -4263,13 +4327,3873 @@ body.level-theme-3 .mascot-top-right .mascot-body {
 }
 
 @keyframes mascotFloat {
-    0% { transform: translateY(0px) rotate(-1deg); }
-    50% { transform: translateY(-7px) rotate(1deg); }
-    100% { transform: translateY(0px) rotate(-1deg); }
+    0%, 100% { 
+        transform: translateY(0px) rotate(-2deg) scale(1);
+    }
+    25% { 
+        transform: translateY(-10px) rotate(3deg) scale(1.05);
+    }
+    50% { 
+        transform: translateY(-15px) rotate(-1deg) scale(1.08);
+    }
+    75% { 
+        transform: translateY(-8px) rotate(2deg) scale(1.03);
+    }
+}
+
+@keyframes mascotBounce {
+    0%, 100% { 
+        transform: translateY(0px) scale(1, 1) rotate(0deg);
+    }
+    20% { 
+        transform: translateY(-12px) scale(1.08, 0.92) rotate(3deg);
+    }
+    40% { 
+        transform: translateY(-18px) scale(0.95, 1.05) rotate(-2deg);
+    }
+    60% { 
+        transform: translateY(-10px) scale(1.05, 0.98) rotate(2deg);
+    }
+    80% { 
+        transform: translateY(-5px) scale(0.98, 1.02) rotate(-1deg);
+    }
+}
+
+@keyframes mascotSwing {
+    0%, 100% { 
+        transform: translateX(0px) rotate(0deg) scale(1);
+    }
+    15% { 
+        transform: translateX(-8px) rotate(-8deg) scale(1.04);
+    }
+    30% { 
+        transform: translateX(-12px) rotate(-12deg) scale(1.06);
+    }
+    50% { 
+        transform: translateX(0px) rotate(0deg) scale(1.03);
+    }
+    65% { 
+        transform: translateX(8px) rotate(8deg) scale(1.04);
+    }
+    85% { 
+        transform: translateX(10px) rotate(6deg) scale(1.02);
+    }
+}
+
+@keyframes mascotPulse {
+    0%, 100% { 
+        transform: scale(1) rotate(0deg);
+        opacity: 0.9;
+    }
+    30% { 
+        transform: scale(1.12) rotate(3deg);
+        opacity: 1;
+    }
+    50% { 
+        transform: scale(1.18) rotate(-2deg);
+        opacity: 0.95;
+    }
+    70% { 
+        transform: scale(1.08) rotate(2deg);
+        opacity: 1;
+    }
+}
+
+@keyframes mascotWiggle {
+    0%, 100% { 
+        transform: translateY(0px) rotate(0deg) skewX(0deg);
+    }
+    20% { 
+        transform: translateY(-6px) rotate(5deg) skewX(-3deg);
+    }
+    40% { 
+        transform: translateY(-14px) rotate(-4deg) skewX(3deg);
+    }
+    60% { 
+        transform: translateY(-9px) rotate(3deg) skewX(-2deg);
+    }
+    80% { 
+        transform: translateY(-3px) rotate(-2deg) skewX(1deg);
+    }
 }
 
 @keyframes helperBob {
-    0% { transform: translateY(0px) scale(1); }
-    50% { transform: translateY(-6px) scale(1.03); }
-    100% { transform: translateY(0px) scale(1); }
+    0%, 100% { 
+        transform: translateY(0px) scale(1) rotate(0deg);
+    }
+    25% { 
+        transform: translateY(-10px) scale(1.08, 0.94) rotate(5deg);
+    }
+    50% { 
+        transform: translateY(-16px) scale(0.96, 1.08) rotate(-3deg);
+    }
+    75% { 
+        transform: translateY(-8px) scale(1.04, 0.98) rotate(2deg);
+    }
+}
+
+@keyframes eyeBlink {
+    0%, 90%, 100% { 
+        transform: scaleY(1);
+    }
+    93% { 
+        transform: scaleY(0.1);
+    }
+    96% { 
+        transform: scaleY(1);
+    }
+}
+
+@keyframes blushPulse {
+    0%, 100% { 
+        opacity: 0.52;
+        transform: scale(1);
+    }
+    50% { 
+        opacity: 0.72;
+        transform: scale(1.15);
+    }
+}
+
+/* =========================================
+   Level 1 - 几何花园（新手探索）
+   温馨、友好、引导性强
+========================================= */
+
+/* 主背景：柔和草地天空渐变 */
+body.level-theme-1 {
+    background:
+        radial-gradient(circle at 15% 12%, rgba(255,248,220,0.45) 0 8%, transparent 18%),
+        radial-gradient(circle at 85% 10%, rgba(210,240,180,0.38) 0 7%, transparent 16%),
+        radial-gradient(circle at 50% 85%, rgba(200,235,160,0.32) 0 12%, transparent 22%),
+        radial-gradient(circle at 20% 88%, rgba(230,245,200,0.28) 0 8%, transparent 16%),
+        radial-gradient(circle at 80% 90%, rgba(215,238,185,0.26) 0 9%, transparent 17%),
+        linear-gradient(175deg, #f0f8e8 0%, #e8f4dc 30%, #ddf2d0 60%, #d4ebc8 100%);
+}
+
+/* 环境光：温暖柔和 */
+body.level-theme-1::after {
+    background:
+        radial-gradient(circle at 50% -8%, rgba(255,250,225,0.42), transparent 34%),
+        radial-gradient(circle at 20% 82%, rgba(200,235,170,0.14), transparent 18%),
+        radial-gradient(circle at 80% 84%, rgba(190,228,165,0.12), transparent 16%),
+        linear-gradient(to top, rgba(255,255,255,0.12), transparent 26%);
+    animation: gardenGlow 7s ease-in-out infinite alternate;
+}
+
+@keyframes gardenGlow {
+    0% { opacity: 0.85; }
+    100% { opacity: 1; }
+}
+
+/* 轻柔粒子：花瓣和光点 */
+body.level-theme-1::before {
+    background:
+        radial-gradient(circle at 18% 26%, rgba(255,255,255,0.78) 0 2px, transparent 2.6px),
+        radial-gradient(circle at 72% 22%, rgba(255,245,210,0.62) 0 2px, transparent 2.6px),
+        radial-gradient(circle at 85% 68%, rgba(210,240,180,0.56) 0 2px, transparent 2.6px),
+        radial-gradient(circle at 28% 76%, rgba(230,250,205,0.58) 0 2px, transparent 2.6px),
+        radial-gradient(circle at 55% 48%, rgba(255,248,230,0.46) 0 1.5px, transparent 2.2px),
+        radial-gradient(circle at 40% 36%, rgba(220,245,195,0.44) 0 1.5px, transparent 2.2px),
+        radial-gradient(circle at 62% 62%, rgba(255,240,190,0.38) 0 1.3px, transparent 2.0px);
+    background-size:
+        200px 200px,
+        240px 240px,
+        220px 220px,
+        260px 260px,
+        170px 170px,
+        190px 190px,
+        210px 210px;
+    animation: petalFloat 28s linear infinite;
+    opacity: 0.86;
+}
+
+@keyframes petalFloat {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-24px, 18px, 0); }
+}
+
+/* 游戏主区域：花园氛围 */
+body.level-theme-1 .game-screen {
+    background:
+        linear-gradient(180deg, rgba(255,252,240,0.52), rgba(245,250,232,0.38)),
+        rgba(255,255,255,0.12);
+    border: 1px solid rgba(180,220,150,0.14);
+    box-shadow:
+        0 28px 56px rgba(140, 180, 120, 0.12),
+        inset 0 1px 0 rgba(255,255,255,0.18);
+}
+
+/* 花园装饰层：几何花朵和弧线 */
+body.level-theme-1 .game-screen::before {
+    background:
+        radial-gradient(circle at 14% 16%, rgba(255,248,220,0.32), transparent 16%),
+        radial-gradient(circle at 86% 18%, rgba(220,245,195,0.28), transparent 14%),
+        radial-gradient(circle at 50% 92%, rgba(200,235,165,0.18), transparent 20%),
+        radial-gradient(circle at 22% 84%, rgba(210,240,180,0.14), transparent 14%),
+        radial-gradient(circle at 78% 86%, rgba(215,238,188,0.12), transparent 14%);
+}
+
+/* 轨道和节点：引导性几何元素 */
+body.level-theme-1 .game-screen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.13;
+    background:
+        radial-gradient(circle at 18% 24%, transparent 0 80px, rgba(180,220,150,0.14) 81px 83px, transparent 84px),
+        radial-gradient(circle at 82% 22%, transparent 0 85px, rgba(200,235,170,0.12) 86px 88px, transparent 89px),
+        radial-gradient(circle at 50% 105%, transparent 0 180px, rgba(190,225,160,0.11) 181px 183px, transparent 184px),
+        radial-gradient(circle at 35% 75%, rgba(255,248,220,0.32) 0 2px, transparent 2.8px),
+        radial-gradient(circle at 65% 74%, rgba(255,248,220,0.32) 0 2px, transparent 2.8px),
+        radial-gradient(circle at 28% 68%, rgba(220,245,195,0.26) 0 2px, transparent 2.8px),
+        radial-gradient(circle at 72% 66%, rgba(220,245,195,0.26) 0 2px, transparent 2.8px),
+        linear-gradient(115deg, transparent 49.7%, rgba(180,220,150,0.06) 49.9%, rgba(180,220,150,0.06) 50.1%, transparent 50.3%),
+        linear-gradient(65deg, transparent 49.8%, rgba(200,235,170,0.05) 49.95%, rgba(200,235,170,0.05) 50.05%, transparent 50.2%);
+    animation: orbitDriftSlow 38s ease-in-out infinite alternate;
+}
+
+@keyframes orbitDriftSlow {
+    0% { transform: translate3d(0, 0, 0) scale(1); }
+    100% { transform: translate3d(-8px, 6px, 0) scale(1.005); }
+}
+
+/* Canvas容器：练习场氛围 */
+body.level-theme-1 .canvas-container {
+    background:
+        linear-gradient(180deg, rgba(255,252,242,0.88), rgba(248,252,238,0.78)),
+        rgba(255,255,255,0.64);
+}
+
+body.level-theme-1 .canvas-container::before {
+    inset: -10% -10% auto -10%;
+    height: 62%;
+    background:
+        radial-gradient(circle at 50% 18%, rgba(255,255,255,0.94), transparent 42%),
+        radial-gradient(circle at 16% 28%, rgba(230,245,210,0.20), transparent 24%),
+        radial-gradient(circle at 84% 30%, rgba(240,248,220,0.20), transparent 24%),
+        radial-gradient(circle at 50% 100%, rgba(215,238,190,0.10), transparent 30%);
+}
+
+/* 任务卡：温馨提示风格 */
+body.level-theme-1 .mission-box {
+    background:
+        linear-gradient(135deg, rgba(255,252,240,0.94), rgba(245,250,232,0.88));
+    border: 1px solid rgba(180,220,150,0.18);
+    box-shadow: 0 14px 28px rgba(160, 195, 135, 0.08);
+}
+
+body.level-theme-1 .mission-box::before {
+    background: linear-gradient(180deg, #a8d96a, #8bc953);
+    box-shadow: 0 0 18px rgba(168, 217, 106, 0.25);
+}
+
+body.level-theme-1 #missionTitle,
+body.level-theme-1 .mission-box h4 {
+    color: #4a7020;
+}
+
+body.level-theme-1 #missionDesc,
+body.level-theme-1 .mission-box p {
+    color: #5a7a38;
+}
+
+/* Info面板：友好学习区 */
+body.level-theme-1 .info-box::before {
+    background: radial-gradient(circle, rgba(200,235,170,0.16), transparent 70%);
+}
+
+body.level-theme-1 .theorem-box {
+    background: linear-gradient(135deg, rgba(245,252,235,0.96), rgba(240,248,228,0.92));
+    border-color: rgba(190,225,160,0.88);
+}
+
+body.level-theme-1 .hint-box {
+    background: linear-gradient(135deg, rgba(255,252,240,0.98), rgba(255,248,230,0.94));
+    border-color: rgba(245,225,160,0.88);
+    color: #8a6d20;
+}
+
+/* 页头：欢迎感 */
+body.level-theme-1 .game-header::before {
+    background:
+        radial-gradient(circle at 18% 18%, rgba(255,248,220,0.54), transparent 16%),
+        radial-gradient(circle at 84% 30%, rgba(220,245,195,0.34), transparent 18%),
+        radial-gradient(circle at 50% 0%, rgba(200,235,170,0.12), transparent 20%),
+        linear-gradient(110deg, transparent 20%, rgba(255,255,255,0.24) 50%, transparent 80%);
+}
+
+/* 底部区域：花园底部 */
+body.level-theme-1 .footer-rich::before {
+    background:
+        radial-gradient(circle at 14% 82%, rgba(200,235,170,0.14), transparent 18%),
+        radial-gradient(circle at 84% 76%, rgba(190,225,160,0.12), transparent 16%),
+        radial-gradient(circle at 50% 100%, rgba(215,238,190,0.10), transparent 24%);
+}
+
+body.level-theme-1 .footer-rich {
+    background:
+        linear-gradient(180deg, rgba(255,252,242,0.66), rgba(248,252,238,0.48)),
+        rgba(255,255,255,0.38);
+}
+
+/* 容器外围：花园光晕 */
+body.level-theme-1 .game-container::before {
+    background:
+        radial-gradient(circle at 50% 0%, rgba(255,250,225,0.42), transparent 18%),
+        radial-gradient(circle at 8% 18%, rgba(210,240,180,0.12), transparent 18%),
+        radial-gradient(circle at 92% 16%, rgba(220,245,195,0.12), transparent 18%),
+        radial-gradient(circle at 8% 92%, rgba(200,235,170,0.10), transparent 18%),
+        radial-gradient(circle at 92% 90%, rgba(210,238,185,0.10), transparent 18%);
+}
+
+/* 关卡选择页：花园入口感 */
+body.level-theme-1 #levelSelect::before {
+    background:
+        radial-gradient(circle at 14% 38%, rgba(210,240,180,0.16), transparent 22%),
+        radial-gradient(circle at 84% 32%, rgba(220,245,195,0.14), transparent 20%),
+        radial-gradient(circle at 50% 10%, rgba(255,248,220,0.26), transparent 20%);
+    filter: blur(10px);
+    opacity: 0.95;
+}
+
+body.level-theme-1 #levelSelect::after {
+    background:
+        radial-gradient(circle at 22% 24%, transparent 0 72px, rgba(180,220,150,0.09) 73px 74px, transparent 75px),
+        radial-gradient(circle at 78% 30%, transparent 0 82px, rgba(200,235,170,0.09) 83px 84px, transparent 85px),
+        radial-gradient(circle at 18% 82%, transparent 0 78px, rgba(190,225,160,0.09) 79px 80px, transparent 81px),
+        radial-gradient(circle at 86% 78%, transparent 0 72px, rgba(195,230,168,0.09) 73px 74px, transparent 75px);
+}
+
+/* =========================================
+   第一关专属装饰动画 - 丰富版
+========================================= */
+
+/* ===== 增强粒子系统：花朵、光点、星星、花瓣 ===== */
+body.level-theme-1::before {
+    background:
+        radial-gradient(circle at 12% 18%, rgba(255,255,255,0.82) 0 2.2px, transparent 2.8px),
+        radial-gradient(circle at 78% 16%, rgba(255,248,210,0.72) 0 2px, transparent 2.6px),
+        radial-gradient(circle at 88% 65%, rgba(215,238,185,0.64) 0 2px, transparent 2.8px),
+        radial-gradient(circle at 18% 74%, rgba(230,250,205,0.62) 0 2.2px, transparent 2.8px),
+        radial-gradient(circle at 52% 45%, rgba(255,250,232,0.54) 0 1.8px, transparent 2.4px),
+        radial-gradient(circle at 35% 32%, rgba(225,248,200,0.52) 0 1.8px, transparent 2.4px),
+        radial-gradient(circle at 68% 58%, rgba(255,242,195,0.46) 0 1.6px, transparent 2.2px),
+        radial-gradient(circle at 25% 55%, rgba(220,245,195,0.44) 0 1.6px, transparent 2.2px),
+        radial-gradient(circle at 75% 38%, rgba(255,245,220,0.40) 0 1.4px, transparent 2.0px),
+        radial-gradient(circle at 42% 68%, rgba(210,240,180,0.38) 0 1.4px, transparent 2.0px),
+        radial-gradient(circle at 58% 25%, rgba(255,248,230,0.36) 0 1.3px, transparent 1.9px),
+        radial-gradient(circle at 8% 42%, rgba(218,242,190,0.34) 0 1.3px, transparent 1.9px),
+        radial-gradient(circle at 92% 48%, rgba(235,250,215,0.32) 0 1.2px, transparent 1.8px),
+        radial-gradient(circle at 48% 85%, rgba(255,245,205,0.30) 0 1.2px, transparent 1.8px);
+    background-size:
+        180px 180px,
+        220px 220px,
+        200px 200px,
+        240px 240px,
+        160px 160px,
+        185px 185px,
+        195px 195px,
+        210px 210px,
+        175px 175px,
+        225px 225px,
+        190px 190px,
+        205px 205px,
+        215px 215px,
+        200px 200px;
+    animation: petalFloatRich 32s linear infinite;
+    opacity: 0.90;
+}
+
+@keyframes petalFloatRich {
+    0% { transform: translate3d(0, 0, 0) rotate(0deg); }
+    25% { transform: translate3d(-18px, 12px, 0) rotate(2deg); }
+    50% { transform: translate3d(-28px, 22px, 0) rotate(-1deg); }
+    75% { transform: translate3d(-14px, 16px, 0) rotate(1deg); }
+    100% { transform: translate3d(-30px, 26px, 0) rotate(0deg); }
+}
+
+/* ===== 花朵装饰层 - 多样化花朵 ===== */
+body.level-theme-1 .game-screen::before {
+    background:
+        radial-gradient(circle at 10% 14%, rgba(255,230,150,0.35), transparent 14%),
+        radial-gradient(circle at 88% 16%, rgba(200,235,170,0.32), transparent 13%),
+        radial-gradient(circle at 48% 94%, rgba(190,228,162,0.28), transparent 18%),
+        radial-gradient(circle at 18% 82%, rgba(210,240,182,0.24), transparent 13%),
+        radial-gradient(circle at 80% 84%, rgba(218,238,188,0.22), transparent 14%),
+        radial-gradient(circle at 25% 35%, rgba(255,240,180,0.20), transparent 10%),
+        radial-gradient(circle at 72% 38%, rgba(222,248,198,0.19), transparent 10%),
+        radial-gradient(circle at 15% 58%, rgba(235,250,215,0.17), transparent 9%),
+        radial-gradient(circle at 85% 56%, rgba(245,248,225,0.16), transparent 9%);
+}
+
+/* ===== 几何轨道与节点 - 引导路径 ===== */
+body.level-theme-1 .game-screen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.16;
+    background:
+        radial-gradient(circle at 15% 22%, transparent 0 70px, rgba(175,218,148,0.15) 71px 73px, transparent 74px),
+        radial-gradient(circle at 85% 20%, transparent 0 75px, rgba(195,232,168,0.13) 76px 78px, transparent 79px),
+        radial-gradient(circle at 50% 108%, transparent 0 165px, rgba(185,222,158,0.12) 166px 168px, transparent 169px),
+        radial-gradient(circle at 32% 72%, rgba(255,248,218,0.34) 0 2.2px, transparent 3px),
+        radial-gradient(circle at 66% 70%, rgba(255,248,218,0.34) 0 2.2px, transparent 3px),
+        radial-gradient(circle at 25% 65%, rgba(218,245,195,0.28) 0 2.2px, transparent 3px),
+        radial-gradient(circle at 74% 63%, rgba(218,245,195,0.28) 0 2.2px, transparent 3px),
+        radial-gradient(circle at 40% 78%, rgba(230,250,212,0.24) 0 2px, transparent 2.8px),
+        radial-gradient(circle at 60% 76%, rgba(230,250,212,0.24) 0 2px, transparent 2.8px),
+        linear-gradient(115deg, transparent 49.6%, rgba(175,218,148,0.07) 49.8%, rgba(175,218,148,0.07) 50.2%, transparent 50.4%),
+        linear-gradient(65deg, transparent 49.7%, rgba(195,232,168,0.06) 49.85%, rgba(195,232,168,0.06) 50.15%, transparent 50.3%),
+        linear-gradient(95deg, transparent 49.65%, rgba(185,222,158,0.05) 49.83%, rgba(185,222,158,0.05) 50.17%, transparent 50.35%),
+        linear-gradient(40deg, transparent 49.7%, rgba(210,240,182,0.04) 49.87%, rgba(210,240,182,0.04) 50.13%, transparent 50.33%);
+    animation: orbitDriftRich 36s ease-in-out infinite alternate;
+}
+
+@keyframes orbitDriftRich {
+    0% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.14; }
+    33% { transform: translate3d(-6px, 4px, 0) scale(1.002); opacity: 0.17; }
+    66% { transform: translate3d(4px, -3px, 0) scale(0.998); opacity: 0.15; }
+    100% { transform: translate3d(-8px, 6px, 0) scale(1.003); opacity: 0.16; }
+}
+
+/* ===== Canvas容器内部装饰 ===== */
+body.level-theme-1 .canvas-container::before {
+    inset: -10% -10% auto -10%;
+    height: 62%;
+    background:
+        radial-gradient(circle at 50% 18%, rgba(255,255,255,0.94), transparent 42%),
+        radial-gradient(circle at 14% 26%, rgba(232,248,208,0.22), transparent 22%),
+        radial-gradient(circle at 84% 28%, rgba(242,250,218,0.22), transparent 22%),
+        radial-gradient(circle at 28% 72%, rgba(225,248,200,0.16), transparent 18%),
+        radial-gradient(circle at 70% 70%, rgba(228,250,210,0.16), transparent 18%),
+        radial-gradient(circle at 50% 100%, rgba(212,238,188,0.12), transparent 30%);
+}
+
+/* ===== 花园主装饰层 - 丰富的几何元素 ===== */
+body.level-theme-1 .game-container::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.22;
+    background:
+
+        /* 大型花朵 - 金色系 */
+        radial-gradient(circle at 8% 22%, transparent 0 8px, rgba(255,215,120,0.30) 9px 12px, transparent 14px),
+        radial-gradient(circle at 92% 18%, transparent 0 7px, rgba(255,225,140,0.28) 8px 11px, transparent 13px),
+
+        /* 中型花朵 - 绿色系 */
+        radial-gradient(circle at 12% 72%, transparent 0 9px, rgba(195,232,165,0.28) 10px 13px, transparent 15px),
+        radial-gradient(circle at 86% 76%, transparent 0 8px, rgba(205,238,175,0.26) 9px 12px, transparent 14px),
+
+        /* 小型花朵 - 暖色系 */
+        radial-gradient(circle at 25% 42%, transparent 0 6px, rgba(255,235,155,0.26) 7px 10px, transparent 12px),
+        radial-gradient(circle at 74% 44%, transparent 0 6px, rgba(218,245,195,0.24) 7px 10px, transparent 12px),
+
+        /* 迷你花朵 - 散布 */
+        radial-gradient(circle at 38% 18%, transparent 0 5px, rgba(255,240,180,0.24) 6px 8px, transparent 10px),
+        radial-gradient(circle at 62% 20%, transparent 0 5px, rgba(222,248,200,0.22) 6px 8px, transparent 10px),
+        radial-gradient(circle at 18% 52%, transparent 0 5px, rgba(235,250,218,0.21) 6px 8px, transparent 10px),
+        radial-gradient(circle at 82% 50%, transparent 0 5px, rgba(248,250,230,0.20) 6px 8px, transparent 10px),
+
+        /* 装饰光点 - 星星感 */
+        radial-gradient(circle at 48% 35%, transparent 0 4px, rgba(255,245,210,0.32) 5px 7px, transparent 9px),
+        radial-gradient(circle at 52% 65%, transparent 0 4px, rgba(230,248,205,0.30) 5px 7px, transparent 9px),
+
+        /* 小蘑菇装饰 */
+        radial-gradient(circle at 5% 88%, transparent 0 6px, rgba(255,180,150,0.25) 7px 9px, transparent 11px),
+        radial-gradient(circle at 94% 90%, transparent 0 5px, rgba(255,190,160,0.23) 6px 8px, transparent 10px),
+
+        /* 叶子装饰 */
+        radial-gradient(circle at 34% 82%, transparent 0 7px, rgba(165,210,130,0.26) 8px 11px, transparent 13px),
+        radial-gradient(circle at 66% 84%, transparent 0 7px, rgba(175,218,142,0.24) 8px 11px, transparent 13px);
+
+    animation: gardenDecorate 24s ease-in-out infinite alternate;
+}
+
+@keyframes gardenDecorate {
+    0% {
+        transform: translate3d(0, 0, 0) scale(1);
+        opacity: 0.18;
+    }
+    25% {
+        transform: translate3d(8px, -6px, 0) scale(1.01);
+        opacity: 0.24;
+    }
+    50% {
+        transform: translate3d(-5px, 4px, 0) scale(0.995);
+        opacity: 0.21;
+    }
+    75% {
+        transform: translate3d(6px, -3px, 0) scale(1.005);
+        opacity: 0.23;
+    }
+    100% {
+        transform: translate3d(-4px, 5px, 0) scale(0.998);
+        opacity: 0.20;
+    }
+}
+
+/* ===== 云朵装饰层 ===== */
+body.level-theme-1 .game-header::before {
+    background:
+        radial-gradient(circle at 18% 18%, rgba(255,248,220,0.54), transparent 16%),
+        radial-gradient(circle at 84% 30%, rgba(220,245,195,0.34), transparent 18%),
+        radial-gradient(circle at 50% 0%, rgba(200,235,170,0.12), transparent 20%),
+        radial-gradient(circle at 35% 8%, rgba(255,250,235,0.18), transparent 12%),
+        radial-gradient(circle at 65% 6%, rgba(240,250,225,0.16), transparent 12%),
+        linear-gradient(110deg, transparent 20%, rgba(255,255,255,0.24) 50%, transparent 80%);
+    animation: cloudDrift 18s ease-in-out infinite alternate;
+}
+
+@keyframes cloudDrift {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(8px); }
+}
+
+/* ===== 页脚花园底部增强 ===== */
+body.level-theme-1 .footer-rich::before {
+    background:
+        radial-gradient(circle at 10% 82%, rgba(200,235,170,0.18), transparent 18%),
+        radial-gradient(circle at 88% 76%, rgba(190,225,160,0.16), transparent 16%),
+        radial-gradient(circle at 50% 98%, rgba(215,238,190,0.14), transparent 24%),
+        radial-gradient(circle at 25% 90%, rgba(225,248,200,0.12), transparent 14%),
+        radial-gradient(circle at 74% 92%, rgba(218,238,188,0.11), transparent 14%),
+        radial-gradient(circle at 40% 96%, rgba(205,235,178,0.10), transparent 12%),
+        radial-gradient(circle at 60% 94%, rgba(212,240,185,0.09), transparent 12%);
+}
+
+/* ===== 关卡选择页入口增强 ===== */
+body.level-theme-1 #levelSelect::before {
+    background:
+        radial-gradient(circle at 12% 36%, rgba(215,240,185,0.20), transparent 22%),
+        radial-gradient(circle at 86% 30%, rgba(225,248,198,0.18), transparent 20%),
+        radial-gradient(circle at 50% 8%, rgba(255,248,220,0.30), transparent 20%),
+        radial-gradient(circle at 28% 18%, rgba(240,250,228,0.14), transparent 16%),
+        radial-gradient(circle at 72% 16%, rgba(235,250,218,0.12), transparent 16%);
+    filter: blur(10px);
+    opacity: 0.96;
+}
+
+body.level-theme-1 #levelSelect::after {
+    background:
+        radial-gradient(circle at 20% 22%, transparent 0 68px, rgba(178,220,152,0.11) 69px 71px, transparent 72px),
+        radial-gradient(circle at 78% 28%, transparent 0 78px, rgba(198,235,172,0.10) 79px 81px, transparent 82px),
+        radial-gradient(circle at 16% 80%, transparent 0 74px, rgba(188,225,162,0.10) 75px 77px, transparent 78px),
+        radial-gradient(circle at 84% 76%, transparent 0 68px, rgba(192,228,168,0.09) 69px 71px, transparent 72px),
+        radial-gradient(circle at 48% 12%, transparent 0 55px, rgba(255,245,215,0.12) 56px 58px, transparent 59px),
+        radial-gradient(circle at 35% 70%, rgba(255,248,218,0.28) 0 2px, transparent 3px),
+        radial-gradient(circle at 64% 68%, rgba(255,248,218,0.28) 0 2px, transparent 3px);
+}
+
+/* ===== 容器外围光晕增强 ===== */
+body.level-theme-1 .game-container::before {
+    background:
+        radial-gradient(circle at 50% 0%, rgba(255,250,225,0.46), transparent 18%),
+        radial-gradient(circle at 8% 16%, rgba(215,240,185,0.14), transparent 18%),
+        radial-gradient(circle at 92% 14%, rgba(225,248,198,0.14), transparent 18%),
+        radial-gradient(circle at 6% 90%, rgba(200,235,170,0.12), transparent 18%),
+        radial-gradient(circle at 94% 88%, rgba(210,238,188,0.11), transparent 18%),
+        radial-gradient(circle at 25% 6%, rgba(240,250,230,0.10), transparent 14%),
+        radial-gradient(circle at 74% 4%, rgba(235,250,220,0.09), transparent 14%);
+}
+
+/* ===== Info面板装饰增强 ===== */
+body.level-theme-1 .info-box::before {
+    background:
+        radial-gradient(circle, rgba(200,235,170,0.18), transparent 70%),
+        radial-gradient(circle at 80% 20%, rgba(255,245,210,0.12), transparent 40%);
+}
+
+/* ===== 任务卡装饰增强 ===== */
+body.level-theme-1 .mission-box::before {
+    background: linear-gradient(180deg, #a8d96a, #8bc953);
+    box-shadow: 0 0 20px rgba(168, 217, 106, 0.28);
+}
+
+/* ===== 额外漂浮元素：蝴蝶/萤火虫效果 ===== */
+@keyframes butterflyFloat {
+    0%, 100% {
+        transform: translate(0, 0) rotate(0deg) scale(1);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.25;
+    }
+    50% {
+        transform: translate(30px, -40px) rotate(15deg) scale(1.1);
+        opacity: 0.35;
+    }
+    90% {
+        opacity: 0.20;
+    }
+}
+
+/* 萤火虫闪烁效果 */
+@keyframes fireflyGlow {
+    0%, 100% { opacity: 0.15; transform: scale(0.8); }
+    25% { opacity: 0.35; transform: scale(1.2); }
+    50% { opacity: 0.20; transform: scale(0.9); }
+    75% { opacity: 0.40; transform: scale(1.3); }
+}
+
+/* 花朵摇摆效果 */
+@keyframes flowerSway {
+    0%, 100% { transform: rotate(-2deg) translateY(0); }
+    50% { transform: rotate(2deg) translateY(-3px); }
+}
+
+/* 叶子飘动效果 */
+@keyframes leafRustle {
+    0%, 100% { transform: translateX(0) rotate(0deg); }
+    25% { transform: translateX(2px) rotate(1deg); }
+    50% { transform: translateX(-1px) rotate(-0.5deg); }
+    75% { transform: translateX(1.5px) rotate(0.8deg); }
+}
+
+/* ===== 第一关超级增强版 - 几何花园豪华版 ===== */
+
+/* ===== 1. 超级粒子系统 - 22个粒子 ===== */
+body.level-theme-1::before {
+    background:
+
+        /* 大型主光源 - 白色 */
+        radial-gradient(circle at 10% 15%, rgba(255,255,255,0.88) 0 2.8px, transparent 3.4px),
+        radial-gradient(circle at 82% 12%, rgba(255,255,255,0.85) 0 2.6px, transparent 3.2px),
+
+        /* 中型暖光点 - 金黄色 */
+        radial-gradient(circle at 75% 18%, rgba(255,248,210,0.78) 0 2.4px, transparent 3.0px),
+        radial-gradient(circle at 22% 20%, rgba(255,245,200,0.76) 0 2.2px, transparent 2.8px),
+        radial-gradient(circle at 88% 62%, rgba(255,240,190,0.72) 0 2.2px, transparent 2.8px),
+        radial-gradient(circle at 14% 68%, rgba(255,242,195,0.70) 0 2.4px, transparent 3.0px),
+
+        /* 绿色系光点 */
+        radial-gradient(circle at 90% 72%, rgba(215,238,185,0.68) 0 2.2px, transparent 2.8px),
+        radial-gradient(circle at 16% 78%, rgba(225,250,205,0.66) 0 2.4px, transparent 3.0px),
+        radial-gradient(circle at 55% 42%, rgba(218,245,195,0.64) 0 2.0px, transparent 2.6px),
+        radial-gradient(circle at 38% 58%, rgba(220,248,200,0.62) 0 2.0px, transparent 2.6px),
+        radial-gradient(circle at 68% 52%, rgba(212,240,182,0.60) 0 1.8px, transparent 2.4px),
+        radial-gradient(circle at 28% 48%, rgba(228,250,210,0.58) 0 1.8px, transparent 2.4px),
+
+        /* 小型星点 - 散布 */
+        radial-gradient(circle at 45% 28%, rgba(255,250,232,0.56) 0 1.6px, transparent 2.2px),
+        radial-gradient(circle at 72% 35%, rgba(240,250,225,0.54) 0 1.6px, transparent 2.2px),
+        radial-gradient(circle at 32% 38%, rgba(235,248,215,0.52) 0 1.5px, transparent 2.0px),
+        radial-gradient(circle at 65% 65%, rgba(230,248,205,0.50) 0 1.5px, transparent 2.0px),
+        radial-gradient(circle at 48% 75%, rgba(225,245,198,0.48) 0 1.4px, transparent 1.9px),
+        radial-gradient(circle at 58% 22%, rgba(255,248,230,0.46) 0 1.4px, transparent 1.9px),
+
+        /* 微小尘埃点 */
+        radial-gradient(circle at 8% 35%, rgba(218,242,190,0.44) 0 1.3px, transparent 1.8px),
+        radial-gradient(circle at 92% 42%, rgba(235,250,215,0.42) 0 1.3px, transparent 1.8px),
+        radial-gradient(circle at 50% 88%, rgba(255,245,208,0.40) 0 1.2px, transparent 1.7px),
+        radial-gradient(circle at 40% 12%, rgba(240,250,228,0.38) 0 1.2px, transparent 1.7px);
+
+    background-size:
+        170px 170px,
+        210px 210px,
+        195px 195px,
+        225px 225px,
+        205px 205px,
+        215px 215px,
+        185px 185px,
+        235px 235px,
+        165px 165px,
+        200px 200px,
+        190px 190px,
+        180px 180px,
+        155px 155px,
+        175px 175px,
+        220px 220px,
+        195px 195px,
+        180px 180px,
+        210px 210px,
+        165px 165px,
+        200px 200px,
+        190px 190px,
+        195px 195px;
+
+    animation: particleDance 36s linear infinite;
+    opacity: 0.95;
+}
+
+@keyframes particleDance {
+    0% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+    20% { transform: translate3d(-22px, 16px, 0) rotate(3deg) scale(1.02); }
+    40% { transform: translate3d(-32px, 26px, 0) rotate(-2deg) scale(0.98); }
+    60% { transform: translate3d(-18px, 18px, 0) rotate(2deg) scale(1.01); }
+    80% { transform: translate3d(-26px, 22px, 0) rotate(-1deg) scale(0.99); }
+    100% { transform: translate3d(-36px, 30px, 0) rotate(0deg) scale(1); }
+}
+
+/* ===== 2. 花朵超级装饰层 - 24朵花 ===== */
+body.level-theme-1 .game-screen::before {
+    background:
+
+        /* 特大型主花 - 四角 */
+        radial-gradient(circle at 6% 10%, rgba(255,215,110,0.42), transparent 16%),
+        radial-gradient(circle at 94% 8%, rgba(255,225,130,0.40), transparent 15%),
+        radial-gradient(circle at 8% 88%, rgba(195,232,160,0.38), transparent 17%),
+        radial-gradient(circle at 92% 90%, rgba(205,238,170,0.36), transparent 16%),
+
+        /* 大型花朵 - 边缘 */
+        radial-gradient(circle at 12% 25%, rgba(255,235,145,0.36), transparent 13%),
+        radial-gradient(circle at 86% 22%, rgba(210,238,175,0.34), transparent 12%),
+        radial-gradient(circle at 15% 75%, rgba(200,235,165,0.32), transparent 14%),
+        radial-gradient(circle at 84% 78%, rgba(215,240,185,0.30), transparent 13%),
+
+        /* 中型花朵 - 中部两侧 */
+        radial-gradient(circle at 22% 40%, rgba(255,240,175,0.28), transparent 11%),
+        radial-gradient(circle at 76% 42%, rgba(222,248,198,0.27), transparent 11%),
+        radial-gradient(circle at 28% 60%, rgba(235,250,218,0.26), transparent 10%),
+        radial-gradient(circle at 72% 58%, rgba(240,250,225,0.25), transparent 10%),
+
+        /* 小型花朵 - 散布 */
+        radial-gradient(circle at 35% 18%, rgba(255,242,185,0.24), transparent 9%),
+        radial-gradient(circle at 64% 16%, rgba(225,248,200,0.23), transparent 9%),
+        radial-gradient(circle at 18% 52%, rgba(238,250,222,0.22), transparent 9%),
+        radial-gradient(circle at 82% 50%, rgba(248,250,232,0.21), transparent 9%),
+        radial-gradient(circle at 45% 82%, rgba(220,245,195,0.20), transparent 8%),
+        radial-gradient(circle at 55% 80%, rgba(228,250,210,0.19), transparent 8%),
+
+        /* 迷你小花点缀 */
+        radial-gradient(circle at 38% 32%, rgba(255,245,210,0.19), transparent 7%),
+        radial-gradient(circle at 62% 34%, rgba(230,248,205,0.18), transparent 7%),
+        radial-gradient(circle at 42% 68%, rgba(240,250,228,0.17), transparent 7%),
+        radial-gradient(circle at 58% 66%, rgba(235,248,215,0.16), transparent 7%);
+
+    animation: flowerGarden 28s ease-in-out infinite alternate;
+}
+
+@keyframes flowerGarden {
+    0% { transform: translateY(0) scale(1); filter: brightness(1); }
+    33% { transform: translateY(-4px) scale(1.008); filter: brightness(1.03); }
+    66% { transform: translateY(-2px) scale(1.004); filter: brightness(0.98); }
+    100% { transform: translateY(-5px) scale(1.01); filter: brightness(1.02); }
+}
+
+/* ===== 3. 几何轨道与节点超级增强 - 18个元素 ===== */
+body.level-theme-1 .game-screen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.19;
+
+    background:
+
+        /* 大型轨道圆环 - 主引导路径 */
+        radial-gradient(circle at 12% 20%, transparent 0 65px, rgba(172,215,145,0.17) 66px 69px, transparent 71px),
+        radial-gradient(circle at 88% 18%, transparent 0 70px, rgba(192,232,168,0.15) 71px 74px, transparent 76px),
+        radial-gradient(circle at 50% 112%, transparent 0 155px, rgba(182,222,158,0.14) 156px 159px, transparent 161px),
+
+        /* 中型轨道环 - 次要路径 */
+        radial-gradient(circle at 28% 78%, transparent 0 50px, rgba(195,235,172,0.13) 51px 53px, transparent 55px),
+        radial-gradient(circle at 70% 76%, transparent 0 50px, rgba(200,238,178,0.12) 51px 53px, transparent 55px),
+        radial-gradient(circle at 22% 48%, transparent 0 45px, rgba(210,240,185,0.11) 46px 48px, transparent 50px),
+        radial-gradient(circle at 76% 46%, transparent 0 45px, rgba(215,242,190,0.10) 46px 48px, transparent 50px),
+
+        /* 核心节点光点 - 明亮 */
+        radial-gradient(circle at 30% 70%, rgba(255,250,218,0.40) 0 2.8px, transparent 3.8px),
+        radial-gradient(circle at 68% 68%, rgba(255,250,218,0.40) 0 2.8px, transparent 3.8px),
+        radial-gradient(circle at 22% 63%, rgba(218,245,195,0.34) 0 2.5px, transparent 3.4px),
+        radial-gradient(circle at 76% 61%, rgba(218,245,195,0.34) 0 2.5px, transparent 3.4px),
+
+        /* 次级节点 - 中等亮度 */
+        radial-gradient(circle at 38% 80%, rgba(232,250,215,0.29) 0 2.2px, transparent 3.0px),
+        radial-gradient(circle at 60% 78%, rgba(232,250,215,0.29) 0 2.2px, transparent 3.0px),
+        radial-gradient(circle at 42% 35%, rgba(240,250,225,0.25) 0 2.0px, transparent 2.8px),
+        radial-gradient(circle at 58% 33%, rgba(240,250,225,0.25) 0 2.0px, transparent 2.8px),
+
+        /* 引导虚线轨道 - 多角度交叉 */
+        linear-gradient(115deg, transparent 49.5%, rgba(172,215,145,0.08) 49.75%, rgba(172,215,145,0.08) 50.25%, transparent 50.5%),
+        linear-gradient(65deg, transparent 49.6%, rgba(192,232,168,0.07) 49.8%, rgba(192,232,168,0.07) 50.2%, transparent 50.4%),
+        linear-gradient(95deg, transparent 49.55%, rgba(182,222,158,0.06) 49.78%, rgba(182,222,158,0.06) 50.22%, transparent 50.45%),
+        linear-gradient(40deg, transparent 49.6%, rgba(202,240,182,0.055) 49.8%, rgba(202,240,182,0.055) 50.2%, transparent 50.4%),
+        linear-gradient(155deg, transparent 49.65%, rgba(212,242,188,0.05) 49.83%, rgba(212,242,188,0.05) 50.17%, transparent 50.35%),
+        linear-gradient(25deg, transparent 49.7%, rgba(222,245,195,0.045) 49.85%, rgba(222,245,195,0.045) 50.15%, transparent 50.3%);
+
+    animation: orbitSuperRich 32s ease-in-out infinite alternate;
+}
+
+@keyframes orbitSuperRich {
+    0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); opacity: 0.17; }
+    25% { transform: translate3d(-8px, 5px, 0) scale(1.002) rotate(0.3deg); opacity: 0.19; }
+    50% { transform: translate3d(5px, -3px, 0) scale(0.998) rotate(-0.2deg); opacity: 0.18; }
+    75% { transform: translate3d(-6px, 4px, 0) scale(1.001) rotate(0.2deg); opacity: 0.20; }
+    100% { transform: translate3d(-10px, 7px, 0) scale(1.003) rotate(0deg); opacity: 0.19; }
+}
+
+/* ===== 4. Canvas容器内部超级装饰 ===== */
+body.level-theme-1 .canvas-container::before {
+    inset: -10% -10% auto -10%;
+    height: 62%;
+    background:
+        radial-gradient(circle at 50% 18%, rgba(255,255,255,0.96), transparent 42%),
+        radial-gradient(circle at 12% 24%, rgba(232,248,208,0.26), transparent 22%),
+        radial-gradient(circle at 86% 26%, rgba(242,250,218,0.26), transparent 22%),
+        radial-gradient(circle at 24% 70%, rgba(225,248,200,0.20), transparent 18%),
+        radial-gradient(circle at 74% 68%, rgba(228,250,210,0.20), transparent 18%),
+        radial-gradient(circle at 38% 82%, rgba(218,242,195,0.16), transparent 16%),
+        radial-gradient(circle at 62% 80%, rgba(222,248,205,0.16), transparent 16%),
+        radial-gradient(circle at 50% 100%, rgba(212,238,188,0.14), transparent 30%);
+}
+
+/* ===== 5. 花园主装饰层 - 28个装饰物 ===== */
+body.level-theme-1 .game-container::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.26;
+
+    background:
+
+        /* === 超大型花朵 - 4朵 === */
+        radial-gradient(circle at 6% 20%, transparent 0 10px, rgba(255,210,110,0.35) 11px 15px, transparent 17px),
+        radial-gradient(circle at 94% 16%, transparent 0 9px, rgba(255,220,130,0.33) 10px 14px, transparent 16px),
+        radial-gradient(circle at 10% 78%, transparent 0 11px, rgba(190,230,162,0.32) 12px 16px, transparent 18px),
+        radial-gradient(circle at 89% 80%, transparent 0 10px, rgba(200,235,170,0.30) 11px 15px, transparent 17px),
+
+        /* === 大型花朵 - 6朵 === */
+        radial-gradient(circle at 20% 38%, transparent 0 8px, rgba(255,235,150,0.30) 9px 13px, transparent 15px),
+        radial-gradient(circle at 79% 40%, transparent 0 8px, rgba(215,240,190,0.28) 9px 13px, transparent 15px),
+        radial-gradient(circle at 16% 58%, transparent 0 9px, rgba(195,232,165,0.27) 10px 14px, transparent 16px),
+        radial-gradient(circle at 83% 56%, transparent 0 8px, rgba(205,238,175,0.26) 9px 13px, transparent 15px),
+        radial-gradient(circle at 35% 14%, transparent 0 7px, rgba(255,240,180,0.25) 8px 12px, transparent 14px),
+        radial-gradient(circle at 64% 12%, transparent 0 7px, rgba(225,248,200,0.24) 8px 12px, transparent 14px),
+
+        /* === 中型花朵 - 8朵 === */
+        radial-gradient(circle at 28% 48%, transparent 0 6px, rgba(250,238,160,0.24) 7px 11px, transparent 13px),
+        radial-gradient(circle at 71% 50%, transparent 0 6px, rgba(222,248,198,0.23) 7px 11px, transparent 13px),
+        radial-gradient(circle at 22% 72%, transparent 0 7px, rgba(235,250,218,0.22) 8px 12px, transparent 14px),
+        radial-gradient(circle at 77% 70%, transparent 0 6px, rgba(242,250,230,0.21) 7px 11px, transparent 13px),
+        radial-gradient(circle at 42% 24%, transparent 0 6px, rgba(240,248,220,0.20) 7px 11px, transparent 13px),
+        radial-gradient(circle at 57% 26%, transparent 0 6px, rgba(228,250,210,0.19) 7px 11px, transparent 13px),
+        radial-gradient(circle at 45% 78%, transparent 0 6px, rgba(218,245,195,0.18) 7px 11px, transparent 13px),
+        radial-gradient(circle at 54% 76%, transparent 0 6px, rgba(225,248,205,0.17) 7px 11px, transparent 13px),
+
+        /* === 小型装饰 - 6个 === */
+        radial-gradient(circle at 48% 38%, transparent 0 5px, rgba(255,248,215,0.32) 6px 9px, transparent 11px),
+        radial-gradient(circle at 51% 62%, transparent 0 5px, rgba(232,248,208,0.30) 6px 9px, transparent 11px),
+        radial-gradient(circle at 32% 28%, transparent 0 5px, rgba(245,250,228,0.26) 6px 9px, transparent 11px),
+        radial-gradient(circle at 67% 30%, transparent 0 5px, rgba(235,248,215,0.25) 6px 9px, transparent 11px),
+        radial-gradient(circle at 38% 66%, transparent 0 5px, rgba(240,250,225,0.22) 6px 9px, transparent 11px),
+        radial-gradient(circle at 61% 64%, transparent 0 5px, rgba(238,250,220,0.21) 6px 9px, transparent 11px),
+
+        /* === 特殊装饰 - 4个 === */
+        radial-gradient(circle at 3% 92%, transparent 0 7px, rgba(255,175,145,0.28) 8px 11px, transparent 13px),
+        radial-gradient(circle at 96% 94%, transparent 0 6px, rgba(255,185,155,0.26) 7px 10px, transparent 12px),
+        radial-gradient(circle at 30% 86%, transparent 0 8px, rgba(162,208,128,0.28) 9px 13px, transparent 15px),
+        radial-gradient(circle at 69% 88%, transparent 0 8px, rgba(172,218,142,0.26) 9px 13px, transparent 15px);
+
+    animation: gardenMegaDecorate 22s ease-in-out infinite alternate;
+}
+
+@keyframes gardenMegaDecorate {
+    0% {
+        transform: translate3d(0, 0, 0) scale(1);
+        opacity: 0.22;
+    }
+    20% {
+        transform: translate3d(10px, -8px, 0) scale(1.012);
+        opacity: 0.27;
+    }
+    40% {
+        transform: translate3d(-6px, 5px, 0) scale(0.994);
+        opacity: 0.24;
+    }
+    60% {
+        transform: translate3d(8px, -4px, 0) scale(1.006);
+        opacity: 0.26;
+    }
+    80% {
+        transform: translate3d(-5px, 3px, 0) scale(0.998);
+        opacity: 0.25;
+    }
+    100% {
+        transform: translate3d(-6px, 5px, 0) scale(1.003);
+        opacity: 0.23;
+    }
+}
+
+/* ===== 6. 云朵超级增强 ===== */
+body.level-theme-1 .game-header::before {
+    background:
+        radial-gradient(circle at 18% 18%, rgba(255,248,220,0.58), transparent 16%),
+        radial-gradient(circle at 84% 30%, rgba(220,245,195,0.38), transparent 18%),
+        radial-gradient(circle at 50% 0%, rgba(200,235,170,0.14), transparent 20%),
+        radial-gradient(circle at 32% 6%, rgba(255,250,235,0.22), transparent 12%),
+        radial-gradient(circle at 68% 4%, rgba(240,250,225,0.20), transparent 12%),
+        radial-gradient(circle at 10% 10%, rgba(255,252,240,0.16), transparent 10%),
+        radial-gradient(circle at 90% 8%, rgba(245,250,230,0.14), transparent 10%),
+        linear-gradient(110deg, transparent 20%, rgba(255,255,255,0.24) 50%, transparent 80%);
+    animation: cloudDriftRich 16s ease-in-out infinite alternate;
+}
+
+@keyframes cloudDriftRich {
+    0% { transform: translateX(0) scaleX(1); }
+    50% { transform: translateX(6px) scaleX(1.01); }
+    100% { transform: translateX(10px) scaleX(0.99); }
+}
+
+/* ===== 7. 页脚花园底部超级增强 ===== */
+body.level-theme-1 .footer-rich::before {
+    background:
+        radial-gradient(circle at 8% 82%, rgba(200,235,170,0.22), transparent 18%),
+        radial-gradient(circle at 90% 76%, rgba(190,225,160,0.20), transparent 16%),
+        radial-gradient(circle at 50% 98%, rgba(215,238,190,0.18), transparent 24%),
+        radial-gradient(circle at 22% 90%, rgba(225,248,200,0.16), transparent 14%),
+        radial-gradient(circle at 76% 92%, rgba(218,238,188,0.15), transparent 14%),
+        radial-gradient(circle at 35% 96%, rgba(205,235,178,0.13), transparent 12%),
+        radial-gradient(circle at 64% 94%, rgba(212,240,185,0.12), transparent 12%),
+        radial-gradient(circle at 48% 96%, rgba(220,245,195,0.11), transparent 14%);
+}
+
+/* ===== 8. 关卡选择页入口超级增强 ===== */
+body.level-theme-1 #levelSelect::before {
+    background:
+        radial-gradient(circle at 10% 34%, rgba(215,240,185,0.24), transparent 22%),
+        radial-gradient(circle at 88% 28%, rgba(225,248,198,0.22), transparent 20%),
+        radial-gradient(circle at 50% 6%, rgba(255,248,220,0.34), transparent 20%),
+        radial-gradient(circle at 26% 16%, rgba(240,250,228,0.18), transparent 16%),
+        radial-gradient(circle at 74% 14%, rgba(235,250,218,0.16), transparent 16%),
+        radial-gradient(circle at 15% 70%, rgba(218,242,195,0.14), transparent 14%),
+        radial-gradient(circle at 85% 68%, rgba(225,248,205,0.12), transparent 14%);
+    filter: blur(10px);
+    opacity: 0.97;
+}
+
+body.level-theme-1 #levelSelect::after {
+    background:
+        radial-gradient(circle at 18% 20%, transparent 0 65px, rgba(176,220,152,0.13) 66px 69px, transparent 71px),
+        radial-gradient(circle at 80% 26%, transparent 0 75px, rgba(196,235,172,0.12) 76px 79px,透明 81px),
+        radial-gradient(circle at 14% 78%, transparent 0 70px, rgba(186,225,162,0.12) 71px 73px, transparent 75px),
+        radial-gradient(circle at 86% 74%, transparent 0 65px, rgba(190,228,168,0.11) 66px 68px, transparent 70px),
+        radial-gradient(circle at 48% 10%, transparent 0 52px, rgba(255,245,215,0.14) 53px 55px, transparent 57px),
+        radial-gradient(circle at 32% 68%, rgba(255,248,218,0.30) 0 2.5px, transparent 3.5px),
+        radial-gradient(circle at 66% 66%, rgba(255,248,218,0.30) 0 2.5px, transparent 3.5px),
+        radial-gradient(circle at 25% 45%, rgba(228,248,205,0.26) 0 2.2px, transparent 3.0px),
+        radial-gradient(circle at 74% 43%, rgba(228,248,205,0.26) 0 2.2px, transparent 3.0px);
+}
+
+/* ===== 9. 容器外围光晕超级增强 ===== */
+body.level-theme-1 .game-container::before {
+    background:
+        radial-gradient(circle at 50% 0%, rgba(255,250,225,0.50), transparent 18%),
+        radial-gradient(circle at 6% 14%, rgba(215,240,185,0.16), transparent 18%),
+        radial-gradient(circle at 93% 12%, rgba(225,248,198,0.16), transparent 18%),
+        radial-gradient(circle at 4% 88%, rgba(200,235,170,0.14), transparent 18%),
+        radial-gradient(circle at 95% 86%, rgba(210,238,188,0.13), transparent 18%),
+        radial-gradient(circle at 22% 4%, rgba(240,250,230,0.12), transparent 14%),
+        radial-gradient(circle at 76% 2%, rgba(235,250,220,0.11), transparent 14%),
+        radial-gradient(circle at 12% 96%, rgba(195,230,165,0.10), transparent 14%),
+        radial-gradient(circle at 88% 98%, rgba(205,235,178,0.09), transparent 14%);
+}
+
+/* ===== 10. Info面板超级增强 ===== */
+body.level-theme-1 .info-box::before {
+    background:
+        radial-gradient(circle, rgba(200,235,170,0.20), transparent 70%),
+        radial-gradient(circle at 80% 20%, rgba(255,245,210,0.14), transparent 40%),
+        radial-gradient(circle at 15% 80%, rgba(225,248,200,0.12), transparent 35%);
+}
+
+/* ===== 11. 任务卡超级增强 ===== */
+body.level-theme-1 .mission-box::before {
+    background: linear-gradient(180deg, #a8d96a, #8bc953);
+    box-shadow: 0 0 24px rgba(168, 217, 106, 0.32);
+}
+
+/* ===== 12. 额外动画效果库 ===== */
+
+/* 蝴蝶飞舞路径 */
+@keyframes butterflyPath {
+    0%, 100% {
+        transform: translate(0, 0) rotate(0deg) scale(1);
+        opacity: 0;
+    }
+    10% { opacity: 0.28; }
+    30% {
+        transform: translate(40px, -50px) rotate(20deg) scale(1.15);
+        opacity: 0.38;
+    }
+    50% {
+        transform: translate(60px, -30px) rotate(-10deg) scale(1.08);
+        opacity: 0.32;
+    }
+    70% {
+        transform: translate(30px, -60px) rotate(15deg) scale(1.12);
+        opacity: 0.36;
+    }
+    90% { opacity: 0.24; }
+}
+
+/* 萤火虫群闪烁 */
+@keyframes fireflySwarm {
+    0%, 100% { opacity: 0.18; transform: scale(0.8); }
+    20% { opacity: 0.38; transform: scale(1.25); }
+    40% { opacity: 0.22; transform: scale(0.92); }
+    60% { opacity: 0.42; transform: scale(1.3); }
+    80% { opacity: 0.26; transform: scale(0.88); }
+}
+
+/* 花田摇摆 */
+@keyframes flowerFieldSway {
+    0%, 100% { transform: rotate(-3deg) translateY(0) scale(1); }
+    25% { transform: rotate(1deg) translateY(-2px) scale(1.005); }
+    50% { transform: rotate(2.5deg) translateY(-4px) scale(1.008); }
+    75% { transform: rotate(-1.5deg) translateY(-1px) scale(1.003); }
+}
+
+/* 叶丛颤动 */
+@keyframes leafClusterRustle {
+    0%, 100% { transform: translateX(0) rotate(0deg) skewX(0deg); }
+    20% { transform: translateX(3px) rotate(1.5deg) skewX(0.5deg); }
+    40% { transform: translateX(-2px) rotate(-1deg) skewX(-0.3deg); }
+    60% { transform: translateX(2.5px) rotate(1deg) skewX(0.4deg); }
+    80% { transform: translateX(-1.5px) rotate(-0.5deg) skewX(-0.2deg); }
+}
+
+/* 星光闪烁 */
+@keyframes starTwinkle {
+    0%, 100% { opacity: 0.3; transform: scale(0.9) rotate(0deg); }
+    25% { opacity: 0.6; transform: scale(1.15) rotate(5deg); }
+    50% { opacity: 0.4; transform: scale(1.0) rotate(-3deg); }
+    75% { opacity: 0.7; transform: scale(1.2) rotate(4deg); }
+}
+
+/* 彩虹光环脉动 */
+@keyframes rainbowPulse {
+    0%, 100% {
+        opacity: 0.15;
+        filter: hue-rotate(0deg) blur(8px);
+        transform: scale(1);
+    }
+    33% {
+        opacity: 0.25;
+        filter: hue-rotate(30deg) blur(10px);
+        transform: scale(1.04);
+    }
+    66% {
+        opacity: 0.20;
+        filter: hue-rotate(-20deg) blur(9px);
+        transform: scale(0.98);
+    }
+}
+
+/* 环境呼吸 */
+@keyframes environmentBreathe {
+    0%, 100% {
+        filter: brightness(1) saturate(1) contrast(1);
+    }
+    33% {
+        filter: brightness(1.03) saturate(1.06) contrast(1.01);
+    }
+    66% {
+        filter: brightness(0.98) saturate(0.97) contrast(0.99);
+    }
+}
+
+/* ===== 13. 高对比度模式兼容 ===== */
+body.high-contrast.level-theme-1 .game-container::after,
+body.high-contrast.level-theme-1 #levelSelect::before,
+body.high-contrast.level-theme-1 #levelSelect::after,
+body.high-contrast.level-theme-1 .game-screen::after,
+body.high-contrast.level-theme-1 .game-screen::before {
+    display: none !important;
+}
+
+/* =========================================
+   第一关动态卡通形象系统 - 几何花园精灵
+   符合"新手探索、温馨引导"的主题基调
+========================================= */
+
+/* ===== 基础角色容器 ===== */
+.level1-mascot {
+    position: absolute;
+    pointer-events: none;
+    z-index: 8;
+    opacity: 0.88;
+}
+
+/* ===== 1. 小花精灵（主角色）===== */
+.mascot-flower {
+    width: 52px;
+    height: 58px;
+}
+
+.mascot-flower .flower-head {
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 38px;
+    height: 38px;
+    background: radial-gradient(circle at 50% 45%, #ffd966 0%, #ffb347 60%, #f39c12 100%);
+    border-radius: 50% 50% 48% 48%;
+    box-shadow:
+        0 3px 10px rgba(255,179,71,0.35),
+        inset 0 -2px 6px rgba(243,156,18,0.25);
+}
+
+.mascot-flower .petal {
+    position: absolute;
+    width: 16px;
+    height: 22px;
+    background: linear-gradient(135deg, #fff4cc 0%, #ffe082 50%, #ffcc33 100%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    box-shadow: 0 2px 5px rgba(255,204,51,0.30);
+}
+
+.mascot-flower .petal-1 { top: -8px; left: 18px; transform: rotate(0deg); }
+.mascot-flower .petal-2 { top: 4px; right: -6px; transform: rotate(72deg); }
+.mascot-flower .petal-3 { bottom: 2px; right: -4px; transform: rotate(144deg); }
+.mascot-flower .petal-4 { bottom: 4px; left: -4px; transform: rotate(216deg); }
+.mascot-flower .petal-5 { top: 4px; left: -6px; transform: rotate(288deg); }
+
+.mascot-flower .face {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 28px;
+    height: 20px;
+}
+
+.mascot-flower .eye-left,
+.mascot-flower .eye-right {
+    position: absolute;
+    top: 2px;
+    width: 7px;
+    height: 8px;
+    background: radial-gradient(circle at 40% 40%, #333 0%, #000 100%);
+    border-radius: 50%;
+    animation: flowerEyeBlink 3.5s ease-in-out infinite;
+}
+
+.mascot-flower .eye-left { left: 3px; animation-delay: 0s; }
+.mascot-flower .eye-right { right: 3px; animation-delay: 0.15s; }
+
+.mascot-flower .eye-shine {
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    width: 3px;
+    height: 3px;
+    background: white;
+    border-radius: 50%;
+}
+
+.mascot-flower .mouth {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 4px;
+    border-bottom: 2.5px solid #d35400;
+    border-radius: 0 0 50% 50%;
+}
+
+.mascot-flower .cheek-left,
+.mascot-flower .cheek-right {
+    position: absolute;
+    top: 8px;
+    width: 8px;
+    height: 5px;
+    background: rgba(255,140,150,0.55);
+    border-radius: 50%;
+    filter: blur(1.5px);
+    animation: cheekBlush 2.8s ease-in-out infinite alternate;
+}
+
+.mascot-flower .cheek-left { left: -2px; }
+.mascot-flower .cheek-right { right: -2px; animation-delay: 0.4s; }
+
+.mascot-flower .stem {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 5px;
+    height: 14px;
+    background: linear-gradient(180deg, #7cb342 0%, #558b2f 100%);
+    border-radius: 3px;
+}
+
+/* 花朵精灵位置 - 全部在四角边缘 */
+.mascot-flower.pos-topleft { top: 4%; left: 3%; animation: flowerFloatTL 5s ease-in-out infinite; }
+.mascot-flower.pos-topright { top: 5%; right: 3%; animation: flowerFloatTR 5.5s ease-in-out infinite; }
+.mascot-flower.pos-midleft { bottom: 8%; left: 2%; animation: flowerFloatML 6s ease-in-out infinite; }
+.mascot-flower.pos-midright { bottom: 10%; right: 2%; animation: flowerFloatMR 5.8s ease-in-out infinite; }
+
+@keyframes flowerFloatTL {
+    0%, 100% { transform: translateY(0) rotate(-3deg); }
+    50% { transform: translateY(-8px) rotate(3deg); }
+}
+@keyframes flowerFloatTR {
+    0%, 100% { transform: translateY(0) rotate(3deg); }
+    50% { transform: translateY(-6px) rotate(-3deg); }
+}
+@keyframes flowerFloatML {
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    50% { transform: translateY(-10px) rotate(2deg); }
+}
+@keyframes flowerFloatMR {
+    0%, 100% { transform: translateY(0) rotate(2deg); }
+    50% { transform: translateY(-8px) rotate(-2deg); }
+}
+
+@keyframes flowerEyeBlink {
+    0%, 90%, 100% { transform: scaleY(1); }
+    95% { transform: scaleY(0.1); }
+}
+
+@keyframes cheekBlush {
+    0% { opacity: 0.45; transform: scale(1); }
+    100% { opacity: 0.65; transform: scale(1.15); }
+}
+
+/* ===== 2. 小蝴蝶（飞舞装饰）===== */
+.mascot-butterfly {
+    width: 44px;
+    height: 36px;
+}
+
+.mascot-butterfly .butterfly-body {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 5px;
+    height: 22px;
+    background: linear-gradient(180deg, #5d4037 0%, #3e2723 100%);
+    border-radius: 3px;
+}
+
+.mascot-butterfly .wing-left,
+.mascot-butterfly .wing-right {
+    position: absolute;
+    top: 6px;
+    width: 20px;
+    height: 26px;
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 40%, #90caf9 80%, #64b5f6 100%);
+    border-radius: 50% 50% 50% 20%;
+    box-shadow:
+        0 2px 8px rgba(100,181,246,0.35),
+        inset 0 0 10px rgba(255,255,255,0.5);
+    transform-origin: center right;
+}
+
+.mascot-butterfly .wing-left {
+    left: 2px;
+    transform-origin: right center;
+    animation: wingFlapLeft 0.18s ease-in-out infinite;
+}
+
+.mascot-butterfly .wing-right {
+    right: 2px;
+    transform-origin: left center;
+    animation: wingFlapRight 0.18s ease-in-out infinite;
+}
+
+.mascot-butterfly .antenna-left,
+.mascot-butterfly .antenna-right {
+    position: absolute;
+    top: 0;
+    width: 2px;
+    height: 10px;
+    background: #5d4037;
+    border-radius: 1px;
+}
+
+.mascot-butterfly .antenna-left {
+    left: 46%;
+    transform: rotate(-20deg);
+}
+
+.mascot-butterfly .antenna-right {
+    right: 46%;
+    transform: rotate(20deg);
+}
+
+.mascot-butterfly .antenna-left::after,
+.mascot-butterfly .antenna-right::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    width: 4px;
+    height: 4px;
+    background: #ffeb3b;
+    border-radius: 50%;
+}
+
+/* 蝴蝶位置 - 边缘飞舞，避开圆形区域 */
+.mascot-butterfly.pos-fly1 { top: 8%; left: 12%; animation: butterflyFly1 7s ease-in-out infinite; }
+.mascot-butterfly.pos-fly2 { top: 10%; right: 12%; animation: butterflyFly2 8s ease-in-out infinite; }
+.mascot-butterfly.pos-fly3 { bottom: 18%; left: 10%; animation: butterflyFly3 7.5s ease-in-out infinite; }
+
+@keyframes butterflyFly1 {
+    0% { transform: translate(0, 0) rotate(5deg); }
+    25% { transform: translate(15px, -10px) rotate(-8deg); }
+    50% { transform: translate(8px, -4px) rotate(3deg); }
+    75% { transform: translate(18px, -12px) rotate(-5deg); }
+    100% { transform: translate(0, 0) rotate(5deg); }
+}
+@keyframes butterflyFly2 {
+    0% { transform: translate(0, 0) rotate(-5deg); }
+    33% { transform: translate(-18px, -10px) rotate(8deg); }
+    66% { transform: translate(-10px, -16px) rotate(-3deg); }
+    100% { transform: translate(0, 0) rotate(-5deg); }
+}
+@keyframes butterflyFly3 {
+    0% { transform: translate(0, 0) rotate(3deg); }
+    50% { transform: translate(12px, -8px) rotate(-6deg); }
+    100% { transform: translate(0, 0) rotate(3deg); }
+}
+
+@keyframes wingFlapLeft {
+    0%, 100% { transform: rotateY(0deg); }
+    50% { transform: rotateY(70deg); }
+}
+@keyframes wingFlapRight {
+    0%, 100% { transform: rotateY(0deg); }
+    50% { transform: rotateY(-70deg); }
+}
+
+/* ===== 3. 小蜜蜂（勤劳助手）===== */
+.mascot-bee {
+    width: 40px;
+    height: 34px;
+}
+
+.mascot-bee .bee-body {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 26px;
+    height: 22px;
+    background: linear-gradient(180deg,
+        #ffc107 0%, #ffc107 25%,
+        #212121 25%, #212121 37%,
+        #ffc107 37%, #ffc107 50%,
+        #212121 50%, #212121 63%,
+        #ffc107 63%, #ffc107 100%
+    );
+    border-radius: 50%;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+}
+
+.mascot-bee .bee-wing-l,
+.mascot-bee .bee-wing-r {
+    position: absolute;
+    top: 2px;
+    width: 16px;
+    height: 20px;
+    background: rgba(200,230,255,0.75);
+    border-radius: 50%;
+    backdrop-filter: blur(2px);
+}
+
+.mascot-bee .bee-wing-l {
+    left: 2px;
+    transform-origin: bottom right;
+    animation: beeWingL 0.12s ease-in-out infinite;
+}
+
+.mascot-bee .bee-wing-r {
+    right: 2px;
+    transform-origin: bottom left;
+    animation: beeWingR 0.12s ease-in-out infinite;
+}
+
+.mascot-bee .bee-eye {
+    position: absolute;
+    top: 8px;
+    width: 5px;
+    height: 6px;
+    background: #000;
+    border-radius: 50%;
+}
+
+.mascot-bee .bee-eye.left { left: 11px; }
+.mascot-bee .bee-eye.right { right: 11px; }
+
+.mascot-bee .bee-stinger {
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 8px solid #212121;
+}
+
+/* 蜜蜂位置 - 边缘区域盘旋 */
+.mascot-bee.pos-bee1 { top: 6%; right: 8%; animation: beeBuzz1 6s ease-in-out infinite; }
+.mascot-bee.pos-bee2 { bottom: 22%; right: 6%; animation: beeBuzz2 6.5s ease-in-out infinite; }
+
+@keyframes beeBuzz1 {
+    0%, 100% { transform: translate(0, 0) rotate(-5deg); }
+    25% { transform: translate(-12px, 8px) rotate(8deg); }
+    50% { transform: translate(-6px, 4px) rotate(-3deg); }
+    75% { transform: translate(-14px, 10px) rotate(5deg); }
+}
+@keyframes beeBuzz2 {
+    0%, 100% { transform: translate(0, 0) rotate(5deg); }
+    50% { transform: translate(10px, -6px) rotate(-6deg); }
+}
+
+@keyframes beeWingL {
+    0%, 100% { transform: rotateZ(0deg) scaleY(1); }
+    50% { transform: rotateZ(20deg) scaleY(0.7); }
+}
+@keyframes beeWingR {
+    0%, 100% { transform: rotateZ(0deg) scaleY(1); }
+    50% { transform: rotateZ(-20deg) scaleY(0.7); }
+}
+
+/* ===== 4. 小蘑菇（可爱配角）===== */
+.mascot-mushroom {
+    width: 38px;
+    height: 44px;
+}
+
+.mascot-mushroom .mushroom-cap {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 34px;
+    height: 22px;
+    background: linear-gradient(180deg, #ef5350 0%, #e53935 60%, #c62828 100%);
+    border-radius: 50% 50% 45% 45%;
+    box-shadow:
+        0 4px 10px rgba(198,40,40,0.3),
+        inset 0 -3px 8px rgba(0,0,0,0.15);
+}
+
+.mascot-mushroom .cap-spot {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+.mascot-mushroom .spot-1 { top: 4px; left: 7px; width: 6px; height: 6px; }
+.mascot-mushroom .spot-2 { top: 2px; right: 8px; width: 5px; height: 5px; }
+.mascot-mushroom .spot-3 { top: 10px; left: 50%; transform: translateX(-50%); }
+
+.mascot-mushroom .mushroom-stem {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 18px;
+    height: 22px;
+    background: linear-gradient(180deg, #fafafa 0%, #e0e0e0 70%, #bdbdbd 100%);
+    border-radius: 6px 6px 8px 8px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.12);
+}
+
+.mascot-mushroom .mushroom-face {
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 14px;
+    height: 10px;
+}
+
+.mascot-mushroom .mushroom-eye {
+    position: absolute;
+    top: 0;
+    width: 4px;
+    height: 5px;
+    background: #333;
+    border-radius: 50%;
+}
+
+.mascot-mushroom .mushroom-eye.left { left: 1px; }
+.mascot-mushroom .mushroom-eye.right { right: 1px; }
+
+.mascot-mushroom .mushroom-mouth {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 3px;
+    border-bottom: 2px solid #d32f2f;
+    border-radius: 0 0 50% 50%;
+}
+
+.mascot-mushroom .mushroom-blush {
+    position: absolute;
+    top: 4px;
+    width: 5px;
+    height: 3px;
+    background: rgba(255,138,128,0.5);
+    border-radius: 50%;
+    filter: blur(1px);
+}
+
+.mascot-mushroom .mushroom-blush.left { left: -2px; }
+.mascot-mushroom .mushroom-blush.right { right: -2px; }
+
+/* 蘑菇位置 - 底部角落地面 */
+.mascot-mushroom.pos-ground1 { bottom: 4%; left: 4%; animation: mushroomSway1 4s ease-in-out infinite; }
+.mascot-mushroom.pos-ground2 { bottom: 3%; right: 4%; animation: mushroomSway2 4.5s ease-in-out infinite; }
+
+@keyframes mushroomSway1 {
+    0%, 100% { transform: rotate(-2deg) translateY(0); }
+    50% { transform: rotate(2deg) translateY(-3px); }
+}
+@keyframes mushroomSway2 {
+    0%, 100% { transform: rotate(2deg) translateY(0); }
+    50% { transform: rotate(-2deg) translateY(-2px); }
+}
+
+/* ===== 5. 几何星星（闪光点缀）===== */
+.mascot-star {
+    width: 32px;
+    height: 32px;
+}
+
+.mascot-star .star-body {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0;
+    height: 0;
+    border-left: 14px solid transparent;
+    border-right: 14px solid transparent;
+    border-bottom: 26px solid #ffd54f;
+    filter: drop-shadow(0 2px 6px rgba(255,213,79,0.5));
+}
+
+.mascot-star .star-body::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: -14px;
+    width: 0;
+    height: 0;
+    border-left: 14px solid transparent;
+    border-right: 14px solid transparent;
+    border-top: 26px solid #ffd54f;
+}
+
+.mascot-star .star-face {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 14px;
+}
+
+.mascot-star .star-eye {
+    position: absolute;
+    top: 2px;
+    width: 4px;
+    height: 5px;
+    background: #333;
+    border-radius: 50%;
+    animation: starTwinkleAnim 2s ease-in-out infinite;
+}
+
+.mascot-star .star-eye.left { left: 2px; animation-delay: 0s; }
+.mascot-star .star-eye.right { right: 2px; animation-delay: 0.3s; }
+
+.mascot-star .star-smile {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 7px;
+    height: 3.5px;
+    border-bottom: 2px solid #f57c00;
+    border-radius: 0 0 50% 50%;
+}
+
+/* 星星位置 - 边缘闪烁，完全避开圆形区域 */
+.mascot-star.pos-twinkle1 { top: 3%; left: 18%; animation: starTwinklePos1 3s ease-in-out infinite; }
+.mascot-star.pos-twinkle2 { top: 12%; right: 6%; animation: starTwinklePos2 3.5s ease-in-out infinite; }
+.mascot-star.pos-twinkle3 { bottom: 15%; right: 14%; animation: starTwinklePos3 4s ease-in-out infinite; }
+
+@keyframes starTwinklePos1 {
+    0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.85; }
+    50% { transform: scale(1.15) rotate(10deg); opacity: 1; }
+}
+@keyframes starTwinklePos2 {
+    0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.82; }
+    50% { transform: scale(1.2) rotate(-12deg); opacity: 1; }
+}
+@keyframes starTwinklePos3 {
+    0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.80; }
+    50% { transform: scale(1.18) rotate(8deg); opacity: 1; }
+}
+
+@keyframes starTwinkleAnim {
+    0%, 90%, 100% { transform: scaleY(1); }
+    95% { transform: scaleY(0.1); }
+}
+
+/* ===== 6. 叶子小精灵（绿色伙伴）===== */
+.mascot-leaf {
+    width: 36px;
+    height: 42px;
+}
+
+.mascot-leaf .leaf-body {
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-15deg);
+    width: 28px;
+    height: 36px;
+    background: linear-gradient(135deg, #81c784 0%, #66bb6a 40%, #4caf50 80%, #43a047 100%);
+    border-radius: 50% 0 50% 50%;
+    box-shadow:
+        0 4px 10px rgba(76,175,80,0.35),
+        inset 2px 2px 8px rgba(255,255,255,0.25);
+}
+
+.mascot-leaf .leaf-vein {
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 24px;
+    background: rgba(56,142,60,0.4);
+    border-radius: 1px;
+}
+
+.mascot-leaf .leaf-face {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 18px;
+    height: 14px;
+}
+
+.mascot-leaf .leaf-eye {
+    position: absolute;
+    top: 2px;
+    width: 5px;
+    height: 6px;
+    background: #2e7d32;
+    border-radius: 50%;
+    animation: leafEyeBlink 4s ease-in-out infinite;
+}
+
+.mascot-leaf .leaf-eye.left { left: 2px; animation-delay: 0s; }
+.mascot-leaf .leaf-eye.right { right: 2px; animation-delay: 0.2s; }
+
+.mascot-leaf .leaf-mouth {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 3px;
+    border-bottom: 2px solid #1b5e20;
+    border-radius: 0 0 50% 50%;
+}
+
+.mascot-leaf .leaf-cheek {
+    position: absolute;
+    top: 6px;
+    width: 6px;
+    height: 4px;
+    background: rgba(129,199,132,0.5);
+    border-radius: 50%;
+    filter: blur(1px);
+}
+
+.mascot-leaf .leaf-cheek.left { left: -1px; }
+.mascot-leaf .leaf-cheek.right { right: -1px; }
+
+/* 叶子位置 - 边缘摇摆，避开圆形区域 */
+.mascot-leaf.pos-leaf1 { bottom: 6%; left: 14%; animation: leafSway1 5s ease-in-out infinite; }
+.mascot-leaf.pos-leaf2 { top: 14%; left: 6%; animation: leafSway2 5.5s ease-in-out infinite; }
+
+@keyframes leafSway1 {
+    0%, 100% { transform: rotate(-8deg) translateY(0); }
+    50% { transform: rotate(5deg) translateY(-6px); }
+}
+@keyframes leafSway2 {
+    0%, 100% { transform: rotate(6deg) translateY(0); }
+    50% { transform: rotate(-7deg) translateY(-5px); }
+}
+
+@keyframes leafEyeBlink {
+    0%, 92%, 100% { transform: scaleY(1); }
+    96% { transform: scaleY(0.1); }
+}
+
+/* ===== 高对比度模式隐藏 ===== */
+body.high-contrast .level1-mascot {
+    display: none !important;
+}
+
+/* =========================================
+   第二关 - 几何花园路径（过渡关卡）
+   连接第一关(草地)与第三关(晶洞)的桥梁
+   强调：路径感、连接关系、几何结构
+========================================= */
+
+/* ===== 1. 主背景：柔和三色渐变（绿→蓝→紫过渡）===== */
+body.level-theme-2 {
+    background:
+
+        /* 远景光斑 - 营造空间深度 */
+        radial-gradient(circle at 20% 15%, rgba(200,230,255,0.28), transparent 22%),
+        radial-gradient(circle at 80% 12%, rgba(225,190,245,0.24), transparent 20%),
+        radial-gradient(circle at 50% 88%, rgba(178,235,212,0.26), transparent 24%),
+        radial-gradient(circle at 15% 82%, rgba(200,230,220,0.20), transparent 18%),
+        radial-gradient(circle at 85% 85%, rgba(210,200,240,0.18), transparent 16%),
+
+        /* 主渐变：浅绿 → 浅蓝 → 淡紫 */
+        linear-gradient(
+            165deg,
+            #e8f5e9 0%,
+            #e0f2f1 25%,
+            #e1f5fe 50%,
+            #ede7f6 75%,
+            #f3e5f5 100%
+        );
+}
+
+/* ===== 2. 粒子系统：轻量结构化（8个节点式粒子）===== */
+body.level-theme-2::before {
+
+    background:
+
+        /* 主路径节点 - 较大较亮 */
+        radial-gradient(circle at 18% 28%, rgba(129,199,132,0.65) 0 3px, transparent 4.5px),
+        radial-gradient(circle at 42% 18%, rgba(100,181,246,0.60) 0 2.8px, transparent 4.2px),
+        radial-gradient(circle at 72% 24%, rgba(186,104,200,0.58) 0 3px, transparent 4.5px),
+
+        /* 次级节点 - 中等 */
+        radial-gradient(circle at 30% 48%, rgba(129,199,132,0.52) 0 2.4px, transparent 3.6px),
+        radial-gradient(circle at 58% 42%, rgba(100,181,246,0.50) 0 2.4px, transparent 3.6px),
+
+        /* 终点节点 */
+        radial-gradient(circle at 78% 62%, rgba(186,104,200,0.55) 0 2.8px, transparent 4.2px),
+        radial-gradient(circle at 22% 68%, rgba(129,199,132,0.48) 0 2.4px, transparent 3.6px),
+
+        /* 微小连接点 */
+        radial-gradient(circle at 50% 55%, rgba(149,117,205,0.40) 0 2px, transparent 3px);
+
+    background-size:
+        200px 200px,
+        180px 180px,
+        195px 195px,
+        170px 170px,
+        185px 185px,
+        210px 210px,
+        175px 175px,
+        160px 160px;
+
+    animation: nodePulseGlow 4.5s ease-in-out infinite;
+    opacity: 0.88;
+}
+
+@keyframes nodePulseGlow {
+    0% {
+        transform: scale(1);
+        opacity: 0.84;
+    }
+    12% {
+        /* 绿色主节点微亮 */
+        transform: scale(1.015);
+        opacity: 0.88;
+    }
+    24% {
+        /* 蓝色主节点亮起 */
+        transform: scale(1.02);
+        opacity: 0.90;
+    }
+    37% {
+        /* 紫色主节点 + 中心点最亮（小高潮）*/
+        transform: scale(1.03);
+        opacity: 0.93;
+        filter: brightness(1.05);
+    }
+    50% {
+        /* 次级节点脉动 */
+        transform: scale(1.01);
+        opacity: 0.89;
+        filter: brightness(1.02);
+    }
+    62% {
+        /* 终点点亮 */
+        transform: scale(1.02);
+        opacity: 0.91;
+    }
+    75% {
+        /* 平稳过渡 */
+        transform: scale(1.005);
+        opacity: 0.86;
+    }
+    87% {
+        /* 准备下一轮 */
+        transform: scale(0.998);
+        opacity: 0.85;
+    }
+    100% {
+        /* 回到起点 */
+        transform: scale(1);
+        opacity: 0.84;
+        filter: brightness(1);
+    }
+}
+
+/* ===== 3. 路径系统核心层（game-screen::before）===== */
+body.level-theme-2 .game-screen::before {
+
+    background:
+
+        /* === 主路径弧线：左下 → 右上（学习之旅）=== */
+        /* 使用多层渐变模拟曲线 */
+        radial-gradient(ellipse 45% 12% at 35% 65%, transparent 48%, rgba(129,199,132,0.18) 49%, rgba(129,199,132,0.18) 51%, transparent 52%),
+        radial-gradient(ellipse 38% 10% at 45% 55%, transparent 47%, rgba(100,181,246,0.17) 48%, rgba(100,181,246,0.17) 50%, transparent 51%),
+        radial-gradient(ellipse 32% 8% at 55% 45%, transparent 46%, rgba(149,117,205,0.16) 47%, rgba(149,117,205,0.16) 49%, transparent 50%),
+
+        /* === 流动光点（沿主路径分布）=== */
+        /* 光点1 - 绿色段 */
+        radial-gradient(circle at 32% 58%, rgba(129,199,132,0.55) 0 2px, transparent 3px),
+
+        /* 光点2 - 青蓝过渡段 */
+        radial-gradient(circle at 44% 46%, rgba(77,182,172,0.52) 0 2px, transparent 3px),
+
+        /* 光点3 - 蓝色中心段 */
+        radial-gradient(circle at 52% 40%, rgba(100,181,246,0.58) 0 2.2px, transparent 3.2px),
+
+        /* 光点4 - 蓝紫过渡段 */
+        radial-gradient(circle at 62% 32%, rgba(149,117,205,0.50) 0 2px, transparent 3px),
+
+        /* 光点5 - 紫色终点段 */
+        radial-gradient(circle at 72% 26%, rgba(186,104,200,0.48) 0 1.8px, transparent 2.8px),
+
+        /* === 次级路径1：左侧分支 === */
+        radial-gradient(ellipse 28% 6% at 25% 42%, transparent 46%, rgba(129,199,132,0.14) 47%, rgba(129,199,132,0.14) 49%, transparent 50%),
+        radial-gradient(ellipse 22% 5% at 22% 32%, transparent 45%, rgba(100,181,246,0.13) 46%, rgba(100,181,246,0.13) 48%, transparent 49%),
+
+        /* 次级路径流动光点（左侧）*/
+        radial-gradient(circle at 24% 36%, rgba(129,199,132,0.42) 0 1.6px, transparent 2.4px),
+
+        /* === 次级路径2：右侧分支 === */
+        radial-gradient(ellipse 26% 6% at 70% 38%, transparent 46%, rgba(186,104,200,0.14) 47%, rgba(186,104,200,0.14) 49%, transparent 50%),
+        radial-gradient(ellipse 20% 5% at 74% 28%, transparent 45%, rgba(149,117,205,0.13) 46%, rgba(149,117,205,0.13) 48%, transparent 49%),
+
+        /* 次级路径流动光点（右侧）*/
+        radial-gradient(circle at 72% 32%, rgba(186,104,200,0.40) 0 1.6px, transparent 2.4px),
+
+        /* === 微细连接线（网格暗示）=== */
+        linear-gradient(115deg, transparent 49.7%, rgba(129,199,132,0.06) 49.85%, rgba(129,199,132,0.06) 50.15%, transparent 50.3%),
+        linear-gradient(65deg, transparent 49.7%, rgba(100,181,246,0.055) 49.85%, rgba(100,181,246,0.055) 50.15%, transparent 50.3%),
+        linear-gradient(155deg, transparent 49.75%, rgba(149,117,205,0.05) 49.88%, rgba(149,117,205,0.05) 50.12%, transparent 50.25%);
+
+    animation: pathGlowFlow 8s ease-in-out infinite;
+}
+
+@keyframes pathGlowFlow {
+    0% {
+        opacity: 0.78;
+        filter: brightness(1);
+        background-position: 0% 0%;
+    }
+    25% {
+        opacity: 0.86;
+        filter: brightness(1.04);
+    }
+    50% {
+        opacity: 0.82;
+        filter: brightness(1.02);
+    }
+    75% {
+        opacity: 0.88;
+        filter: brightness(1.06);
+    }
+    100% {
+        opacity: 0.78;
+        filter: brightness(1);
+        background-position: 100% 100%;
+    }
+}
+
+/* ===== 4. 节点与几何图形层（game-screen::after）===== */
+body.level-theme-2 .game-screen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+
+    background:
+
+        /* === 主要节点（大圆环）- 路径上的关键点 === */
+        /* 起点（左下）- 绿色 - 闪烁延迟0s */
+        radial-gradient(circle at 22% 68%, transparent 0 8px, rgba(129,199,132,0.25) 9px 13px, transparent 14px),
+
+        /* 转折点1（中部偏左）- 绿蓝过渡 - 闪烁延迟1s */
+        radial-gradient(circle at 35% 50%, transparent 0 9px, rgba(77,182,172,0.24) 10px 14px, transparent 15px),
+
+        /* 中心枢纽（正中）- 蓝色 - 闪烁延迟2s（最亮最大）*/
+        radial-gradient(circle at 50% 44%, transparent 0 11px, rgba(100,181,246,0.27) 12px 16px, transparent 17px),
+
+        /* 转折点2（中部偏右）- 蓝紫过渡 - 闪烁延迟3s */
+        radial-gradient(circle at 64% 36%, transparent 0 9px, rgba(149,117,205,0.24) 10px 14px, transparent 15px),
+
+        /* 终点（右上）- 紫色 - 闪烁延迟4s */
+        radial-gradient(circle at 76% 24%, transparent 0 10px, rgba(186,104,200,0.26) 11px 15px, transparent 16px),
+
+        /* === 次要节点（中等圆环）- 分支点 === */
+        /* 左侧分支点 - 闪烁延迟0.5s */
+        radial-gradient(circle at 28% 38%, transparent 0 6px, rgba(129,199,132,0.20) 7px 10px, transparent 11px),
+        /* 右侧分支点 - 闪烁延迟3.5s */
+        radial-gradient(circle at 70% 32%, transparent 0 6px, rgba(186,104,200,0.20) 7px 10px, transparent 11px),
+
+        /* === 小几何装饰（轻量点缀）=== */
+        /* 三角形暗示（用椭圆模拟）*/
+        radial-gradient(ellipse 4px 6px at 18% 48%, rgba(129,199,132,0.30), transparent),
+        radial-gradient(ellipse 4px 6px at 80% 54%, rgba(186,104,200,0.30), transparent),
+
+        /* 菱形暗示 */
+        radial-gradient(ellipse 5px 3px at 42% 62%, rgba(100,181,246,0.28), transparent),
+        radial-gradient(ellipse 5px 3px at 58% 26%, rgba(149,117,205,0.28), transparent),
+
+        /* 小圆点（路径标记）*/
+        radial-gradient(circle at 30% 56%, rgba(129,199,132,0.35) 0 1.8px, transparent 2.5px),
+        radial-gradient(circle at 44% 34%, rgba(100,181,246,0.35) 0 1.8px, transparent 2.5px),
+        radial-gradient(circle at 56% 52%, rgba(149,117,205,0.35) 0 1.8px, transparent 2.5px),
+        radial-gradient(circle at 68% 46%, rgba(186,104,200,0.35) 0 1.8px, transparent 2.5px),
+
+        /* === 虚线轨道效果（极淡）=== */
+        linear-gradient(90deg, transparent 48%, rgba(129,199,132,0.04) 49%, rgba(129,199,132,0.04) 51%, transparent 52%),
+        linear-gradient(125deg, transparent 48%, rgba(100,181,246,0.035) 49%, rgba(100,181,246,0.035) 51%, transparent 52%);
+
+    animation: nodeBreathBlink 7s ease-in-out infinite;
+    opacity: 0.82;
+}
+
+@keyframes nodeBreathBlink {
+    0% {
+        transform: scale(0.99);
+        opacity: 0.78;
+    }
+    14% {
+        /* 第1阶段：起点节点微亮 */
+        opacity: 0.82;
+        filter: brightness(1.02);
+    }
+    28% {
+        /* 第2阶段：转折点1亮起 */
+        opacity: 0.84;
+        filter: brightness(1.03);
+    }
+    42% {
+        /* 第3阶段：中心枢纽最亮（高潮点）*/
+        transform: scale(1.008);
+        opacity: 0.88;
+        filter: brightness(1.06);
+    }
+    57% {
+        /* 第4阶段：转折点2亮起 */
+        opacity: 0.85;
+        filter: brightness(1.04);
+    }
+    71% {
+        /* 第5阶段：终点节点亮起 */
+        opacity: 0.83;
+        filter: brightness(1.03);
+    }
+    85% {
+        /* 回落期 */
+        transform: scale(0.995);
+        opacity: 0.80;
+        filter: brightness(1.01);
+    }
+    100% {
+        /* 完全循环 */
+        transform: scale(0.99);
+        opacity: 0.78;
+        filter: brightness(1);
+    }
+}
+
+/* ===== 5. Canvas容器内部增强 ===== */
+body.level-theme-2 .canvas-container::before {
+    inset: -8% -8% auto -8%;
+    height: 58%;
+    background:
+        radial-gradient(circle at 50% 15%, rgba(255,255,255,0.85), transparent 38%),
+        radial-gradient(circle at 18% 28%, rgba(200,230,255,0.18), transparent 20%),
+        radial-gradient(circle at 80% 26%, rgba(225,200,245,0.18), transparent 20%),
+        radial-gradient(circle at 50% 98%, rgba(178,235,212,0.14),透明 26%);
+}
+
+/* ===== 6. 容器外围光晕（边缘柔和）===== */
+body.level-theme-2 .game-container::before {
+    background:
+        radial-gradient(circle at 50% 0%, rgba(232,245,233,0.42), transparent 16%),
+        radial-gradient(circle at 8% 12%, rgba(200,230,255,0.14), transparent 16%),
+        radial-gradient(circle at 92% 10%, rgba(225,200,245,0.14), transparent 16%),
+        radial-gradient(circle at 5% 86%, rgba(178,235,212,0.12), transparent 16%),
+        radial-gradient(circle at 94% 88%, rgba(210,200,240,0.11), transparent 16%);
+}
+
+/* ===== 7. 页头装饰（路径延续感）===== */
+body.level-theme-2 .game-header::before {
+    background:
+        radial-gradient(circle at 25% 20%, rgba(200,230,255,0.22), transparent 14%),
+        radial-gradient(circle at 72% 24%, rgba(225,200,245,0.20), transparent 14%),
+        linear-gradient(110deg, transparent 30%, rgba(149,117,205,0.12) 50%, transparent 70%);
+    animation: headerPathDrift 12s ease-in-out infinite alternate;
+}
+
+@keyframes headerPathDrift {
+    0% { transform: translateX(-3px); }
+    100% { transform: translateX(3px); }
+}
+
+/* ===== 8. 页脚装饰（路径汇聚感）===== */
+body.level-theme-2 .footer-rich::before {
+    background:
+        radial-gradient(circle at 30% 88%, rgba(129,199,132,0.18), transparent 16%),
+        radial-gradient(circle at 70% 86%, rgba(149,117,205,0.16), transparent 14%),
+        radial-gradient(circle at 50% 96%, rgba(100,181,246,0.14), transparent 20%);
+}
+
+/* ===== 9. 关卡选择页入口（路径起点感）===== */
+body.level-theme-2 #levelSelect::before {
+    background:
+        radial-gradient(circle at 20% 32%, rgba(200,230,255,0.20), transparent 20%),
+        radial-gradient(circle at 78% 28%, rgba(225,200,245,0.18), transparent 18%),
+        radial-gradient(circle at 50% 8%, rgba(178,235,212,0.26), transparent 18%),
+        linear-gradient(135deg, rgba(129,199,132,0.06) 0%, rgba(100,181,246,0.06) 50%, rgba(186,104,200,0.06) 100%);
+    filter: blur(8px);
+    opacity: 0.95;
+}
+
+body.level-theme-2 #levelSelect::after {
+    background:
+        radial-gradient(circle at 22% 26%, transparent 0 55px, rgba(129,199,132,0.11) 56px 59px, transparent 61px),
+        radial-gradient(circle at 76% 24%, transparent 0 60px, rgba(186,104,200,0.10) 61px 64px, transparent 66px),
+        radial-gradient(circle at 50% 10%, transparent 0 45px, rgba(100,181,246,0.12) 46px 48px, transparent 51px),
+        radial-gradient(circle at 35% 68%, rgba(129,199,132,0.28) 0 2px, transparent 3px),
+        radial-gradient(circle at 64% 66%, rgba(149,117,205,0.28) 0 2px, transparent 3px);
+}
+
+/* ===== 10. Info面板（信息节点风格）===== */
+body.level-theme-2 .info-box::before {
+    background:
+        radial-gradient(circle, rgba(200,230,255,0.18), transparent 70%),
+        radial-gradient(circle at 75% 25%, rgba(225,200,245,0.12), transparent 40%),
+        radial-gradient(circle at 25% 75%, rgba(178,235,212,0.10), transparent 35%);
+}
+
+/* ===== 11. 任务卡（路径进度条风格）===== */
+body.level-theme-2 .mission-box::before {
+    background: linear-gradient(135deg, #81c784, #64b5f6);
+    box-shadow:
+        0 0 18px rgba(129,199,132,0.25),
+        0 0 28px rgba(100,181,246,0.18);
+}
+
+/* ===== 12. 动画效果库 ===== */
+
+/* 节点闪烁（主节点使用）*/
+@keyframes mainNodeBlink {
+    0%, 90%, 100% { opacity: 0.85; transform: scale(1); }
+    95% { opacity: 1; transform: scale(1.08); }
+}
+
+/* 路径流动效果（模拟数据传输）*/
+@keyframes pathFlow {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+}
+
+/* 几何图形旋转（轻量装饰）*/
+@keyframes geoRotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* 连接线脉动 */
+@keyframes linePulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 0.9; }
+}
+
+/* 整体环境呼吸 */
+@keyframes envBreatheL2 {
+    0%, 100% {
+        filter: brightness(1) saturate(1);
+    }
+    50% {
+        filter: brightness(1.02) saturate(1.04);
+    }
+}
+
+/* ===== 13. 高对比度模式兼容 ===== */
+body.high-contrast.level-theme-2 .game-container::after,
+body.high-contrast.level-theme-2 #levelSelect::before,
+body.high-contrast.level-theme-2 #levelSelect::after,
+body.high-contrast.level-theme-2 .game-screen::after,
+body.high-contrast.level-theme-2 .game-screen::before {
+    display: none !important;
+}
+
+/* ============================================================
+   第二关卡通形象系统 - 几何花园路径主题
+   主题：路径连接、几何探索、过渡引导
+   风格：梦幻、教育友好、轻量动态
+   ============================================================ */
+
+/* ===== 基础容器样式 ===== */
+.level2-mascot {
+    position: absolute;
+    pointer-events: none;
+    z-index: 8;
+    opacity: 0;
+    animation: mascotFadeIn 0.8s ease-out forwards;
+}
+
+@keyframes mascotFadeIn {
+    0% { opacity: 0; transform: scale(0.8) translateY(10px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ===== 1. 路径引导精灵 (Path Guide Sprite) =====
+   设计理念：圆形身体 + 发光指南针/箭头
+   代表：路径引导者，帮助玩家理解前进方向
+   分布：页面四角（避开中央canvas区域）*/
+.mascot-path-guide {
+    width: 56px;
+    height: 56px;
+}
+
+.mascot-path-guide .guide-body {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, #81c784 0%, #64b5f6 100%);
+    border-radius: 50%;
+    box-shadow:
+        0 4px 12px rgba(100,181,246,0.3),
+        inset 0 -3px 8px rgba(0,0,0,0.1),
+        inset 0 3px 8px rgba(255,255,255,0.4);
+    animation: guideBodyPulse 3s ease-in-out infinite;
+}
+
+@keyframes guideBodyPulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.05); }
+}
+
+.mascot-path-guide .guide-face {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 28px;
+    height: 18px;
+}
+
+.mascot-path-guide .eye-left,
+.mascot-path-guide .eye-right {
+    position: absolute;
+    width: 7px;
+    height: 8px;
+    background: #23325f;
+    border-radius: 50%;
+    top: 2px;
+    animation: guideEyeBlink 4s ease-in-out infinite;
+}
+
+.mascot-path-guide .eye-left { left: 3px; }
+.mascot-path-guide .eye-right { right: 3px; animation-delay: 0.15s; }
+
+@keyframes guideEyeBlink {
+    0%, 90%, 100% { transform: scaleY(1); }
+    95% { transform: scaleY(0.1); }
+}
+
+.mascot-path-guide .cheek-left,
+.mascot-path-guide .cheek-right {
+    position: absolute;
+    width: 6px;
+    height: 4px;
+    background: rgba(255,138,128,0.5);
+    border-radius: 50%;
+    bottom: 2px;
+}
+
+.mascot-path-guide .cheek-left { left: 0; }
+.mascot-path-guide .cheek-right { right: 0; }
+
+.mascot-path-guide .mouth {
+    position: absolute;
+    width: 6px;
+    height: 3px;
+    border-bottom: 2px solid #23325f;
+    border-radius: 0 0 6px 6px;
+    bottom: 1px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* 发光指南针/箭头 */
+.mascot-path-guide .guide-compass {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    top: -4px;
+    right: -2px;
+    background: radial-gradient(circle, rgba(255,255,255,0.95), rgba(200,230,255,0.8));
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(100,181,246,0.5);
+    animation: compassGlow 2s ease-in-out infinite;
+}
+
+.mascot-path-guide .compass-arrow {
+    position: absolute;
+    width: 2px;
+    height: 10px;
+    background: linear-gradient(to bottom, #f45aa6, #64b5f6);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 2px;
+    animation: compassRotate 6s linear infinite;
+}
+
+.mascot-path-guide .compass-arrow::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    border-bottom: 5px solid #f45aa6;
+    top: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+@keyframes compassGlow {
+    0%, 100% { box-shadow: 0 0 10px rgba(100,181,246,0.5); }
+    50% { box-shadow: 0 0 16px rgba(100,181,246,0.8), 0 0 20px rgba(129,199,132,0.4); }
+}
+
+@keyframes compassRotate {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* 路径引导精灵位置和动画 */
+.mascot-path-guide.pos-corner-tl { top: 6%; left: 3%; animation-delay: 0.1s, 0.9s; animation: mascotFadeIn 0.8s ease-out 0.1s forwards, guideFloatTL 5s ease-in-out 0.9s infinite; }
+.mascot-path-guide.pos-corner-tr { top: 7%; right: 3%; animation-delay: 0.2s, 1s; animation: mascotFadeIn 0.8s ease-out 0.2s forwards, guideFloatTR 5.5s ease-in-out 1s infinite; }
+.mascot-path-guide.pos-corner-bl { bottom: 10%; left: 4%; animation-delay: 0.3s, 1.1s; animation: mascotFadeIn 0.8s ease-out 0.3s forwards, guideFloatBL 6s ease-in-out 1.1s infinite; }
+.mascot-path-guide.pos-corner-br { bottom: 11%; right: 4%; animation-delay: 0.4s, 1.2s; animation: mascotFadeIn 0.8s ease-out 0.4s forwards, guideFloatBR 5.8s ease-in-out 1.2s infinite; }
+
+@keyframes guideFloatTL {
+    0%, 100% { transform: translate(0, 0) rotate(-3deg); }
+    33% { transform: translate(6px, 8px) rotate(2deg); }
+    66% { transform: translate(-4px, 5px) rotate(-1deg); }
+}
+@keyframes guideFloatTR {
+    0%, 100% { transform: translate(0, 0) rotate(3deg); }
+    33% { transform: translate(-6px, 8px) rotate(-2deg); }
+    66% { transform: translate(4px, 5px) rotate(1deg); }
+}
+@keyframes guideFloatBL {
+    0%, 100% { transform: translate(0, 0) rotate(2deg); }
+    33% { transform: translate(6px, -6px) rotate(-2deg); }
+    66% { transform: translate(-4px, -4px) rotate(1deg); }
+}
+@keyframes guideFloatBR {
+    0%, 100% { transform: translate(0, 0) rotate(-2deg); }
+    33% { transform: translate(-6px, -6px) rotate(2deg); }
+    66% { transform: translate(4px, -4px) rotate(-1deg); }
+}
+
+/* ===== 2. 几何节点精灵 (Geometry Node Sprite) =====
+   设计理念：六边形/圆形几何体 + 发光核心
+   代表：路径上的关键节点，强调"位置"和"连接"
+   分布：页面边缘中部区域 */
+.mascot-node-sprite {
+    width: 48px;
+    height: 48px;
+}
+
+.mascot-node-sprite .node-hexagon {
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, #ba68c8 0%, #64b5f6 100%);
+    clip-path: polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%);
+    box-shadow:
+        0 4px 12px rgba(186,104,200,0.35),
+        inset 0 0 12px rgba(255,255,255,0.3);
+    animation: nodeHexPulse 4s ease-in-out infinite;
+}
+
+@keyframes nodeHexPulse {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+        filter: brightness(1);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.08) rotate(5deg);
+        filter: brightness(1.15);
+    }
+}
+
+.mascot-node-sprite .node-core {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(255,255,255,0.95), rgba(200,230,255,0.8));
+    border-radius: 50%;
+    box-shadow: 0 0 12px rgba(149,117,205,0.6);
+    animation: nodeCoreGlow 2s ease-in-out infinite;
+}
+
+@keyframes nodeCoreGlow {
+    0%, 100% { 
+        box-shadow: 0 0 12px rgba(149,117,205,0.6);
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 18px rgba(149,117,205,0.9), 0 0 24px rgba(100,181,246,0.5);
+        transform: translate(-50%, -50%) scale(1.15);
+    }
+}
+
+.mascot-node-sprite .node-face {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 14px;
+    z-index: 2;
+}
+
+.mascot-node-sprite .node-eye {
+    position: absolute;
+    width: 5px;
+    height: 6px;
+    background: #fff;
+    border-radius: 50%;
+    top: 1px;
+    box-shadow: inset 1px 1px 2px rgba(0,0,0,0.2);
+    animation: nodeEyeBlink 3.5s ease-in-out infinite;
+}
+
+.mascot-node-sprite .node-eye.left { left: 4px; }
+.mascot-node-sprite .node-eye.right { right: 4px; animation-delay: 0.12s; }
+
+@keyframes nodeEyeBlink {
+    0%, 92%, 100% { transform: scaleY(1); }
+    96% { transform: scaleY(0.1); }
+}
+
+.mascot-node-sprite .node-smile {
+    position: absolute;
+    width: 8px;
+    height: 4px;
+    border: 2px solid #fff;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* 几何节点精灵位置 */
+.mascot-node-sprite.pos-edge-lt { top: 25%; left: 2%; animation-delay: 0.15s, 1s; animation: mascotFadeIn 0.8s ease-out 0.15s forwards, nodeFloatLT 6.5s ease-in-out 1s infinite; }
+.mascot-node-sprite.pos-edge-rt { top: 28%; right: 2%; animation-delay: 0.25s, 1.1s; animation: mascotFadeIn 0.8s ease-out 0.25s forwards, nodeFloatRT 7s ease-in-out 1.1s infinite; }
+.mascot-node-sprite.pos-edge-lb { bottom: 22%; left: 3%; animation-delay: 0.35s, 1.2s; animation: mascotFadeIn 0.8s ease-out 0.35s forwards, nodeFloatLB 6.8s ease-in-out 1.2s infinite; }
+.mascot-node-sprite.pos-edge-rb { bottom: 25%; right: 3%; animation-delay: 0.45s, 1.3s; animation: mascotFadeIn 0.8s ease-out 0.45s forwards, nodeFloatRB 7.2s ease-in-out 1.3s infinite; }
+
+@keyframes nodeFloatLT {
+    0%, 100% { transform: translate(0, 0) rotate(-5deg); }
+    50% { transform: translate(8px, 10px) rotate(3deg); }
+}
+@keyframes nodeFloatRT {
+    0%, 100% { transform: translate(0, 0) rotate(5deg); }
+    50% { transform: translate(-8px, 10px) rotate(-3deg); }
+}
+@keyframes nodeFloatLB {
+    0%, 100% { transform: translate(0, 0) rotate(3deg); }
+    50% { transform: translate(8px, -8px) rotate(-3deg); }
+}
+@keyframes nodeFloatRB {
+    0%, 100% { transform: translate(0, 0) rotate(-3deg); }
+    50% { transform: translate(-8px, -8px) rotate(3deg); }
+}
+
+/* ===== 3. 连接线小助手 (Connector Helper) =====
+   设计理念：线条形状 + 小眼睛 + 波浪运动
+   代表：连接关系，强调"路径"概念
+   分布：沿页面边缘分布 */
+.mascot-connector {
+    width: 52px;
+    height: 32px;
+}
+
+.mascot-connector .connector-body {
+    position: absolute;
+    width: 44px;
+    height: 10px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(90deg, #81c784 0%, #64b5f6 50%, #ba68c8 100%);
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(100,181,246,0.3);
+    animation: connectorWave 3s ease-in-out infinite;
+}
+
+@keyframes connectorWave {
+    0%, 100% { 
+        transform: translate(-50%, -50%) scaleX(1) rotate(0deg); 
+        border-radius: 10px;
+    }
+    33% { 
+        transform: translate(-50%, -50%) scaleX(1.08) rotate(2deg); 
+        border-radius: 12px 8px 8px 12px;
+    }
+    66% { 
+        transform: translate(-50%, -50%) scaleX(0.96) rotate(-2deg); 
+        border-radius: 8px 12px 12px 8px;
+    }
+}
+
+.mascot-connector .connector-dot-start,
+.mascot-connector .connector-dot-end {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: radial-gradient(circle, #fff, rgba(200,230,255,0.9));
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    box-shadow: 0 0 8px rgba(129,199,132,0.5);
+    animation: dotPulse 2s ease-in-out infinite;
+}
+
+.mascot-connector .connector-dot-start { left: 2px; }
+.mascot-connector .connector-dot-end { right: 2px; animation-delay: 0.5s; }
+
+@keyframes dotPulse {
+    0%, 100% { transform: translateY(-50%) scale(1); opacity: 0.9; }
+    50% { transform: translateY(-50%) scale(1.2); opacity: 1; }
+}
+
+.mascot-connector .connector-eye {
+    position: absolute;
+    width: 5px;
+    height: 6px;
+    background: #23325f;
+    border-radius: 50%;
+    top: 10px;
+    animation: connectorBlink 4s ease-in-out infinite;
+}
+
+.mascot-connector .connector-eye.left { left: 16px; }
+.mascot-connector .connector-eye.right { right: 16px; animation-delay: 0.1s; }
+
+@keyframes connectorBlink {
+    0%, 93%, 100% { transform: scaleY(1); }
+    96% { transform: scaleY(0.1); }
+}
+
+/* 连接线小助手位置 */
+.mascot-connector.pos-line-t { top: 14%; left: 18%; animation-delay: 0.2s, 1.05s; animation: mascotFadeIn 0.8s ease-out 0.2s forwards, connectorFloatT 5.5s ease-in-out 1.05s infinite; }
+.mascot-connector.pos-line-b { bottom: 16%; right: 18%; animation-delay: 0.3s, 1.15s; animation: mascotFadeIn 0.8s ease-out 0.3s forwards, connectorFloatB 6s ease-in-out 1.15s infinite; }
+
+@keyframes connectorFloatT {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(10px, 6px); }
+}
+@keyframes connectorFloatB {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-10px, -6px); }
+}
+
+/* ===== 4. 方向指示鸟 (Direction Bird) =====
+   设计理念：小鸟造型 + 箭头尾巴 + 扇翅动画
+   代表：方向指引，暗示"前进"概念
+   分布：页面上方两侧 */
+.mascot-direction-bird {
+    width: 46px;
+    height: 38px;
+}
+
+.mascot-direction-bird .bird-body {
+    position: absolute;
+    width: 28px;
+    height: 22px;
+    top: 10px;
+    left: 9px;
+    background: linear-gradient(180deg, #aed581 0%, #81c784 100%);
+    border-radius: 50% 50% 45% 45%;
+    box-shadow: 0 3px 10px rgba(129,199,132,0.35);
+    animation: birdBodyBob 2.5s ease-in-out infinite;
+}
+
+@keyframes birdBodyBob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
+
+.mascot-direction-bird .bird-wing-left,
+.mascot-direction-bird .bird-wing-right {
+    position: absolute;
+    width: 18px;
+    height: 12px;
+    top: 6px;
+    background: linear-gradient(180deg, #c5e1a5 0%, #aed581 100%);
+    border-radius: 50% 50% 20% 20%;
+    transform-origin: center bottom;
+}
+
+.mascot-direction-bird .bird-wing-left {
+    left: 4px;
+    animation: wingFlapL 0.4s ease-in-out infinite;
+}
+
+.mascot-direction-bird .bird-wing-right {
+    right: 4px;
+    animation: wingFlapR 0.4s ease-in-out infinite;
+}
+
+@keyframes wingFlapL {
+    0%, 100% { transform: rotateZ(-15deg); }
+    50% { transform: rotateZ(25deg); }
+}
+@keyframes wingFlapR {
+    0%, 100% { transform: rotateZ(15deg); }
+    50% { transform: rotateZ(-25deg); }
+}
+
+.mascot-direction-bird .bird-eye {
+    position: absolute;
+    width: 6px;
+    height: 7px;
+    background: #23325f;
+    border-radius: 50%;
+    top: 15px;
+    z-index: 2;
+}
+
+.mascot-direction-bird .bird-eye.left { left: 16px; }
+.mascot-direction-bird .bird-eye.right { left: 24px; }
+
+.mascot-direction-bird .bird-beak {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 6px solid #ffb74d;
+    border-top: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+    top: 19px;
+    left: 30px;
+}
+
+.mascot-direction-bird .bird-arrow-tail {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-right: 8px solid #64b5f6;
+    top: 17px;
+    left: 0;
+    animation: arrowTailWag 1.5s ease-in-out infinite;
+}
+
+@keyframes arrowTailWag {
+    0%, 100% { transform: translateX(0) rotate(0deg); opacity: 0.8; }
+    50% { transform: translateX(-3px) rotate(-10deg); opacity: 1; }
+}
+
+/* 方向指示鸟位置 */
+.mascot-direction-bird.pos-fly-ul { top: 18%; left: 10%; animation-delay: 0.25s, 1.2s; animation: mascotFadeIn 0.8s ease-out 0.25s forwards, birdFlyUL 8s ease-in-out 1.2s infinite; }
+.mascot-direction-bird.pos-fly-ur { top: 20%; right: 10%; animation-delay: 0.35s, 1.3s; animation: mascotFadeIn 0.8s ease-out 0.35s forwards, birdFlyUR 8.5s ease-in-out 1.3s infinite; }
+
+@keyframes birdFlyUL {
+    0%, 100% { transform: translate(0, 0) rotate(-5deg); }
+    25% { transform: translate(15px, -10px) rotate(0deg); }
+    50% { transform: translate(25px, 5px) rotate(5deg); }
+    75% { transform: translate(10px, -5px) rotate(0deg); }
+}
+@keyframes birdFlyUR {
+    0%, 100% { transform: translate(0, 0) rotate(5deg); }
+    25% { transform: translate(-15px, -10px) rotate(0deg); }
+    50% { transform: translate(-25px, 5px) rotate(-5deg); }
+    75% { transform: translate(-10px, -5px) rotate(0deg); }
+}
+
+/* ===== 5. 几何花朵 (Geo Flower) =====
+   设计理念：六瓣花 + 几何图案中心 + 柔和摆动
+   代表：花园元素与几何结合，呼应第一关并引入结构感
+   分布：页面底部两侧 */
+.mascot-geo-flower {
+    width: 50px;
+    height: 54px;
+}
+
+.mascot-geo-flower .flower-stem {
+    position: absolute;
+    width: 3px;
+    height: 24px;
+    background: linear-gradient(to bottom, #81c784, #66bb6a);
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 3px;
+    animation: stemSway 4s ease-in-out infinite;
+}
+
+@keyframes stemSway {
+    0%, 100% { transform: translateX(-50%) rotate(-3deg); }
+    50% { transform: translateX(-50%) rotate(3deg); }
+}
+
+.mascot-geo-flower .flower-center {
+    position: absolute;
+    width: 34px;
+    height: 34px;
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.mascot-geo-flower .petal {
+    position: absolute;
+    width: 13px;
+    height: 18px;
+    background: linear-gradient(135deg, #ce93d8 0%, #ba68c8 100%);
+    border-radius: 50% 50% 50% 50%;
+    left: 50%;
+    top: 50%;
+    transform-origin: center bottom;
+    box-shadow: 0 2px 6px rgba(186,104,200,0.3);
+    animation: petalSway 3s ease-in-out infinite;
+}
+
+.mascot-geo-flower .petal-1 { transform: translate(-50%, -100%) rotate(0deg); animation-delay: 0s; }
+.mascot-geo-flower .petal-2 { transform: translate(-50%, -100%) rotate(60deg); animation-delay: 0.1s; }
+.mascot-geo-flower .petal-3 { transform: translate(-50%, -100%) rotate(120deg); animation-delay: 0.2s; }
+.mascot-geo-flower .petal-4 { transform: translate(-50%, -100%) rotate(180deg); animation-delay: 0.3s; }
+.mascot-geo-flower .petal-5 { transform: translate(-50%, -100%) rotate(240deg); animation-delay: 0.4s; }
+.mascot-geo-flower .petal-6 { transform: translate(-50%, -100%) rotate(300deg); animation-delay: 0.5s; }
+
+@keyframes petalSway {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.15); }
+}
+
+.mascot-geo-flower .flower-core {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, #fff9c4, #ffd54f);
+    border-radius: 50%;
+    z-index: 2;
+    box-shadow: 0 0 10px rgba(255,213,79,0.5);
+    animation: coreShine 2.5s ease-in-out infinite;
+}
+
+@keyframes coreShine {
+    0%, 100% { 
+        box-shadow: 0 0 10px rgba(255,213,79,0.5);
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 16px rgba(255,213,79,0.8), 0 0 20px rgba(255,183,77,0.4);
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+}
+
+.mascot-geo-flower .flower-face {
+    position: absolute;
+    top: 13px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16px;
+    height: 12px;
+    z-index: 3;
+}
+
+.mascot-geo-flower .flower-eye {
+    position: absolute;
+    width: 4px;
+    height: 5px;
+    background: #7b1fa2;
+    border-radius: 50%;
+    top: 1px;
+    animation: flowerEyeBlink 3.8s ease-in-out infinite;
+}
+
+.mascot-geo-flower .flower-eye.left { left: 2px; }
+.mascot-geo-flower .flower-eye.right { right: 2px; animation-delay: 0.1s; }
+
+@keyframes flowerEyeBlink {
+    0%, 94%, 100% { transform: scaleY(1); }
+    97% { transform: scaleY(0.1); }
+}
+
+.mascot-geo-flower .flower-blush {
+    position: absolute;
+    width: 5px;
+    height: 3px;
+    background: rgba(244,90,166,0.4);
+    border-radius: 50%;
+    bottom: 2px;
+}
+
+.mascot-geo-flower .flower-blush.left { left: -1px; }
+.mascot-geo-flower .flower-blush.right { right: -1px; }
+
+.mascot-geo-flower .flower-mouth {
+    position: absolute;
+    width: 5px;
+    height: 2px;
+    border-bottom: 2px solid #7b1fa2;
+    border-radius: 0 0 5px 5px;
+    bottom: 1px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* 几何花朵位置 */
+.mascot-geo-flower.pos-garden-bl { bottom: 6%; left: 8%; animation-delay: 0.4s, 1.25s; animation: mascotFadeIn 0.8s ease-out 0.4s forwards, geoFlowerFloatBL 6.5s ease-in-out 1.25s infinite; }
+.mascot-geo-flower.pos-garden-br { bottom: 7%; right: 8%; animation-delay: 0.5s, 1.35s; animation: mascotFadeIn 0.8s ease-out 0.5s forwards, geoFlowerFloatBR 7s ease-in-out 1.35s infinite; }
+
+@keyframes geoFlowerFloatBL {
+    0%, 100% { transform: translate(0, 0) rotate(-2deg); }
+    33% { transform: translate(6px, -4px) rotate(1deg); }
+    66% { transform: translate(-3px, -2px) rotate(-1deg); }
+}
+@keyframes geoFlowerFloatBR {
+    0%, 100% { transform: translate(0, 0) rotate(2deg); }
+    33% { transform: translate(-6px, -4px) rotate(-1deg); }
+    66% { transform: translate(3px, -2px) rotate(1deg); }
+}
+
+/* ===== 高对比度模式兼容 ===== */
+body.high-contrast .level2-mascot {
+    display: none !important;
+}
+
+/* ============================================================
+   第4关背景系统 - 几何遗迹主题 (Geometric Ruins)
+   ============================================================
+   【设计理念】
+   - 主题：几何遗迹 / 祭坛 / 结构空间
+   - 定位：比第3关更"理性"和"结构化"
+   - 核心特征：
+     * 强对称性（左右对称 / 放射结构）
+     * 几何构造感（多边形 / 圆形 / 弧线）
+     * 秩序感和仪式感
+     * 冷色调 + 微光点缀
+   - 层次设计：
+     * 远景：大型对称框架轮廓
+     * 中景：几何构造系统（多边形+圆形）
+     * 前景：能量线 + 轻量刻纹
+   ============================================================ */
+
+/* ===== 1. 主背景层（body）- 遗迹空间基础 [显著增强] ===== */
+body.level-theme-4 {
+    background:
+
+        /* 远景光晕 - 大幅增强深度和色彩 */
+        radial-gradient(circle at 50% 50%, rgba(155,142,196,0.35), transparent 42%),
+        radial-gradient(circle at 20% 20%, rgba(140,120,180,0.28), transparent 22%),
+        radial-gradient(circle at 80% 20%, rgba(140,120,180,0.28), transparent 22%),
+        radial-gradient(circle at 20% 80%, rgba(100,140,185,0.24), transparent 20%),
+        radial-gradient(circle at 80% 80%, rgba(100,140,185,0.24), transparent 20%),
+
+        /* 主渐变：增强对比度的冷色调 */
+        linear-gradient(
+            165deg,
+            #dde1e8 0%,
+            #d6dbe3 25%,
+            #d2d8e0 40%,
+            #cbd2dc 60%,
+            #c5cdd8 75%          ,
+            #bfc8d4 100%
+        );
+
+    animation: ruinsAmbient 10s ease-in-out infinite alternate;
+}
+
+@keyframes ruinsAmbient {
+    0% {
+        filter: brightness(0.98) saturate(1);
+    }
+    100% {
+        filter: brightness(1.04) saturate(1.08);
+    }
+}
+
+/* ===== 2. 粒子系统（body::before）- 有序几何点阵 [大幅增强] ===== */
+body.level-theme-4::before {
+
+    background:
+
+        /* === 核心对称点阵（中心区域）- 提升至清晰可见 === */
+        /* 中心主节点 - 最亮最大 */
+        radial-gradient(circle at 50% 50%, rgba(155,142,196,0.88) 0 5px, transparent 7px),
+
+        /* 内环6个节点（六边形分布）- 明显增强 */
+        radial-gradient(circle at 50% 36%, rgba(107,154,196,0.82) 0 4px, transparent 6px),
+        radial-gradient(circle at 62% 44%, rgba(107,154,196,0.82) 0 4px, transparent 6px),
+        radial-gradient(circle at 62% 56%, rgba(107,154,196,0.82) 0 4px, transparent 6px),
+        radial-gradient(circle at 50% 64%, rgba(107,154,196,0.82) 0 4px, transparent 6px),
+        radial-gradient(circle at 38% 56%, rgba(107,154,196,0.82) 0 4px, transparent 6px),
+        radial-gradient(circle at 38% 44%, rgba(107,154,196,0.82) 0 4px, transparent 6px),
+
+        /* 外环12个节点 - 清晰可见 */
+        radial-gradient(circle at 50% 26%, rgba(90,108,125,0.72) 0 3.5px, transparent 5px),
+        radial-gradient(circle at 70% 32%, rgba(90,108,125,0.72) 0 3.5px, transparent 5px),
+        radial-gradient(circle at 80% 50%, rgba(90,108,125,0.72) 0 3.5px, transparent 5px),
+        radial-gradient(circle at 70% 68%, rgba(90,108,125,0.72) 0 3.5px, transparent 5px),
+        radial-gradient(circle at 50% 74%, rgba(90,108,125,0.72) 0 3.5px, transparent 5px),
+        radial-gradient(circle at 30% 68%, rgba(90,108,125,0.72) 0 3.5px, transparent 5px),
+        radial-gradient(circle at 20% 50%, rgba(90,108,125,0.72) 0 3.5px, transparent 5px),
+        radial-gradient(circle at 30% 32%, rgba(90,108,125,0.72) 0 3.5px, transparent 5px),
+
+        /* 四角定位点 - 明显标记 */
+        radial-gradient(circle at 12% 15%, rgba(155,142,196,0.65) 0 3.5px, transparent 5px),
+        radial-gradient(circle at 88% 15%, rgba(155,142,196,0.65) 0 3.5px, transparent 5px),
+        radial-gradient(circle at 12% 85%, rgba(107,154,196,0.58) 0 3.5px, transparent 5px),
+        radial-gradient(circle at 88% 85%, rgba(107,154,196,0.58) 0 3.5px, transparent 5px);
+
+    background-size:
+        auto,
+        200px 200px,
+        195px 195px,
+        198px 198px,
+        205px 205px,
+        192px 192px,
+        197px 197px,
+
+        220px 220px,
+        225px 225px,
+        218px 218px,
+        222px 222px,
+        215px 215px,
+        228px 228px,
+        212px 212px,
+        220px 220px,
+
+        250px 250px,
+        248px 248px,
+        255px 255px,
+        252px 252px;
+
+    animation: orderedPulse 5s ease-in-out infinite;
+    opacity: 0.92;
+}
+
+@keyframes orderedPulse {
+    0%, 100% {
+        opacity: 0.92;
+        transform: scale(1);
+    }
+    25% {
+        opacity: 0.97;
+        transform: scale(1.008);
+    }
+    50% {
+        opacity: 0.94;
+        transform: scale(1);
+    }
+    75% {
+        opacity: 0.98;
+        transform: scale(1.01);
+    }
+}
+
+/* ===== 3. 大型对称框架（body::after）- 遗迹轮廓 [强力增强] ===== */
+body.level-theme-4::after {
+
+    background:
+
+        /* === 外围巨型圆环（最外层结构）- 清晰可见 === */
+        radial-gradient(circle at 50% 50%, transparent 0 35%, rgba(155,142,196,0.18) 36% 38.5%, transparent 40%),
+
+        /* === 第二层圆环 - 明显 === */
+        radial-gradient(circle at 50% 50%, transparent 0 28%, rgba(107,154,196,0.22) 29% 31.5%, transparent 33%),
+
+        /* === 第三层圆环 - 可见 === */
+        radial-gradient(circle at 50% 50%, transparent 0 21%, rgba(90,108,125,0.16) 22% 24.5%, transparent 26%),
+
+        /* === 左侧垂直结构柱 - 强化 === */
+        linear-gradient(90deg, transparent 13%, rgba(155,142,196,0.15) 14% 16.5%, transparent 18%),
+
+        /* === 右侧垂直结构柱（对称）=== */
+        linear-gradient(270deg, transparent 13%, rgba(155,142,196,0.15) 14% 16.5%, transparent 18%),
+
+        /* === 上方水平横梁 - 强化 === */
+        linear-gradient(180deg, transparent 8%, rgba(107,154,196,0.14) 9% 11.5%, transparent 13%),
+
+        /* === 下方水平横梁（对称）=== */
+        linear-gradient(0%, transparent 87%, rgba(107,154,196,0.14) 88% 91%, transparent 93%),
+
+        /* === 对角支撑线（左上→右下）- 可见 === */
+        linear-gradient(135deg, transparent 47%, rgba(90,108,125,0.12) 48% 49.2%, transparent 51%),
+
+        /* === 对角支撑线（右上→左下，对称）=== */
+        linear-gradient(45deg, transparent 47%, rgba(90,108,125,0.12) 48% 49.2%, transparent 51%);
+
+    animation: frameBreath 8s ease-in-out infinite;
+    opacity: 0.84;
+}
+
+@keyframes frameBreath {
+    0%, 100% {
+        opacity: 0.80;
+        filter: brightness(1);
+    }
+    50% {
+        opacity: 0.88;
+        filter: brightness(1.03);
+    }
+}
+
+/* ===== 4. 游戏主区域（game-screen）- 构造核心区 [柔和] ===== */
+body.level-theme-4 .game-screen {
+    background:
+        linear-gradient(180deg, rgba(220,224,232,0.70), rgba(210,216,225,0.56)),
+        rgba(255,255,255,0.14);
+    border: 1.2px solid rgba(155,142,196,0.22);
+    box-shadow:
+        0 28px 56px rgba(90,108,125,0.16),
+        inset 0 1px 0 rgba(255,255,255,0.18),
+        0 0 36px rgba(155,142,196,0.06);
+}
+
+/* ===== 5. 中景几何构造层（game-screen::before）- 多边形系统 [核心增强] ===== */
+body.level-theme-4 .game-screen::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+
+    background:
+
+        /* === 中心六边形结构（主构造）- 柔和可见 === */
+        radial-gradient(ellipse 28% 32% at 50% 50%, transparent 46%, rgba(155,142,196,0.26) 47% 50%, transparent 52%),
+
+        /* === 内嵌三角形（上）- 柔和 === */
+        radial-gradient(ellipse 20% 18% at 50% 34%, transparent 44%, rgba(107,154,196,0.22) 45% 49%, transparent 51%),
+
+        /* === 内嵌倒三角形（下，对称）- 柔和 === */
+        radial-gradient(ellipse 20% 18% at 50% 66%, transparent 44%, rgba(107,154,196,0.22) 45% 49%, transparent 51%),
+
+        /* === 左右对称圆弧（装饰性拱门）- 轻柔 === */
+        radial-gradient(circle at 26% 50%, transparent 0 13%, rgba(155,142,196,0.20) 14% 17.5%, transparent 19%),
+        radial-gradient(circle at 74% 50%, transparent 0 13%, rgba(155,142,196,0.20) 14% 17.5%, transparent 19%),
+
+        /* === 上下对称圆弧 - 轻柔 === */
+        radial-gradient(circle at 50% 20%, transparent 0 11%, rgba(107,154,196,0.16) 13% 16%, transparent 17%),
+        radial-gradient(circle at 50% 80%, transparent 0 11%, rgba(107,154,196,0.16) 13% 16%, transparent 17%),
+
+        /* === 放射状连接线（从中心向外）- 微妙 === */
+        linear-gradient(0deg, transparent 49%, rgba(90,108,125,0.12) 49.5% 50.5%, transparent 51%),
+        linear-gradient(60deg, transparent 49%, rgba(90,108,125,0.12) 49.5% 50.5%, transparent 51%),
+        linear-gradient(120deg, transparent 49%, rgba(90,108,125,0.12) 49.5% 50.5%, transparent 51%),
+        linear-gradient(180deg, transparent 49%, rgba(90,108,125,0.12) 49.5% 50.5%, transparent 51%),
+        linear-gradient(240deg, transparent 49%, rgba(90,108,125,0.12) 49.5% 50.5%, transparent 51%),
+        linear-gradient(300deg, transparent 49%, rgba(90,108,125,0.12) 49.5% 50.5%, transparent 51%),
+
+        /* === 同心圆轨道（3层）- 淡雅可见 === */
+        radial-gradient(circle at 50% 50%, transparent 0 17%, rgba(155,142,196,0.15) 18% 20.5%, transparent 22%),
+        radial-gradient(circle at 50% 50%, transparent 0 25%, rgba(107,154,196,0.12) 26% 28.5%, transparent 30%),
+        radial-gradient(circle at 50% 50%, transparent 0 33%, rgba(90,108,125,0.09) 34% 36.5%, transparent 38%);
+
+    animation: geoConstructRotate 20s linear infinite;
+    opacity: 0.76;
+}
+
+@keyframes geoConstructRotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ===== 6. 能量线与刻纹层（game-screen::after）- 前景细节 ===== */
+body.level-theme-4 .game-screen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+
+    background:
+
+        /* === 能量流动线（沿主要路径）- 轻柔 === */
+        /* 垂直主轴线 */
+        linear-gradient(180deg,
+            transparent 20%,
+            rgba(126,187,255,0.08) 35%,
+            rgba(155,142,196,0.12) 48%,
+            rgba(126,187,255,0.08) 52%,
+            transparent 65%
+        ),
+
+        /* 水平主轴线 - 轻柔 */
+        linear-gradient(90deg,
+            transparent 25%,
+            rgba(107,154,196,0.06) 45%,
+            rgba(155,142,196,0.10) 50%,
+            rgba(107,154,196,0.06) 55%,
+            transparent 75%
+        ),
+
+        /* === 刻纹装饰（几何图案）=== */
+        /* 左上角刻纹组 */
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 3px,
+            rgba(90,108,125,0.04) 3px,
+            rgba(90,108,125,0.04) 4px
+        ),
+
+        /* 右下角刻纹组（对称）*/
+        repeating-linear-gradient(
+            225deg,
+            transparent,
+            transparent 3px,
+            rgba(90,108,125,0.04) 3px,
+            rgba(90,108,125,0.04) 4px
+        ),
+
+        /* === 关键节点标记（发光点）- 微妙 === */
+        /* 中心节点（最强）*/
+        radial-gradient(circle at 50% 50%, rgba(155,142,196,0.24) 0 4px, transparent 5px),
+
+        /* 六边形顶点节点 - 轻柔 */
+        radial-gradient(circle at 50% 35%, rgba(107,154,196,0.18) 0 3px, transparent 4px),
+        radial-gradient(circle at 64% 42.5%, rgba(107,154,196,0.18) 0 3px, transparent 4px),
+        radial-gradient(circle at 64% 57.5%, rgba(107,154,196,0.18) 0 3px, transparent 4px),
+        radial-gradient(circle at 50% 65%, rgba(107,154,196,0.18) 0 3px, transparent 4px),
+        radial-gradient(circle at 36% 57.5%, rgba(107,154,196,0.18) 0 3px, transparent 4px),
+        radial-gradient(circle at 36% 42.5%, rgba(107,154,196,0.18) 0 3px, transparent 4px),
+
+        /* === 边缘微光点缀 - 淡雅 === */
+        radial-gradient(circle at 12% 12%, rgba(155,142,196,0.10) 0 2px, transparent 3px),
+        radial-gradient(circle at 88% 12%, rgba(155,142,196,0.10) 0 2px, transparent 3px),
+        radial-gradient(circle at 12% 88%, rgba(107,154,196,0.08) 0 2px, transparent 3px),
+        radial-gradient(circle at 88% 88%, rgba(107,154,196,0.08) 0 2px, transparent 3px);
+
+    animation: energyFlowPulse 8s ease-in-out infinite;
+    opacity: 0.58;
+}
+
+@keyframes energyFlowPulse {
+    0%, 100% {
+        opacity: 0.54;
+        filter: brightness(1);
+    }
+    25% {
+        opacity: 0.62;
+        filter: brightness(1.02);
+    }
+    50% {
+        opacity: 0.58;
+        filter: brightness(1.01);
+    }
+    75% {
+        opacity: 0.64;
+        filter: brightness(1.03);
+    }
+}
+
+/* ===== 7. Canvas容器增强 - 柔和可见性 ===== */
+body.level-theme-4 .canvas-container {
+    background:
+        linear-gradient(180deg, rgba(230,233,238,0.76), rgba(222,226,232,0.60)),
+        rgba(255,255,255,0.10);
+    border: 1px solid rgba(155,142,196,0.18);
+    box-shadow:
+        0 28px 54px rgba(90,108,125,0.14),
+        0 0 0 1px rgba(155,142,196,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.14),
+        0 0 18px rgba(155,142,196,0.05);
+}
+
+/* Canvas容器内部结构光晕 - 柔和 */
+body.level-theme-4 .canvas-container::before {
+    content: "";
+    position: absolute;
+    inset: -6% -6% auto -6%;
+    height: 52%;
+    background:
+
+        /* 顶部聚光效果 - 柔和 */
+        radial-gradient(circle at 50% 0%, rgba(255,255,255,0.75), transparent 35%),
+
+        /* 左上角结构暗示 - 微妙 */
+        radial-gradient(circle at 15% 15%, rgba(155,142,196,0.10), transparent 20%),
+
+        /* 右上角结构暗示（对称）- 微妙 */
+        radial-gradient(circle at 85% 15%, rgba(155,142,196,0.10), transparent 20%),
+
+        /* 底部微弱反射 - 淡雅 */
+        radial-gradient(circle at 50% 98%, rgba(107,154,196,0.08), transparent 22%);
+}
+
+/* Canvas容器底部装饰 - 淡雅 */
+body.level-theme-4 .canvas-container::after {
+    content: "";
+    position: absolute;
+    left: -18px;
+    bottom: -12px;
+    width: 150px;
+    height: 120px;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.32;
+    background:
+
+        /* 左下角几何晶体（低饱和度版）- 淡雅 */
+        linear-gradient(135deg, transparent 40%, rgba(155,142,196,0.42) 41% 54%, transparent 55%),
+        linear-gradient(45deg, transparent 44%, rgba(107,154,196,0.32) 45% 57%, transparent 58%),
+        linear-gradient(155deg, transparent 46%, rgba(90,108,125,0.24) 47% 57%, transparent 58%);
+    filter: drop-shadow(0 8px 12px rgba(90,108,125,0.08));
+    animation: crystalRuinsFloat 8s ease-in-out infinite;
+}
+
+@keyframes crystalRuinsFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.32; }
+    50% { transform: translateY(-6px) rotate(1deg); opacity: 0.38; }
+}
+
+/* 右下角对称晶体 */
+body.level-theme-4 .canvas-container::after {
+    right: -18px;
+    left: auto;
+    animation: crystalRuinsFloat 8s ease-in-out infinite reverse;
+}
+
+/* ===== 8. 游戏画布内部 ===== */
+body.level-theme-4 #gameCanvas {
+    background:
+        radial-gradient(circle at 50% 18%, rgba(245,246,248,0.96), rgba(232,235,240,0.98) 42%, rgba(226,230,235,1) 100%),
+        radial-gradient(circle at 50% 62%, rgba(155,142,196,0.06), transparent 28%),
+        linear-gradient(transparent 95%, rgba(155,142,196,0.025) 95%),
+        linear-gradient(90deg, transparent 95%, rgba(155,142,196,0.025) 95%);
+    background-size: auto, auto, 40px 40px, 40px 40px;
+    box-shadow:
+        inset 0 0 0 1px rgba(155,142,196,0.07),
+        inset 0 -16px 30px rgba(90,108,125,0.05);
+}
+
+/* ===== 9. 容器外围光晕 ===== */
+body.level-theme-4 .game-container::before {
+    background:
+        radial-gradient(circle at 50% 0%, rgba(232,234,237,0.38), transparent 14%),
+        radial-gradient(circle at 8% 10%, rgba(155,142,196,0.10), transparent 14%),
+        radial-gradient(circle at 92% 10%, rgba(155,142,196,0.10), transparent 14%),
+        radial-gradient(circle at 5% 86%, rgba(107,154,196,0.08), transparent 14%),
+        radial-gradient(circle at 94% 86%, rgba(107,154,196,0.08), transparent 14%);
+}
+
+/* ===== 10. 页头装饰（仪式感横幅）===== */
+body.level-theme-4 .game-header::before {
+    background:
+        radial-gradient(circle at 20% 20%, rgba(155,142,196,0.14), transparent 12%),
+        radial-gradient(circle at 80% 20%, rgba(155,142,196,0.14), transparent 12%),
+        linear-gradient(90deg, transparent 25%, rgba(107,154,196,0.08) 50%, transparent 75%);
+    animation: headerRitualDrift 14s ease-in-out infinite alternate;
+}
+
+@keyframes headerRitualDrift {
+    0% { transform: translateX(-2px); opacity: 0.9; }
+    100% { transform: translateX(2px); opacity: 1; }
+}
+
+/* ===== 11. 页脚装饰（基座感）===== */
+body.level-theme-4 .footer-rich::before {
+    background:
+        radial-gradient(circle at 25% 90%, rgba(107,154,196,0.12), transparent 14%),
+        radial-gradient(circle at 75% 90%, rgba(155,142,196,0.10), transparent 12%),
+        radial-gradient(circle at 50% 98%, rgba(90,108,125,0.10), transparent 18%);
+}
+
+/* ===== 12. 关卡选择页入口 ===== */
+body.level-theme-4 #levelSelect::before {
+    background:
+        radial-gradient(circle at 20% 30%, rgba(155,142,196,0.14), transparent 18%),
+        radial-gradient(circle at 80% 28%, rgba(155,142,196,0.12), transparent 16%),
+        radial-gradient(circle at 50% 8%, rgba(107,154,196,0.18),透明 16%),
+        linear-gradient(135deg, rgba(90,108,125,0.04) 0%, rgba(107,154,196,0.04) 50%, rgba(155,142,196,0.04) 100%);
+    filter: blur(6px);
+    opacity: 0.92;
+}
+
+body.level-theme-4 #levelSelect::after {
+    background:
+        radial-gradient(circle at 22% 24%, transparent 0 52px, rgba(155,142,196,0.08) 53px 56px, transparent 58px),
+        radial-gradient(circle at 76% 24%, transparent 0 56px, rgba(107,154,196,0.07) 57px 60px, transparent 62px),
+        radial-gradient(circle at 50% 8%, transparent 0 42px, rgba(90,108,125,0.09) 43px 46px, transparent 48px),
+        radial-gradient(circle at 35% 68%, rgba(155,142,196,0.22) 0 2px, transparent 3px),
+        radial-gradient(circle at 64% 66%, rgba(107,154,196,0.22) 0 2px, transparent 3px);
+}
+
+/* ===== 13. Info面板（观测站风格）===== */
+body.level-theme-4 .info-box::before {
+    background:
+        radial-gradient(circle, rgba(155,142,196,0.12), transparent 70%),
+        radial-gradient(circle at 75% 25%, rgba(107,154,196,0.08), transparent 40%),
+        radial-gradient(circle at 25% 75%, rgba(90,108,125,0.06), transparent 35%);
+}
+
+/* ===== 14. 任务卡（任务终端风格）===== */
+body.level-theme-4 .mission-box::before {
+    background: linear-gradient(135deg, #7b8db5, #9b8ec4);
+    box-shadow:
+        0 0 18px rgba(155,142,196,0.22),
+        0 0 28px rgba(107,154,196,0.14);
+}
+
+/* ===== 15. 动画效果库 ===== */
+
+/* 对称结构缓慢旋转（主构造层使用）*/
+@keyframes symmetryRotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* 能量线流动（前景层使用）*/
+@keyframes energyLineFlow {
+    0% {
+        background-position: 0% 50%;
+        opacity: 0.6;
+    }
+    50% {
+        background-position: 100% 50%;
+        opacity: 0.8;
+    }
+    100% {
+        background-position: 0% 50%;
+        opacity: 0.6;
+    }
+}
+
+/* 低频脉冲（节点和关键元素使用）*/
+@keyframes lowFreqPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.7;
+        box-shadow: 0 0 8px rgba(155,142,196,0.3);
+    }
+    50% {
+        transform: scale(1.08);
+        opacity: 0.9;
+        box-shadow: 0 0 16px rgba(155,142,196,0.5), 0 0 24px rgba(107,154,196,0.3);
+    }
+}
+
+/* 刻纹闪烁（装饰元素使用）*/
+@keyframes glyphFlicker {
+    0%, 90%, 100% { opacity: 0.4; }
+    95% { opacity: 0.7; }
+}
+
+/* 整体环境呼吸（body使用）*/
+@keyframes envBreatheL4 {
+    0%, 100% {
+        filter: brightness(1) saturate(0.95);
+    }
+    50% {
+        filter: brightness(1.02) saturate(1.02);
+    }
+}
+
+/* ===== 第5关：几何核心（终极关卡）===== */
+/* 设计理念：所有几何规律的汇聚点，强烈的中心聚焦感，终极空间 */
+
+/* ===== 1. 主背景层（body）- 核心空间基础 [大幅弱化] ===== */
+body.level-theme-5 {
+    background:
+
+        /* 中心主光晕（柔和聚焦）*/
+        radial-gradient(circle at 50% 50%, rgba(57,73,171,0.18), transparent 38%),
+
+        /* 内环能量场 - 微妙 */
+        radial-gradient(circle at 50% 50%, rgba(26,35,126,0.12), transparent 28%),
+
+        /* 中环结构暗示 - 淡雅 */
+        radial-gradient(circle at 50% 50%, rgba(2,136,209,0.08), transparent 45%),
+
+        /* 外围空间光晕 - 四角对称 - 极淡 */
+        radial-gradient(circle at 20% 20%, rgba(57,73,171,0.06), transparent 22%),
+        radial-gradient(circle at 80% 20%, rgba(57,73,171,0.06), transparent 22%),
+        radial-gradient(circle at 20% 80%, rgba(2,136,209,0.04), transparent 20%),
+        radial-gradient(circle at 80% 80%, rgba(2,136,209,0.04), transparent 20%),
+
+        /* 主渐变：淡蓝紫核心空间 */
+        linear-gradient(
+            165deg,
+            #d4dae8 0%,
+            #c8d0e2 20%,
+            #bcc6dc 40%,
+            #b2bdd6 60%,
+            #a8b4d0 80%,
+            #9faaca 100%
+        );
+
+    animation: coreSpaceAmbient 12s ease-in-out infinite alternate;
+}
+
+@keyframes coreSpaceAmbient {
+    0% {
+        filter: brightness(0.97) saturate(1);
+    }
+    100% {
+        filter: brightness(1.03) saturate(1.05);
+    }
+}
+
+/* ===== 2. 粒子系统（body::before）- 向中心聚焦的点阵 [显著弱化] ===== */
+body.level-theme-5::before {
+
+    background:
+
+        /* === 核心节点系统（最内层）- 柔和 === */
+        /* 中心超级节点（温和）*/
+        radial-gradient(circle at 50% 50%, rgba(255,213,79,0.35) 0 4px, transparent 6px),
+
+        /* 内环6个主节点（六边形分布）- 淡雅 */
+        radial-gradient(circle at 50% 34%, rgba(57,73,171,0.28) 0 3px, transparent 4.5px),
+        radial-gradient(circle at 63% 43%, rgba(57,73,171,0.28) 0 3px, transparent 4.5px),
+        radial-gradient(circle at 63% 57%, rgba(57,73,171,0.28) 0 3px, transparent 4.5px),
+        radial-gradient(circle at 50% 66%, rgba(57,73,171,0.28) 0 3px, transparent 4.5px),
+        radial-gradient(circle at 37% 57%, rgba(57,73,171,0.28) 0 3px, transparent 4.5px),
+        radial-gradient(circle at 37% 43%, rgba(57,73,171,0.28) 0 3px, transparent 4.5px),
+
+        /* 中环12个节点（向中心汇聚）- 微妙 */
+        radial-gradient(circle at 50% 24%, rgba(2,136,209,0.18) 0 2.5px, transparent 4px),
+        radial-gradient(circle at 72% 30%, rgba(2,136,209,0.18) 0 2.5px, transparent 4px),
+        radial-gradient(circle at 84% 50%, rgba(2,136,209,0.18) 0 2.5px, transparent 4px),
+        radial-gradient(circle at 72% 70%, rgba(2,136,209,0.18) 0 2.5px, transparent 4px),
+        radial-gradient(circle at 50% 76%, rgba(2,136,209,0.18) 0 2.5px, transparent 4px),
+        radial-gradient(circle at 28% 70%, rgba(2,136,209,0.18) 0 2.5px, transparent 4px),
+        radial-gradient(circle at 16% 50%, rgba(2,136,209,0.18) 0 2.5px, transparent 4px),
+        radial-gradient(circle at 28% 30%, rgba(2,136,209,0.18) 0 2.5px, transparent 4px),
+
+        /* === 外围定位节点（四角+边缘）- 极淡 === */
+        radial-gradient(circle at 10% 12%, rgba(57,73,171,0.14) 0 2px, transparent 3.5px),
+        radial-gradient(circle at 90% 12%, rgba(57,73,171,0.14) 0 2px, transparent 3.5px),
+        radial-gradient(circle at 10% 88%, rgba(2,136,209,0.10) 0 2px, transparent 3.5px),
+        radial-gradient(circle at 90% 88%, rgba(2,136,209,0.10) 0 2px, transparent 3.5px),
+
+        /* 边缘中点辅助节点 - 几乎不可见 */
+        radial-gradient(circle at 50% 8%, rgba(57,73,171,0.10) 0 1.5px, transparent 3px),
+        radial-gradient(circle at 50% 92%, rgba(2,136,209,0.08) 0 1.5px, transparent 3px),
+        radial-gradient(circle at 6% 50%, rgba(57,73,171,0.10) 0 1.5px, transparent 3px),
+        radial-gradient(circle at 94% 50%, rgba(2,136,209,0.08) 0 1.5px, transparent 3px);
+
+    background-size:
+        auto,
+        180px 180px,
+        175px 175px,
+        178px 178px,
+        182px 182px,
+        177px 177px,
+        179px 179px,
+
+        210px 210px,
+        215px 215px,
+        208px 208px,
+        212px 212px,
+        205px 205px,
+        218px 218px,
+        206px 206px,
+        214px 214px,
+
+        260px 260px,
+        258px 258px,
+        262px 262px,
+        264px 264px,
+
+        280px 280px,
+        282px 282px,
+        278px 278px,
+        284px 284px;
+
+    animation: focusPulse 6s ease-in-out infinite;
+    opacity: 0.65;
+}
+
+@keyframes focusPulse {
+    0%, 100% {
+        opacity: 0.88;
+    }
+    33% {
+        opacity: 0.92;
+    }
+    66% {
+        opacity: 0.90;
+    }
+}
+
+/* ===== 3. 大型放射框架（body::after）- 终极结构轮廓 [大幅弱化] ===== */
+body.level-theme-5::after {
+
+    background:
+
+        /* === 核心同心圆环系统（多层聚焦）- 柔和 === */
+        /* 最外层巨型圆环（空间边界）- 微妙 */
+        radial-gradient(circle at 50% 50%, transparent 0 40%, rgba(57,73,171,0.08) 41% 43.5%, transparent 45%),
+
+        /* 第二层圆环（主结构）- 淡雅 */
+        radial-gradient(circle at 50% 50%, transparent 0 32%, rgba(26,35,126,0.06) 33% 35.5%, transparent 38%),
+
+        /* 第三层圆环（能量轨道）- 极淡 */
+        radial-gradient(circle at 50% 50%, transparent 0 24%, rgba(2,136,209,0.04) 25% 27.5%, transparent 30%),
+
+        /* 第四层圆环（内轨道）- 几乎不可见 */
+        radial-gradient(circle at 50% 50%, transparent 0 16%, rgba(57,73,171,0.03) 17% 19.5%, transparent 22%),
+
+        /* === 放射线系统（从中心向外辐射）- 弱化 === */
+        /* 主放射线（8方向）- 淡 */
+        linear-gradient(0deg, transparent 48%, rgba(57,73,171,0.06) 48.5% 51.5%, transparent 52%),
+        linear-gradient(45deg, transparent 48%, rgba(57,73,171,0.06) 48.5% 51.5%, transparent 52%),
+        linear-gradient(90deg, transparent 48%, rgba(57,73,171,0.06) 48.5% 51.5%, transparent 52%),
+        linear-gradient(135deg, transparent 48%, rgba(57,73,171,0.06) 48.5% 51.5%, transparent 52%),
+        linear-gradient(180deg, transparent 48%, rgba(57,73,171,0.06) 48.5% 51.5%, transparent 52%),
+        linear-gradient(225deg, transparent 48%, rgba(57,73,171,0.06) 48.5% 51.5%, transparent 52%),
+        linear-gradient(270deg, transparent 48%, rgba(57,73,171,0.06) 48.5% 51.5%, transparent 52%),
+        linear-gradient(315deg, transparent 48%, rgba(57,73,171,0.06) 48.5% 51.5%, transparent 52%),
+
+        /* 次放射线（8方向偏移22.5°）- 极淡 */
+        linear-gradient(22.5deg, transparent 49%, rgba(2,136,209,0.03) 49.3% 50.7%, transparent 51%),
+        linear-gradient(67.5deg, transparent 49%, rgba(2,136,209,0.03) 49.3% 50.7%, transparent 51%),
+        linear-gradient(112.5deg, transparent 49%, rgba(2,136,209,0.03) 49.3% 50.7%, transparent 51%),
+        linear-gradient(157.5deg, transparent 49%, rgba(2,136,209,0.03) 49.3% 50.7%, transparent 51%),
+        linear-gradient(202.5deg, transparent 49%, rgba(2,136,209,0.03) 49.3% 50.7%, transparent 51%),
+        linear-gradient(247.5deg, transparent 49%, rgba(2,136,209,0.03) 49.3% 50.7%, transparent 51%),
+        linear-gradient(292.5deg, transparent 49%, rgba(2,136,209,0.03) 49.3% 50.7%, transparent 51%),
+        linear-gradient(337.5deg, transparent 49%, rgba(2,136,209,0.03) 49.3% 50.7%, transparent 51%);
+
+    animation: radialFrameBreath 10s ease-in-out infinite;
+    opacity: 0.32;
+}
+
+@keyframes radialFrameBreath {
+    0%, 100% {
+        opacity: 0.30;
+        filter: brightness(1);
+    }
+    50% {
+        opacity: 0.36;
+        filter: brightness(1.01);
+    }
+}
+
+/* ===== 4. 游戏主区域（game-screen）- 核心构造区 ===== */
+body.level-theme-5 .game-screen {
+    background:
+        linear-gradient(180deg, rgba(197,202,233,0.68), rgba(163,174,217,0.54)),
+        rgba(255,255,255,0.12);
+    border: 1.5px solid rgba(57,73,171,0.26);
+    box-shadow:
+        0 28px 56px rgba(26,35,126,0.18),
+        inset 0 1px 0 rgba(255,255,255,0.18),
+        0 0 45px rgba(57,73,171,0.08);
+}
+
+/* ===== 5. 中景核心构造层（game-screen::before）- 放射状多轨道系统 [大幅弱化] ===== */
+body.level-theme-5 .game-screen::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+
+    background:
+
+        /* === 中心核心结构 - 柔和 === */
+        /* 中心发光核 - 温和 */
+        radial-gradient(circle at 50% 50%, rgba(255,213,79,0.14) 0 8%, transparent 12%),
+
+        /* 中心六边形框架（主构造）- 淡雅 */
+        radial-gradient(ellipse 26% 30% at 50% 50%, transparent 44%, rgba(57,73,171,0.12) 45% 49%, transparent 53%),
+
+        /* 内嵌正三角形（上）- 微妙 */
+        radial-gradient(ellipse 18% 16% at 50% 32%, transparent 42%, rgba(26,35,126,0.10) 43% 48%, transparent 52%),
+
+        /* 内嵌倒三角形（下，对称）- 微妙 */
+        radial-gradient(ellipse 18% 16% at 50% 68%, transparent 42%, rgba(26,35,126,0.10) 43% 48%, transparent 52%),
+
+        /* === 同心圆轨道系统（4层）- 弱化 === */
+        /* 最外层轨道（边界）- 极淡 */
+        radial-gradient(circle at 50% 50%, transparent 0 38%, rgba(57,73,171,0.08) 39% 42.5%, transparent 45%),
+
+        /* 第三层轨道（主要）- 微妙 */
+        radial-gradient(circle at 50% 50%, transparent 0 29%, rgba(2,136,209,0.06) 30% 33.5%, transparent 36%),
+
+        /* 第二层轨道（次要）- 几乎不可见 */
+        radial-gradient(circle at 50% 50%, transparent 0 20%, rgba(57,73,171,0.05) 21% 24.5%, transparent 27%),
+
+        /* 最内层轨道（核心）- 极淡 */
+        radial-gradient(circle at 50% 50%, transparent 0 11%, rgba(255,213,79,0.06) 12% 15.5%, transparent 18%),
+
+        /* === 放射状连接线 - 大幅弱化 === */
+        /* 主放射线（6方向）- 淡 */
+        linear-gradient(0deg, transparent 48%, rgba(26,35,126,0.06) 48.5% 51.5%, transparent 52%),
+        linear-gradient(60deg, transparent 48%, rgba(26,35,126,0.06) 48.5% 51.5%, transparent 52%),
+        linear-gradient(120deg, transparent 48%, rgba(26,35,126,0.06) 48.5% 51.5%, transparent 52%),
+        linear-gradient(180deg, transparent 48%, rgba(26,35,126,0.06) 48.5% 51.5%, transparent 52%),
+        linear-gradient(240deg, transparent 48%, rgba(26,35,126,0.06) 48.5% 51.5%, transparent 52%),
+        linear-gradient(300deg, transparent 48%, rgba(26,35,126,0.06) 48.5% 51.5%, transparent 52%),
+
+        /* 辅助放射线（6方向细分）- 极淡 */
+        linear-gradient(30deg, transparent 49%, rgba(2,136,209,0.04) 49.3% 50.7%, transparent 51%),
+        linear-gradient(90deg, transparent 49%, rgba(2,136,209,0.04) 49.3% 50.7%, transparent 51%),
+        linear-gradient(150deg, transparent 49%, rgba(2,136,209,0.04) 49.3% 50.7%, transparent 51%),
+        linear-gradient(210deg, transparent 49%, rgba(2,136,209,0.04) 49.3% 50.7%, transparent 51%),
+        linear-gradient(270deg, transparent 49%, rgba(2,136,209,0.04) 49.3% 50.7%, transparent 51%),
+        linear-gradient(330deg, transparent 49%, rgba(2,136,209,0.04) 49.3% 50.7%, transparent 51%),
+
+        /* === 对称弧形装饰 - 几乎不可见 === */
+        /* 左侧弧 */
+        radial-gradient(circle at 24% 50%, transparent 0 14%, rgba(57,73,171,0.08) 15% 19%, transparent 21%),
+        /* 右侧弧（对称）*/
+        radial-gradient(circle at 76% 50%, transparent 0 14%, rgba(57,73,171,0.08) 15% 19%, transparent 21%),
+        /* 上方弧 */
+        radial-gradient(circle at 50% 18%, transparent 0 12%, rgba(2,136,209,0.06) 13% 17%, transparent 19%),
+        /* 下方弧（对称）*/
+        radial-gradient(circle at 50% 82%, transparent 0 12%, rgba(2,136,209,0.06) 13% 17%, transparent 19%);
+
+    animation:
+        coreConstructPulse 8s ease-in-out infinite,
+        coreRipple 4s ease-out infinite;
+    opacity: 0.42;
+}
+
+@keyframes coreConstructPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.40;
+        filter: brightness(1);
+    }
+    50% {
+        transform: scale(1.008);
+        opacity: 0.46;
+        filter: brightness(1.01);
+    }
+}
+
+/* ===== 6. 能量脉冲与聚焦层（game-screen::after）- 中心聚焦效果 ===== */
+body.level-theme-5 .game-screen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+
+    background:
+
+        /* === 能量流动线 - 极淡 === */
+        /* 垂直主轴线 - 微妙 */
+        linear-gradient(180deg,
+            transparent 20%,
+            rgba(2,136,209,0.04) 35%,
+            rgba(57,73,171,0.06) 46%,
+            rgba(255,213,79,0.05) 50%,
+            rgba(57,73,171,0.06) 54%,
+            rgba(2,136,209,0.04) 65%,
+            transparent 80%
+        ),
+
+        /* 水平主轴线 - 几乎不可见 */
+        linear-gradient(90deg,
+            transparent 25%,
+            rgba(2,136,209,0.03) 42%,
+            rgba(57,73,171,0.05) 48%,
+            rgba(255,213,79,0.04) 50%,
+            rgba(57,73,171,0.05) 52%,
+            rgba(2,136,209,0.03) 58%,
+            transparent 75%
+        ),
+
+        /* 对角能量流 - 极淡 */
+        linear-gradient(135deg,
+            transparent 30%,
+            rgba(26,35,126,0.02) 44%,
+            rgba(57,73,171,0.04) 50%,
+            rgba(26,35,126,0.02) 56%,
+            transparent 70%
+        ),
+
+        /* 对角能量流（对称）- 极淡 */
+        linear-gradient(45deg,
+            transparent 30%,
+            rgba(26,35,126,0.02) 44%,
+            rgba(57,73,171,0.04) 50%,
+            rgba(26,35,126,0.02) 56%,
+            transparent 70%
+        ),
+
+        /* === 核心聚焦节点 - 柔和 === */
+        /* 中心超级节点 - 温和 */
+        radial-gradient(circle at 50% 50%, rgba(255,213,79,0.18) 0 4px, transparent 6px),
+
+        /* 六边形主节点 - 淡雅 */
+        radial-gradient(circle at 50% 32%, rgba(57,73,171,0.12) 0 3px, transparent 4.5px),
+        radial-gradient(circle at 64% 41%, rgba(57,73,171,0.12) 0 3px, transparent 4.5px),
+        radial-gradient(circle at 64% 59%, rgba(57,73,171,0.12) 0 3px, transparent 4.5px),
+        radial-gradient(circle at 50% 68%, rgba(57,73,171,0.12) 0 3px, transparent 4.5px),
+        radial-gradient(circle at 36% 59%, rgba(57,73,171,0.12) 0 3px, transparent 4.5px),
+        radial-gradient(circle at 36% 41%, rgba(57,73,171,0.12) 0 3px, transparent 4.5px),
+
+        /* 轨道交点标记（中层）- 微妙 */
+        radial-gradient(circle at 50% 20%, rgba(2,136,209,0.08) 0 2px, transparent 3.5px),
+        radial-gradient(circle at 78% 35%, rgba(2,136,209,0.08) 0 2px, transparent 3.5px),
+        radial-gradient(circle at 78% 65%, rgba(2,136,209,0.08) 0 2px, transparent 3.5px),
+        radial-gradient(circle at 50% 80%, rgba(2,136,209,0.08) 0 2px, transparent 3.5px),
+        radial-gradient(circle at 22% 65%, rgba(2,136,209,0.08) 0 2px, transparent 3.5px),
+        radial-gradient(circle at 22% 35%, rgba(2,136,209,0.08) 0 2px, transparent 3.5px),
+
+        /* === 边缘微光点缀 - 几乎不可见 === */
+        radial-gradient(circle at 10% 10%, rgba(57,73,171,0.06) 0 1.5px, transparent 2.5px),
+        radial-gradient(circle at 90% 10%, rgba(57,73,171,0.06) 0 1.5px, transparent 2.5px),
+        radial-gradient(circle at 10% 90%, rgba(2,136,209,0.04) 0 1.5px, transparent 2.5px),
+        radial-gradient(circle at 90% 90%, rgba(2,136,209,0.04) 0 1.5px, transparent 2.5px);
+
+    animation: coreEnergyPulse 8s ease-in-out infinite;
+    opacity: 0.28;
+}
+
+@keyframes coreEnergyPulse {
+    0%, 100% {
+        opacity: 0.26;
+        filter: brightness(1);
+    }
+    50% {
+        opacity: 0.32;
+        filter: brightness(1.01);
+    }
+}
+
+/* ===== 7. Canvas容器增强 [弱化] ===== */
+body.level-theme-5 .canvas-container {
+    background:
+        linear-gradient(180deg, rgba(220,224,238,0.82), rgba(205,212,232,0.70)),
+        rgba(255,255,255,0.08);
+    border: 1px solid rgba(57,73,171,0.12);
+    box-shadow:
+        0 18px 36px rgba(26,35,126,0.10),
+        0 0 0 1px rgba(57,73,171,0.06),
+        inset 0 1px 0 rgba(255,255,255,0.12),
+        0 0 14px rgba(57,73,171,0.03);
+}
+
+/* Canvas容器内部核心光晕 - 柔和 */
+body.level-theme-5 .canvas-container::before {
+    content: "";
+    position: absolute;
+    inset: -6% -6% auto -6%;
+    height: 52%;
+    background:
+
+        /* 顶部核心聚光 - 淡雅 */
+        radial-gradient(circle at 50% 0%, rgba(255,255,255,0.52), transparent 35%),
+
+        /* 左上角结构暗示 - 微妙 */
+        radial-gradient(circle at 15% 15%, rgba(57,73,171,0.06), transparent 20%),
+
+        /* 右上角结构暗示（向中心，对称）- 微妙 */
+        radial-gradient(circle at 85% 15%, rgba(57,73,171,0.06), transparent 20%),
+
+        /* 底部反射 - 极淡 */
+        radial-gradient(circle at 50% 98%, rgba(2,136,209,0.04), transparent 22%);
+}
+
+/* Canvas容器底部装饰 - 几乎不可见 */
+body.level-theme-5 .canvas-container::after {
+    content: "";
+    position: absolute;
+    left: -18px;
+    bottom: -12px;
+    width: 150px;
+    height: 120px;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.12;
+    background:
+
+        /* 左下角几何晶体（终极版）*/
+        linear-gradient(135deg, transparent 40%, rgba(57,73,171,0.42) 41% 54%, transparent 55%),
+        linear-gradient(45deg, transparent 44%, rgba(2,136,209,0.34) 45% 57%, transparent 58%),
+        linear-gradient(155deg, transparent 46%, rgba(26,35,126,0.26) 47% 57%, transparent 58%);
+    filter: drop-shadow(0 8px 12px rgba(26,35,126,0.08));
+    animation: coreCrystalFloat 8s ease-in-out infinite;
+}
+
+/* 右下角对称晶体 */
+body.level-theme-5 .canvas-container::after {
+    right: -18px;
+    left: auto;
+    animation: coreCrystalFloat 8s ease-in-out infinite reverse;
+}
+
+@keyframes coreCrystalFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.30; }
+    50% { transform: translateY(-6px) rotate(1deg); opacity: 0.36; }
+}
+
+/* ===== 8. 游戏画布内部 ===== */
+body.level-theme-5 #gameCanvas {
+    background:
+        radial-gradient(circle at 50% 18%, rgba(240,242,248,0.96), rgba(217,222,236,0.98) 42%, rgba(207,212,232,1) 100%),
+        radial-gradient(circle at 50% 62%, rgba(57,73,171,0.06), transparent 28%),
+        linear-gradient(transparent 95%, rgba(57,73,171,0.02) 95%),
+        linear-gradient(90deg, transparent 95%, rgba(57,73,171,0.02) 95%);
+    background-size: auto, auto, 40px 40px, 40px 40px;
+    box-shadow:
+        inset 0 0 0 1px rgba(57,73,171,0.06),
+        inset 0 -16px 30px rgba(26,35,126,0.04);
+}
+
+/* ===== 9. 容器外围光晕 ===== */
+body.level-theme-5 .game-container::before {
+    background:
+        radial-gradient(circle at 50% 0%, rgba(207,212,232,0.35), transparent 14%),
+        radial-gradient(circle at 8% 10%, rgba(57,73,171,0.10), transparent 14%),
+        radial-gradient(circle at 92% 10%, rgba(57,73,171,0.10), transparent 14%),
+        radial-gradient(circle at 5% 86%, rgba(2,136,209,0.08), transparent 14%),
+        radial-gradient(circle at 94% 86%, rgba(2,136,209,0.08), transparent 14%);
+}
+
+/* ===== 10. 页头装饰（终极横幅）===== */
+body.level-theme-5 .game-header::before {
+    background:
+        radial-gradient(circle at 20% 20%, rgba(57,73,171,0.14), transparent 12%),
+        radial-gradient(circle at 80% 20%, rgba(57,73,171,0.14), transparent 12%),
+        linear-gradient(90deg, transparent 28%, rgba(2,136,209,0.09) 50%, transparent 72%);
+    animation: headerCoreDrift 14s ease-in-out infinite alternate;
+}
+
+@keyframes headerCoreDrift {
+    0% { transform: translateX(-2px); opacity: 0.9; }
+    100% { transform: translateX(2px); opacity: 1; }
+}
+
+/* ===== 11. 页脚装饰（基座感）===== */
+body.level-theme-5 .footer-rich::before {
+    background:
+        radial-gradient(circle at 25% 90%, rgba(2,136,209,0.12), transparent 14%),
+        radial-gradient(circle at 75% 90%, rgba(57,73,171,0.10), transparent 12%),
+        radial-gradient(circle at 50% 98%, rgba(26,35,126,0.10), transparent 18%);
+}
+
+/* ===== 12. 关卡选择页入口 ===== */
+body.level-theme-5 #levelSelect::before {
+    background:
+        radial-gradient(circle at 20% 30%, rgba(57,73,171,0.14), transparent 18%),
+        radial-gradient(circle at 80% 28%, rgba(57,73,171,0.12), transparent 16%),
+        radial-gradient(circle at 50% 8%, rgba(2,136,209,0.17), transparent 16%),
+        linear-gradient(135deg, rgba(26,35,126,0.04) 0%, rgba(2,136,209,0.04) 50%, rgba(57,73,171,0.04) 100%);
+    filter: blur(6px);
+    opacity: 0.90;
+}
+
+body.level-theme-5 #levelSelect::after {
+    background:
+        radial-gradient(circle at 22% 24%, transparent 0 52px, rgba(57,73,171,0.08) 53px 56px, transparent 58px),
+        radial-gradient(circle at 76% 24%, transparent 0 56px, rgba(2,136,209,0.07) 57px 60px, transparent 62px),
+        radial-gradient(circle at 50% 8%, transparent 0 42px, rgba(26,35,126,0.09) 43px 46px, transparent 48px),
+        radial-gradient(circle at 35% 68%, rgba(57,73,171,0.20) 0 2px, transparent 3px),
+        radial-gradient(circle at 64% 66%, rgba(2,136,209,0.20) 0 2px, transparent 3px);
+}
+
+/* ===== 13. Info面板（观测站风格）===== */
+body.level-theme-5 .info-box::before {
+    background:
+        radial-gradient(circle, rgba(57,73,171,0.12), transparent 70%),
+        radial-gradient(circle at 75% 25%, rgba(2,136,209,0.08), transparent 40%),
+        radial-gradient(circle at 25% 75%, rgba(26,35,126,0.06), transparent 35%);
+}
+
+/* ===== 14. 任务卡（任务终端风格）===== */
+body.level-theme-5 .mission-box::before {
+    background: linear-gradient(135deg, #3949ab, #1a237e);
+    box-shadow:
+        0 0 18px rgba(57,73,171,0.24),
+        0 0 28px rgba(2,136,209,0.16);
+}
+
+/* ===== 15. 中心波纹扩散效果（替代旋转的舒适动态）===== */
+body.level-theme-5 .game-screen::before {
+    animation:
+        coreConstructPulse 8s ease-in-out infinite,
+        coreRipple 4s ease-out infinite;
+}
+
+@keyframes coreRipple {
+    0% {
+        box-shadow:
+            0 0 0 0 rgba(255,213,79,0.08),
+            inset 0 0 0 0 rgba(57,73,171,0.04);
+    }
+    50% {
+        box-shadow:
+            0 0 0 60px rgba(255,213,79,0),
+            inset 0 0 20px rgba(57,73,171,0.03);
+    }
+    100% {
+        box-shadow:
+            0 0 0 0 rgba(255,213,79,0),
+            inset 0 0 0 0 rgba(57,73,171,0);
+    }
+}
+
+/* ===== 16. 高对比度模式兼容 ===== */
+body.high-contrast.level-theme-4 .game-container::after,
+body.high-contrast.level-theme-4 #levelSelect::before,
+body.high-contrast.level-theme-4 #levelSelect::after,
+body.high-contrast.level-theme-4 .game-screen::after,
+body.high-contrast.level-theme-4 .game-screen::before {
+    display: none !important;
 }

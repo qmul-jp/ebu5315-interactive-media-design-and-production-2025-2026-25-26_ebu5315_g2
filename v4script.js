@@ -493,6 +493,16 @@ function checkMicroMilestones() {
 } else {
     removeLevel3Mascots();
 }
+        if (Number(levelId) === 1) {
+            setTimeout(() => injectLevel1Mascots(), 100);
+        } else {
+            removeLevel1Mascots();
+        }
+        if (Number(levelId) === 2) {
+            setTimeout(() => injectLevel2Mascots(), 100);
+        } else {
+            removeLevel2Mascots();
+        }
         enableAudio();
         currentLevel=levelId;
         levelScore=0;
@@ -1219,16 +1229,41 @@ function addHubPointerEffect() {
 }
 
 function initExploreHub() {
-    updateExploreHubLanguage();
-    updateHubProgress();
-    updateTodayChallenge();
-    updateAchievementSummary();
-    highlightLevelPath();
-    addHubPointerEffect();
-    rotateFunFacts();
+    try {
+        updateExploreHubLanguage();
+    } catch (e) { console.warn('updateExploreHubLanguage failed:', e); }
+
+    try {
+        updateHubProgress();
+    } catch (e) { console.warn('updateHubProgress failed:', e); }
+
+    try {
+        updateTodayChallenge();
+    } catch (e) { console.warn('updateTodayChallenge failed:', e); }
+
+    try {
+        updateAchievementSummary();
+    } catch (e) { console.warn('updateAchievementSummary failed:', e); }
+
+    try {
+        highlightLevelPath();
+    } catch (e) { console.warn('highlightLevelPath failed:', e); }
+
+    try {
+        addHubPointerEffect();
+    } catch (e) { console.warn('addHubPointerEffect failed:', e); }
+
+    try {
+        rotateFunFacts();
+    } catch (e) { console.warn('rotateFunFacts failed:', e); }
 }
 
-/* 初始执行 */
+/* 初始执行 - 提前到DOMContentLoaded避免空白 */
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => initExploreHub(), 0);
+});
+
+/* 保留load事件作为备份 */
 window.addEventListener('load', () => {
     initExploreHub();
 });
@@ -1358,6 +1393,8 @@ function applyLevelTheme(levelId = null) {
     const body = document.body;
     if (!body) return;
 
+    const previousTheme = Array.from(body.classList).find(c => c.startsWith('level-theme-') || c === 'home-theme');
+
     body.classList.remove(
         'home-theme',
         'level-theme-1',
@@ -1369,11 +1406,22 @@ function applyLevelTheme(levelId = null) {
 
     if (!levelId) {
         body.classList.add('home-theme');
+        console.log(`[主题切换] ${previousTheme || '无'} → home-theme`);
         return;
     }
 
     const safeId = Math.max(1, Math.min(5, Number(levelId) || 1));
-    body.classList.add(`level-theme-${safeId}`);
+    const newTheme = `level-theme-${safeId}`;
+    body.classList.add(newTheme);
+
+    console.log(`[主题切换] ${previousTheme || '无'} → ${newTheme}`);
+
+    requestAnimationFrame(() => {
+        body.style.display = 'none';
+        body.offsetHeight;
+        body.style.display = '';
+        console.log(`[主题应用] ${newTheme} 已强制重绘`);
+    });
 }
 /* ===== Level 3 卡通角色函数 ===== */
 
@@ -1503,6 +1551,247 @@ if (backToSelectBtnEl) {
         setTimeout(() => applyLevelTheme(null), 50);
     });
 }
+/* ===== Level 1 卡通形象函数 - 几何花园精灵系统 ===== */
+
+function injectLevel1Mascots() {
+    removeLevel1Mascots();
+
+    const canvasContainer = document.querySelector('.canvas-container');
+    if (!canvasContainer || !document.body.classList.contains('level-theme-1')) return;
+
+    /* 1. 小花精灵 × 4（四角分布） */
+    const flowerPositions = ['pos-topleft', 'pos-topright', 'pos-midleft', 'pos-midright'];
+    flowerPositions.forEach(pos => {
+        const flower = document.createElement('div');
+        flower.className = `level1-mascot mascot-flower ${pos}`;
+        flower.innerHTML = `
+            <div class="flower-head"></div>
+            <div class="petal petal-1"></div>
+            <div class="petal petal-2"></div>
+            <div class="petal petal-3"></div>
+            <div class="petal petal-4"></div>
+            <div class="petal petal-5"></div>
+            <div class="face">
+                <div class="eye-left"><div class="eye-shine"></div></div>
+                <div class="eye-right"><div class="eye-shine"></div></div>
+                <div class="cheek-left"></div>
+                <div class="cheek-right"></div>
+                <div class="mouth"></div>
+            </div>
+            <div class="stem"></div>
+        `;
+        canvasContainer.appendChild(flower);
+    });
+
+    /* 2. 小蝴蝶 × 3（飞舞路径） */
+    const butterflyPositions = ['pos-fly1', 'pos-fly2', 'pos-fly3'];
+    butterflyPositions.forEach(pos => {
+        const butterfly = document.createElement('div');
+        butterfly.className = `level1-mascot mascot-butterfly ${pos}`;
+        butterfly.innerHTML = `
+            <div class="butterfly-body"></div>
+            <div class="wing-left"></div>
+            <div class="wing-right"></div>
+            <div class="antenna-left"></div>
+            <div class="antenna-right"></div>
+        `;
+        canvasContainer.appendChild(butterfly);
+    });
+
+    /* 3. 小蜜蜂 × 2（勤劳飞舞） */
+    const beePositions = ['pos-bee1', 'pos-bee2'];
+    beePositions.forEach(pos => {
+        const bee = document.createElement('div');
+        bee.className = `level1-mascot mascot-bee ${pos}`;
+        bee.innerHTML = `
+            <div class="bee-body"></div>
+            <div class="bee-wing-l"></div>
+            <div class="bee-wing-r"></div>
+            <div class="bee-eye left"></div>
+            <div class="bee-eye right"></div>
+            <div class="bee-stinger"></div>
+        `;
+        canvasContainer.appendChild(bee);
+    });
+
+    /* 4. 小蘑菇 × 2（地面装饰） */
+    const mushroomPositions = ['pos-ground1', 'pos-ground2'];
+    mushroomPositions.forEach(pos => {
+        const mushroom = document.createElement('div');
+        mushroom.className = `level1-mascot mascot-mushroom ${pos}`;
+        mushroom.innerHTML = `
+            <div class="mushroom-cap">
+                <div class="cap-spot spot-1"></div>
+                <div class="cap-spot spot-2"></div>
+                <div class="cap-spot spot-3"></div>
+            </div>
+            <div class="mushroom-stem">
+                <div class="mushroom-face">
+                    <div class="mushroom-eye left"></div>
+                    <div class="mushroom-eye right"></div>
+                    <div class="mushroom-blush left"></div>
+                    <div class="mushroom-blush right"></div>
+                    <div class="mushroom-mouth"></div>
+                </div>
+            </div>
+        `;
+        canvasContainer.appendChild(mushroom);
+    });
+
+    /* 5. 几何星星 × 3（闪光点缀） */
+    const starPositions = ['pos-twinkle1', 'pos-twinkle2', 'pos-twinkle3'];
+    starPositions.forEach(pos => {
+        const star = document.createElement('div');
+        star.className = `level1-mascot mascot-star ${pos}`;
+        star.innerHTML = `
+            <div class="star-body"></div>
+            <div class="star-face">
+                <div class="star-eye left"></div>
+                <div class="star-eye right"></div>
+                <div class="star-smile"></div>
+            </div>
+        `;
+        canvasContainer.appendChild(star);
+    });
+
+    /* 6. 叶子小精灵 × 2（绿色伙伴） */
+    const leafPositions = ['pos-leaf1', 'pos-leaf2'];
+    leafPositions.forEach(pos => {
+        const leaf = document.createElement('div');
+        leaf.className = `level1-mascot mascot-leaf ${pos}`;
+        leaf.innerHTML = `
+            <div class="leaf-body">
+                <div class="leaf-vein"></div>
+            </div>
+            <div class="leaf-face">
+                <div class="leaf-eye left"></div>
+                <div class="leaf-eye right"></div>
+                <div class="leaf-cheek left"></div>
+                <div class="leaf-cheek right"></div>
+                <div class="leaf-mouth"></div>
+            </div>
+        `;
+        canvasContainer.appendChild(leaf);
+    });
+
+    console.log('[第一关精灵] 已注入 14 个几何花园卡通形象 ✓');
+}
+
+function removeLevel1Mascots() {
+    document.querySelectorAll('.level1-mascot').forEach(el => el.remove());
+}
+
+/* ===== Level 2 卡通形象函数 - 几何花园路径精灵系统 ===== */
+function injectLevel2Mascots() {
+    removeLevel2Mascots();
+
+    const canvasContainer = document.querySelector('.canvas-container');
+    if (!canvasContainer || !document.body.classList.contains('level-theme-2')) return;
+
+    /* 1. 路径引导精灵 × 4（四角分布） */
+    const guidePositions = ['pos-corner-tl', 'pos-corner-tr', 'pos-corner-bl', 'pos-corner-br'];
+    guidePositions.forEach(pos => {
+        const guide = document.createElement('div');
+        guide.className = `level2-mascot mascot-path-guide ${pos}`;
+        guide.innerHTML = `
+            <div class="guide-body"></div>
+            <div class="guide-face">
+                <div class="eye-left"></div>
+                <div class="eye-right"></div>
+                <div class="cheek-left"></div>
+                <div class="cheek-right"></div>
+                <div class="mouth"></div>
+            </div>
+            <div class="guide-compass">
+                <div class="compass-arrow"></div>
+            </div>
+        `;
+        canvasContainer.appendChild(guide);
+    });
+
+    /* 2. 几何节点精灵 × 4（边缘中部） */
+    const nodePositions = ['pos-edge-lt', 'pos-edge-rt', 'pos-edge-lb', 'pos-edge-rb'];
+    nodePositions.forEach(pos => {
+        const node = document.createElement('div');
+        node.className = `level2-mascot mascot-node-sprite ${pos}`;
+        node.innerHTML = `
+            <div class="node-hexagon"></div>
+            <div class="node-core"></div>
+            <div class="node-face">
+                <div class="node-eye left"></div>
+                <div class="node-eye right"></div>
+                <div class="node-smile"></div>
+            </div>
+        `;
+        canvasContainer.appendChild(node);
+    });
+
+    /* 3. 连接线小助手 × 2（上下边缘） */
+    const connectorPositions = ['pos-line-t', 'pos-line-b'];
+    connectorPositions.forEach(pos => {
+        const connector = document.createElement('div');
+        connector.className = `level2-mascot mascot-connector ${pos}`;
+        connector.innerHTML = `
+            <div class="connector-body"></div>
+            <div class="connector-dot-start"></div>
+            <div class="connector-dot-end"></div>
+            <div class="connector-eye left"></div>
+            <div class="connector-eye right"></div>
+        `;
+        canvasContainer.appendChild(connector);
+    });
+
+    /* 4. 方向指示鸟 × 2（上方两侧） */
+    const birdPositions = ['pos-fly-ul', 'pos-fly-ur'];
+    birdPositions.forEach(pos => {
+        const bird = document.createElement('div');
+        bird.className = `level2-mascot mascot-direction-bird ${pos}`;
+        bird.innerHTML = `
+            <div class="bird-body"></div>
+            <div class="bird-wing-left"></div>
+            <div class="bird-wing-right"></div>
+            <div class="bird-eye left"></div>
+            <div class="bird-eye right"></div>
+            <div class="bird-beak"></div>
+            <div class="bird-arrow-tail"></div>
+        `;
+        canvasContainer.appendChild(bird);
+    });
+
+    /* 5. 几何花朵 × 2（底部两侧） */
+    const flowerPositions = ['pos-garden-bl', 'pos-garden-br'];
+    flowerPositions.forEach(pos => {
+        const flower = document.createElement('div');
+        flower.className = `level2-mascot mascot-geo-flower ${pos}`;
+        flower.innerHTML = `
+            <div class="flower-stem"></div>
+            <div class="flower-center">
+                <div class="petal petal-1"></div>
+                <div class="petal petal-2"></div>
+                <div class="petal petal-3"></div>
+                <div class="petal petal-4"></div>
+                <div class="petal petal-5"></div>
+                <div class="petal petal-6"></div>
+                <div class="flower-core"></div>
+                <div class="flower-face">
+                    <div class="flower-eye left"></div>
+                    <div class="flower-eye right"></div>
+                    <div class="flower-blush left"></div>
+                    <div class="flower-blush right"></div>
+                    <div class="flower-mouth"></div>
+                </div>
+            </div>
+        `;
+        canvasContainer.appendChild(flower);
+    });
+
+    console.log('[第二关精灵] 已注入 14 个几何花园路径卡通形象 ✓');
+}
+
+function removeLevel2Mascots() {
+    document.querySelectorAll('.level2-mascot').forEach(el => el.remove());
+}
+
 /* =========================================================
    Level 3 背景增强增量代码
    粘贴到 v4script.js 最底部
