@@ -17,9 +17,9 @@
       </div>
       
       <nav class="nav-links">
-        <a href="index.html">🏠 首页</a>
-        <a href="game.html">🎮 游戏</a>
-        <a href="quiz.html" class="active">📝 测验</a>
+        <a href="index.html" data-zh="🏠 首页" data-en="🏠 Home">🏠 首页</a>
+        <a href="game.html" data-zh="🎮 游戏" data-en="🎮 Game">🎮 游戏</a>
+        <a href="quiz.html" class="active" data-zh="📝 测验" data-en="📝 Quiz">📝 测验</a>
       </nav>
 
       <div class="header-actions">
@@ -34,18 +34,18 @@
         <h1 data-zh="📝 圆几何测验" data-en="📝 Circle Geometry Quiz">📝 圆几何测验</h1>
         
         <div class="quiz-level-section">
-          <h2 id="level">Level: Easy</h2>
+          <h2 id="level" data-zh="难度：简单" data-en="Level: Easy">Level: Easy</h2>
           <div class="difficulty-selector">
-            <button id="easyBtn" class="difficulty-btn active" data-level="easy">😊 简单</button>
-            <button id="mediumBtn" class="difficulty-btn" data-level="medium">🤔 中等</button>
-            <button id="hardBtn" class="difficulty-btn" data-level="hard">😈 困难</button>
+            <button id="easyBtn" class="difficulty-btn active" data-level="easy" data-zh="😊 简单" data-en="😊 Easy">😊 简单</button>
+            <button id="mediumBtn" class="difficulty-btn" data-level="medium" data-zh="🤔 中等" data-en="🤔 Medium">🤔 中等</button>
+            <button id="hardBtn" class="difficulty-btn" data-level="hard" data-zh="😈 困难" data-en="😈 Hard">😈 困难</button>
           </div>
         </div>
 
         <div class="quiz-progress">
           <div class="progress-info">
-            <span id="questionNumber">问题 1/10</span>
-            <span id="currentScoreDisplay">得分: 0</span>
+            <span id="questionNumber" data-zh="问题 1/10" data-en="Question 1/10">问题 1/10</span>
+            <span id="currentScoreDisplay" data-zh="得分: 0" data-en="Score: 0">得分: 0</span>
           </div>
           <div class="progress-bar">
             <div class="progress-fill" id="quizProgressFill"></div>
@@ -59,8 +59,8 @@
         <div id="answers" class="answers-grid"></div>
 
         <div class="quiz-actions">
-          <button id="submitBtn" onclick="submitAnswer()" class="btn btn-primary">✅ 提交答案</button>
-          <button id="nextQuestionBtn" onclick="nextQuestion()" class="btn btn-secondary hidden">➡️ 下一题</button>
+          <button id="submitBtn" onclick="submitAnswer()" class="btn btn-primary" data-zh="✅ 提交答案" data-en="✅ Submit Answer">✅ 提交答案</button>
+          <button id="nextQuestionBtn" onclick="nextQuestion()" class="btn btn-secondary hidden" data-zh="➡️ 下一题" data-en="➡️ Next Question">➡️ 下一题</button>
         </div>
 
         <div id="feedback" class="quiz-feedback"></div>
@@ -69,11 +69,11 @@
 
         <div id="quizResult" class="quiz-result hidden">
           <div class="result-card card card-success">
-            <h2 id="resultTitle">🎉 测验完成！</h2>
-            <div id="resultScoreDisplay">🏅 最终得分：0/100</div>
-            <div id="resultGrade">评级：</div>
+            <h2 id="resultTitle" data-zh="🎉 测验完成！" data-en="🎉 Quiz Complete!">🎉 测验完成！</h2>
+            <div id="resultScoreDisplay" data-zh="🏅 最终得分：0/100" data-en="🏅 Final Score: 0/100">🏅 最终得分：0/100</div>
+            <div id="resultGrade" data-zh="评级：" data-en="Grade: ">评级：</div>
             <div id="resultMessage"></div>
-            <button id="restartBtn" onclick="restartQuiz()" class="btn btn-primary">🔄 重新开始</button>
+            <button id="restartBtn" onclick="restartQuiz()" class="btn btn-primary" data-zh="🔄 重新开始" data-en="🔄 Restart">🔄 重新开始</button>
           </div>
         </div>
       </div>
@@ -81,7 +81,7 @@
 
     <!-- Footer -->
     <footer class="footer">
-      <p>© 2024 CirCleLearning. All rights reserved.</p>
+      <p data-zh="© 2024 CirCleLearning. 保留所有权利。" data-en="© 2024 CirCleLearning. All rights reserved.">© 2024 CirCleLearning. All rights reserved.</p>
     </footer>
   </div>
   <script src="assets/app.js"></script>

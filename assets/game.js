@@ -1062,7 +1062,7 @@ function initGeoGebra() {
     const parameters = {
         "appName": "geometry",
         "width": "100%",
-        "height": "400",
+        "height": "600",
         "showToolBar": false,
         "showAlgebraInput": false,
         "showMenuBar": false,
@@ -1083,7 +1083,17 @@ function initGeoGebra() {
         "disableAutoScale": false,
         "language": currentLang === 'zh' ? 'zh_CN' : 'en',
         "screenshotGenerator": false,
-        "scale": 1
+        "scale": 1,
+        "showPerspectives": false,
+        "showToolBarHelp": false,
+        "showToolBar": false,
+        "showMenuBar": false,
+        "allowRightClick": false,
+        "allowStyleBar": false,
+        "enableLabelDrags": false,
+        "enableShiftDragZoom": false,
+        "showAxes": false,
+        "showGrid": false
     };
 
     // 为游戏画布容器创建 GeoGebra 元素
