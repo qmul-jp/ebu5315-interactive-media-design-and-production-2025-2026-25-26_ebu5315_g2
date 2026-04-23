@@ -1,32 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>Circle Geometry Quiz</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>圆几何探险 · 互动问答</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700;800&display=swap" rel="stylesheet">
 </head>
-
 <body>
+    <div class="game-box">
+        <h1>📐 圆几何探险 · 互动问答</h1>
+        
+        <div class="header-info">
+            <h2 id="level">当前难度: 入门</h2>
+            <p id="score">得分: 0</p>
+        </div>
 
-<div class="quiz-box">
+        <div class="canvas-container">
+            <canvas id="geomCanvas" width="400" height="300"></canvas>
+            <div class="canvas-tip">💡 提示：拖动绿色的点观察图形变化</div>
+        </div>
 
-    <h1>Circle Geometry Quiz</h1>
+        <h3 id="question">题目加载中...</h3>
+        <div id="answers"></div>
 
-    <h2 id="level">Level: Easy</h2>
+        <div class="action-buttons">
+            <button onclick="submitAnswer()" id="submitBtn">提交答案</button>
+        </div>
+        <p id="feedback"></p>
 
-    <h3 id="question">Question here</h3>
+        <div class="control-group">
+            <button onclick="resetQuiz()" class="btn-secondary">重新开始</button>
+            <button onclick="showStats()" class="btn-secondary">查看统计</button>
+        </div>
 
-    <div id="answers"></div>
+        <!-- 统计弹窗 -->
+        <div id="statsModal" class="modal hidden">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h3>📊 学习统计</h3>
+                <div class="stats-grid">
+                    <p>总题目数: <strong id="totalQ">0</strong></p>
+                    <p>已答题目: <strong id="answeredQ">0</strong></p>
+                    <p>正确率: <strong id="correctRate">0%</strong></p>
+                    <p class="highlight">最终得分: <strong id="finalScore">0</strong></p>
+                </div>
+            </div>
+        </div>
 
-    <button onclick="submitAnswer()">Submit</button>
+        <!-- 难度升级弹窗 -->
+        <div id="levelUpModal" class="modal hidden">
+            <div class="modal-content">
+                <span class="close" onclick="closeLevelUpModal()">&times;</span>
+                <h3>🎉 难度升级！</h3>
+                <p>恭喜你掌握了入门知识，即将进入进阶难度！</p>
+                <button onclick="closeLevelUpModal()" style="margin-top: 20px;">确认</button>
+            </div>
+        </div>
 
-    <p id="feedback"></p>
+        <!-- 全部完成弹窗 -->
+        <div id="finishModal" class="modal hidden">
+            <div class="modal-content">
+                <span class="close" onclick="closeFinishModal()">&times;</span>
+                <h3>🥳 挑战完成！</h3>
+                <p>所有题目已完成，恭喜你掌握圆几何知识！</p>
+                <button onclick="resetQuiz(); closeFinishModal()" style="margin-top: 20px;">重新挑战</button>
+            </div>
+        </div>
+    </div>
 
-    <p id="score"></p>
-
-</div>
-
-<script src="quiz.js"></script>
-
+    <script src="quiz.js"></script>
 </body>
 </html>
