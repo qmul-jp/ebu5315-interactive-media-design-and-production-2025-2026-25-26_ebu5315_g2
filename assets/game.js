@@ -518,6 +518,8 @@ function checkMicroMilestones() {
         renderDataDisplay();
         levelSelect.classList.add('hidden');
         gameScreen.classList.remove('hidden');
+        // 更新 GeoGebra 内容
+        updateGeoGebraForLevel(levelId);
         draw();
     }
 
@@ -1045,6 +1047,158 @@ checkMicroMilestones(); draw(); });
         }
     }, 800);
 });
+
+/* =========================================
+   GeoGebra Integration
+   ========================================= */
+let ggbApplet = null;
+
+function initGeoGebra() {
+    if (typeof GGBApplet === 'undefined') {
+        console.error('GeoGebra not loaded');
+        return;
+    }
+
+    const parameters = {
+        "appName": "geometry",
+        "width": "100%",
+        "height": "400",
+        "showToolBar": false,
+        "showAlgebraInput": false,
+        "showMenuBar": false,
+        "allowStyleBar": false,
+        "enable3d": false,
+        "showResetIcon": false,
+        "capturingThreshold": 3,
+        "showAnimationButtons": false,
+        "preventFocus": false,
+        "showToolBarHelp": false,
+        "enableLabelDrags": false,
+        "enableShiftDragZoom": false,
+        "errorDialogsActive": false,
+        "useBrowserForJS": false,
+        "allowUpscale": true,
+        "clickToLoad": false,
+        "showZoomButtons": false,
+        "disableAutoScale": false,
+        "language": currentLang === 'zh' ? 'zh_CN' : 'en',
+        "screenshotGenerator": false,
+        "scale": 1
+    };
+
+    // 为游戏画布容器创建 GeoGebra 元素
+    const canvasContainer = document.querySelector('.canvas-container');
+    if (canvasContainer) {
+        // 清空容器
+        canvasContainer.innerHTML = '';
+        
+        // 创建 GeoGebra 容器
+        const ggbContainer = document.createElement('div');
+        ggbContainer.id = 'ggb-element';
+        ggbContainer.style.width = '100%';
+        ggbContainer.style.height = '600px';
+        canvasContainer.appendChild(ggbContainer);
+
+        // 初始化 GeoGebra
+        ggbApplet = new GGBApplet(parameters, true);
+        window.addEventListener('load', function() {
+            ggbApplet.inject('ggb-element');
+        });
+    }
+}
+
+// 当关卡改变时更新 GeoGebra
+function updateGeoGebraForLevel(level) {
+    if (!ggbApplet) return;
+
+    // 清除现有内容
+    ggbApplet.evalCommand('ClearAll()');
+
+    // 根据关卡设置不同的 GeoGebra 内容
+    switch(level) {
+        case 1:
+            // 关卡 1: 圆周角定理
+            ggbApplet.evalCommand('c = Circle((0,0), 3)');
+            ggbApplet.evalCommand('A = (3, 0)');
+            ggbApplet.evalCommand('B = Point(c)');
+            ggbApplet.evalCommand('C = Point(c)');
+            ggbApplet.evalCommand('O = (0,0)');
+            ggbApplet.evalCommand('seg1 = Segment(O, A)');
+            ggbApplet.evalCommand('seg2 = Segment(O, B)');
+            ggbApplet.evalCommand('seg3 = Segment(A, B)');
+            ggbApplet.evalCommand('seg4 = Segment(B, C)');
+            ggbApplet.evalCommand('angle1 = Angle(A, O, B)');
+            ggbApplet.evalCommand('angle2 = Angle(A, B, C)');
+            break;
+        case 2:
+            // 关卡 2: 切线定理
+            ggbApplet.evalCommand('c = Circle((0,0), 3)');
+            ggbApplet.evalCommand('P = (5, 0)');
+            ggbApplet.evalCommand('T = Intersect(c, Line(P, (0,0)))[0]');
+            ggbApplet.evalCommand('tangent = Tangent(P, c)');
+            ggbApplet.evalCommand('seg1 = Segment(T, (0,0))');
+            ggbApplet.evalCommand('seg2 = Segment(P, T)');
+            break;
+        case 3:
+            // 关卡 3: 弦定理
+            ggbApplet.evalCommand('c = Circle((0,0), 3)');
+            ggbApplet.evalCommand('A = Point(c)');
+            ggbApplet.evalCommand('B = Point(c)');
+            ggbApplet.evalCommand('C = Point(c)');
+            ggbApplet.evalCommand('D = Point(c)');
+            ggbApplet.evalCommand('chord1 = Segment(A, B)');
+            ggbApplet.evalCommand('chord2 = Segment(C, D)');
+            ggbApplet.evalCommand('angle1 = Angle(C, A, D)');
+            ggbApplet.evalCommand('angle2 = Angle(C, B, D)');
+            break;
+        case 4:
+            // 关卡 4: 割线定理
+            ggbApplet.evalCommand('c = Circle((0,0), 3)');
+            ggbApplet.evalCommand('P = (5, 0)');
+            ggbApplet.evalCommand('secant = Line(P, (0,0))');
+            ggbApplet.evalCommand('A = Intersect(c, secant)[0]');
+            ggbApplet.evalCommand('B = Intersect(c, secant)[1]');
+            ggbApplet.evalCommand('seg1 = Segment(P, A)');
+            ggbApplet.evalCommand('seg2 = Segment(P, B)');
+            break;
+        case 5:
+            // 关卡 5: 综合应用
+            ggbApplet.evalCommand('c = Circle((0,0), 3)');
+            ggbApplet.evalCommand('A = (3, 0)');
+            ggbApplet.evalCommand('B = (0, 3)');
+            ggbApplet.evalCommand('C = (-3, 0)');
+            ggbApplet.evalCommand('D = (0, -3)');
+            ggbApplet.evalCommand('seg1 = Segment(A, B)');
+            ggbApplet.evalCommand('seg2 = Segment(B, C)');
+            ggbApplet.evalCommand('seg3 = Segment(C, D)');
+            ggbApplet.evalCommand('seg4 = Segment(D, A)');
+            break;
+    }
+
+    // 设置颜色和样式
+    ggbApplet.evalCommand('SetColor(c, 0, 0, 0)');
+    ggbApplet.evalCommand('SetLineThickness(c, 2)');
+    ggbApplet.evalCommand('SetColor(seg1, 0, 0, 0)');
+    ggbApplet.evalCommand('SetLineThickness(seg1, 2)');
+}
+
+// 当语言改变时更新 GeoGebra
+function updateGeoGebraLanguage(lang) {
+    if (!ggbApplet) return;
+    ggbApplet.evalCommand('SetLanguage("' + (lang === 'zh' ? 'zh_CN' : 'en') + '")');
+}
+
+// 监听语言切换事件
+document.addEventListener('languageChanged', function(e) {
+    currentLang = e.detail.lang;
+    updateGeoGebraLanguage(currentLang);
+});
+
+// 初始化 GeoGebra
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(initGeoGebra, 1000);
+});
+
 /* =========================================
    探索中心 / 游戏大厅增强
 ========================================= */

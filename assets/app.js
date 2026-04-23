@@ -90,6 +90,12 @@ function toggle_language() {
   if (typeof window.updateGameLanguage === 'function') {
     window.updateGameLanguage(is_zh);
   }
+  
+  // 触发语言改变事件
+  const languageChangeEvent = new CustomEvent('languageChanged', {
+    detail: { lang: is_zh ? 'zh' : 'en' }
+  });
+  document.dispatchEvent(languageChangeEvent);
 }
 
 function bind_common_actions() {
