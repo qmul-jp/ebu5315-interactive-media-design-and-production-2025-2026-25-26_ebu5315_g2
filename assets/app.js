@@ -5,7 +5,7 @@ const highlight_color = "#e8a0bf";
 const bg_color = "#ffffff";
 const bg_color_night = "#150936";
 
-let is_night = false;
+let is_high_contrast = false;
 let is_zh = true;
 
 const rules_data = {
@@ -50,10 +50,14 @@ const rules_data = {
 let rule_index = 0;
 
 function apply_mode() {
-  document.body.classList.toggle("night", is_night);
+  document.body.classList.toggle("high-contrast", is_high_contrast);
+  const modeBtn = document.getElementById("toggle_mode");
+  if (modeBtn) {
+    modeBtn.textContent = is_high_contrast ? "☀️" : "🌙";
+  }
   const mode_label = document.getElementById("mode_label");
   if (mode_label) {
-    mode_label.textContent = is_night ? "黑夜" : "白天";
+    mode_label.textContent = is_high_contrast ? (is_zh ? "高对比度" : "High Contrast") : (is_zh ? "标准模式" : "Standard");
   }
 }
 
@@ -90,7 +94,7 @@ function bind_common_actions() {
 
   if (mode_btn) {
     mode_btn.addEventListener("click", () => {
-      is_night = !is_night;
+      is_high_contrast = !is_high_contrast;
       apply_mode();
     });
   }

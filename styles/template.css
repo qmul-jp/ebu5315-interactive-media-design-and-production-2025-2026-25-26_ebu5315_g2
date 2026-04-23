@@ -517,33 +517,161 @@ textarea.form-control {
    ========================================= */
 
 body.high-contrast {
-  background: #000 !important;
+  background: #0a0a0a !important;
   color: #fff !important;
 }
 
 body.high-contrast .header,
 body.high-contrast .card,
 body.high-contrast .footer {
-  background: #111 !important;
+  background: #1a1a1a !important;
   border-color: #fff !important;
   color: #fff !important;
+  box-shadow: 0 4px 20px rgba(255,255,255,0.1) !important;
+}
+
+body.high-contrast .brand-title {
+  color: #ffd700 !important;
 }
 
 body.high-contrast .nav-links a {
-  background: #1a1a1a !important;
+  background: #222 !important;
+  color: #fff !important;
+  border: 1px solid #fff !important;
+}
+
+body.high-contrast .nav-links a:hover,
+body.high-contrast .nav-links a.active {
+  background: #ffd700 !important;
+  color: #000 !important;
+}
+
+body.high-contrast .btn-primary {
+  background: #ffd700 !important;
+  color: #000 !important;
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3) !important;
+}
+
+body.high-contrast .btn-secondary {
+  background: #222 !important;
   color: #fff !important;
   border-color: #fff !important;
 }
 
-body.high-contrast .btn-primary {
-  background: #ff0 !important;
+body.high-contrast .btn-secondary:hover {
+  background: #fff !important;
+  color: #000 !important;
+}
+
+body.high-contrast .btn-outline {
+  background: transparent !important;
+  color: #fff !important;
+  border-color: #fff !important;
+}
+
+body.high-contrast .btn-outline:hover {
+  background: #fff !important;
   color: #000 !important;
 }
 
 body.high-contrast .form-control {
-  background: #1a1a1a !important;
+  background: #222 !important;
   color: #fff !important;
   border-color: #fff !important;
+}
+
+body.high-contrast .form-control::placeholder {
+  color: #aaa !important;
+}
+
+body.high-contrast h1,
+body.high-contrast h2,
+body.high-contrast h3,
+body.high-contrast h4,
+body.high-contrast h5,
+body.high-contrast h6 {
+  color: #ffd700 !important;
+}
+
+body.high-contrast p {
+  color: #fff !important;
+}
+
+body.high-contrast a {
+  color: #00d4ff !important;
+}
+
+body.high-contrast .badge-primary {
+  background: #ffd700 !important;
+  color: #000 !important;
+}
+
+body.high-contrast .badge-success {
+  background: #00ff00 !important;
+  color: #000 !important;
+}
+
+body.high-contrast .badge-warning {
+  background: #ff8c00 !important;
+  color: #000 !important;
+}
+
+body.high-contrast .badge-danger {
+  background: #ff0000 !important;
+  color: #fff !important;
+}
+
+body.high-contrast .progress-fill {
+  background: #ffd700 !important;
+}
+
+body.high-contrast .rule-content {
+  background: #222 !important;
+  border-color: #ffd700 !important;
+}
+
+body.high-contrast .rule-title {
+  color: #ffd700 !important;
+}
+
+body.high-contrast .rule-text {
+  color: #fff !important;
+}
+
+body.high-contrast .slider-btn {
+  background: #222 !important;
+  color: #fff !important;
+  border: 1px solid #fff !important;
+}
+
+body.high-contrast .slider-btn:hover {
+  background: #fff !important;
+  color: #000 !important;
+}
+
+body.high-contrast .hero-visual {
+  background: #1a1a1a !important;
+}
+
+body.high-contrast .visual-badge {
+  background: #222 !important;
+  color: #ffd700 !important;
+  border: 1px solid #ffd700 !important;
+}
+
+body.high-contrast .status-success {
+  background: rgba(0, 255, 0, 0.2) !important;
+  color: #00ff00 !important;
+}
+
+body.high-contrast .status-error {
+  background: rgba(255, 0, 0, 0.2) !important;
+  color: #ff0000 !important;
+}
+
+body.high-contrast .status-info {
+  background: rgba(0, 212, 255, 0.2) !important;
+  color: #00d4ff !important;
 }
 
 /* =========================================

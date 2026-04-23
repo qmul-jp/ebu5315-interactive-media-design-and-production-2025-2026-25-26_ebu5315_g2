@@ -30,7 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const howToPlayBtn = document.getElementById('howToPlayBtn');
     const aiHintBtn = document.getElementById('aiHintBtn');
-    const contrastBtn = document.getElementById('contrastBtn');
     const langSelect = document.getElementById('langSelect');
     const backBtn = document.getElementById('backBtn');
     const submitBtn = document.getElementById('submitBtn');
@@ -957,7 +956,6 @@ checkMicroMilestones(); draw(); });
 });
     modalClose.addEventListener('click',()=>{ ruleModal.classList.add('hidden'); });
     window.addEventListener('click',(e)=>{ if(e.target===ruleModal) ruleModal.classList.add('hidden'); });
-    contrastBtn.addEventListener('click',()=>{ document.body.classList.toggle('high-contrast'); });
     
     function updateRuleContent(){ const rules=langPack[currentLang].rules; ruleContent.innerHTML=`<h3>${rules.gameRules}</h3><p>${rules.rule1}</p><p>${rules.rule2}</p><p>${rules.rule3}</p><p>${rules.rule4}</p><h3>${rules.scoringRules}</h3><p>${rules.score1}</p><p>${rules.score2}</p><p>${rules.score3}</p>`; }
 
@@ -1025,7 +1023,6 @@ checkMicroMilestones(); draw(); });
         backToSelectBtn.textContent = langPack[currentLang].backToLevels;
         howToPlayBtn.textContent = langPack[currentLang].buttons.howToPlay;
         aiHintBtn.textContent = langPack[currentLang].buttons.aiHint;
-        contrastBtn.textContent = langPack[currentLang].buttons.contrast;
         submitBtn.textContent = langPack[currentLang].buttons.submit;
         resetLevelBtn.textContent = langPack[currentLang].buttons.reset;
         updateRuleContent();
