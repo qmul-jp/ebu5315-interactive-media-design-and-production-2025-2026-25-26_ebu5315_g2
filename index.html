@@ -1,161 +1,181 @@
-<!DOCTYPE html>
-<!---1-->
+<!doctype html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>圆几何探险 · 定理工坊（满分优化版）</title>
-    <link rel="stylesheet" href="index.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Circle Geometry Studio - 首页</title>
+  <link rel="stylesheet" href="styles/template.css" />
+  <!-- GeoGebra API from remote component -->
+  <script src="https://www.geogebra.org/apps/deployggb.js"></script>
 </head>
-<body>
-    <div id="levelThemeBg"></div>
-<div class="game-container">
-    <header class="game-header">
-        <h1 id="gameTitle">⚡ 圆几何探险 · 定理游乐园 ⚡</h1>
-        <div class="score-board">
-            <span id="totalScoreText">🏆 总得分：0</span>
-            <span id="starCount">⭐ 0/15</span>
-        </div>
-        <div class="control-group">
-            <button id="howToPlayBtn">📖 玩法说明</button>
-            <button id="aiHintBtn">✨ AI提示</button>
-            <button id="contrastBtn">🎨 高对比度</button>
-            <select id="langSelect">
-                <option value="zh" selected>🇨🇳 中文</option>
-                <option value="en">🇬🇧 English</option>
-            </select>
-        </div>
-    </header>
-
-    <div id="levelSelect" class="level-select">
-        <h2 id="selectTitle">🗺️ 选择关卡 · 开启几何之旅</h2>
-       <div class="explore-hub" id="exploreHub">
-    <div class="hero-panel today-panel">
-        <div class="hero-badge" id="todayBadge">📅 今日挑战</div>
-        <h3 id="todayTitle">角度观察</h3>
-        <p id="todayDesc">观察同弧对应的圆心角与圆周角关系</p>
-        <button id="todayChallengeBtn">开始挑战</button>
+<body class="doc_page">
+  <div class="doc_container">
+    <div class="doc_top_bar">
+      <div class="top_brand">
+        <div class="top_logo_square"></div>
+        <div class="top_title">CirCleLearning</div>
+      </div>
+      <div class="top_actions">
+        <span>login</span>
+        <button id="toggle_lang">En/Ch</button>
+        <button id="toggle_mode">Night/Day</button>
+      </div>
     </div>
+    
+    <div class="doc_layout">
+      <aside class="doc_sidebar">
+        <a href="index.html" class="doc_nav_item active">home</a>
+        <a href="game.html" class="doc_nav_item">games</a>
+        <a href="quiz.html" class="doc_nav_item">quiz</a>
+      </aside>
 
-    <div class="hero-panel progress-panel">
-        <div class="hero-badge" id="progressBadge">📊 学习进度</div>
-        <div class="progress-stats">
-            <div class="progress-item">
-                <span class="progress-label" id="levelProgressLabel">已通关</span>
-                <strong id="levelProgressText">0 / 5</strong>
+      <article class="doc_main">
+        <div class="intro_layout">
+          <div class="intro_text">
+            <h1>Introducing</h1>
+            <h1>Circles!</h1>
+            <p style="margin-top: 15px; font-size: 1.1rem; opacity: 0.9;" data-zh="极简高效的交互式数学学习平台，让 GCSE 与中考的圆几何变得直观易懂。" data-en="A minimalist interactive math-learning platform making GCSE circle geometry highly visual and intuitive.">
+               极简高效的交互式数学学习平台，让 GCSE 与中考的圆几何变得直观易懂。
+            </p>
+          </div>
+          <div class="intro_image">
+            <!-- GeoGebra Applet Container -->
+            <div id="ggb-element" style="width: 100%; border: 1px solid #ddd; background: #fff;"></div>
+          </div>
+        </div>
+
+        <!-- Document Requirements Sections Begin Here -->
+        <div class="homepage_content" style="margin-top: 50px;">
+          <!-- Content Grid 1: AI Greeting & Slide Show -->
+          <div class="content_grid">
+            <section class="card">
+              <h2 data-zh="👋 AI 学习助理" data-en="👋 AI Greeting / Chatbot">👋 AI 学习助理</h2>
+              <p style="min-height: 80px;" data-zh="你好！我是你的专属 AI 导师。我可以帮你解析圆定理规则，规划从基础到进阶的复习路线。想立刻开始吗？" data-en="Hello! I am your AI tutor. I can interpret circle rules and build your path from basics to advanced. Ready?">
+                你好！我是你的专属 AI 导师。我可以帮你解析圆定理规则，规划从基础到进阶的复习路线。想立刻开始吗？
+              </p>
+              <button class="btn btn_primary" style="width: 100%; border-radius: 0;" data-zh="即刻对话" data-en="Start Chat">即刻对话</button>
+            </section>
+
+            <section class="card">
+              <div class="slider_ctrl" style="margin-top: 0; margin-bottom: 15px;">
+                <h2 style="margin: 0;" data-zh="📐 核心定理轮播 (Slide show)" data-en="📐 Circle Rules (Slide show)">📐 核心定理轮播</h2>
+              </div>
+              <div class="rule_box">
+                <h3 id="rule_title" style="margin: 0 0 10px 0;"></h3>
+                <p id="rule_text" style="margin: 0; font-size: 14px; line-height: 1.5;"></p>
+              </div>
+              <div class="slider_controls">
+                <button id="prev_rule" class="btn" style="border:1px solid #ccc; border-radius:0;">&lt; Prev</button>
+                <span id="rule_counter" class="badge">1 / 4</span>
+                <button id="next_rule" class="btn" style="border:1px solid #ccc; border-radius:0;">Next &gt;</button>
+              </div>
+            </section>
+          </div>
+
+          <!-- USP Section -->
+          <section class="card usp_section" style="margin-top: 20px;">
+            <h2 data-zh="为什么选择 CirCleLearning? (Unique Selling Point)" data-en="Why CirCleLearning? (USP)">为什么选择 CirCleLearning? (Unique Selling Point)</h2>
+            <div class="usp_grid">
+              <div class="usp_item">
+                <h3 data-zh="极简无扰" data-en="Minimalism">极简无扰</h3>
+                <p data-zh="去繁就简的界面设计，让你专注于几何连接本身。" data-en="Clutter-free design focused on core geometric connections.">去繁就简的界面设计，让你专注于几何连接本身。</p>
+              </div>
+              <div class="usp_item">
+                <h3 data-zh="高交互挑战 (Game)" data-en="Interactive Game">高交互挑战 (Game)</h3>
+                <p data-zh="通过拖拽判断与动态演示，深刻记忆规则。" data-en="Remember rules through dragging, testing and visual motions.">通过拖拽判断与动态演示，深刻记忆规则。</p>
+              </div>
+              <div class="usp_item">
+                <h3 data-zh="智能分级测试 (Quiz)" data-en="Level-based Quiz">智能分级测试 (Quiz)</h3>
+                <p data-zh="根据题库提取及动态难度进阶的测验闭环。" data-en="Dynamic difficulty quizzes using a built-in question bank.">根据题库提取及动态难度进阶的测验闭环。</p>
+              </div>
             </div>
-            <div class="progress-item">
-                <span class="progress-label" id="starProgressLabel">获得星星</span>
-                <strong id="starProgressText">0 / 15</strong>
-            </div>
-        </div>
-        <div class="progress-bar">
-            <div class="progress-fill" id="progressFill"></div>
-        </div>
-        <div class="progress-tip" id="progressTip">💡 完成所有关卡解锁终极挑战！</div>
-    </div>
+          </section>
 
-    <div class="hero-panel guide-panel">
-        <div class="hero-badge" id="guideBadge">📖 快速指南</div>
-        <ul class="quick-guide">
-            <li id="guideItem1">拖动圆上的点探索规律</li>
-            <li id="guideItem2">观察角度变化并发现关系</li>
-            <li id="guideItem3">完成挑战获得星星奖励</li>
-        </ul>
-    </div>
-</div>
-
-<div class="level-path-strip" id="levelPathStrip">
-    <span class="path-node active" id="pathNode0">关卡 1</span>
-    <span class="path-line"></span>
-    <span class="path-node" id="pathNode1">关卡 2</span>
-    <span class="path-line"></span>
-    <span class="path-node" id="pathNode2">关卡 3</span>
-    <span class="path-line"></span>
-    <span class="path-node" id="pathNode3">关卡 4</span>
-    <span class="path-line"></span>
-    <span class="path-node" id="pathNode4">关卡 5</span>
-</div>
-        <div class="level-grid" id="levelGrid"></div>
-
-        <div class="footer-rich">
-            <div class="achievements-compact">
-                <div class="compact-header">
-                    <span id="achievementsTitle">🏆 成就系统</span>
-                    <span class="stars-progress-small" id="starsTotalDisplay">⭐ 0/15</span>
+          <!-- Content Grid 2: Contact Form & Ads Banner -->
+          <div class="content_grid" style="margin-top: 20px;">
+            <section class="card">
+              <h2 data-zh="联系我们 (Contact Us)" data-en="Contact Us">联系我们 (Contact Us)</h2>
+              <form id="contact_form" class="form_grid">
+                <input type="text" placeholder="Name" required />
+                <input type="email" placeholder="Email" required />
+                <textarea placeholder="Tell us how we can help..." style="min-height: 80px;" required></textarea>
+                <button type="submit" class="btn btn_primary" style="border-radius: 0;">Submit</button>
+                <p id="contact_status" style="margin: 0; font-size: 13px;"></p>
+              </form>
+            </section>
+            
+            <section class="card ads_card">
+              <h2 data-zh="教育赞助与推广区 (Ads banner)" data-en="Sponsorship & Ads banner">教育赞助与推广区 (Ads banner)</h2>
+              <div class="ad_placeholder">
+                <div>
+                  <h3>Ad Space Placeholder</h3>
+                  <p>Profit-making component for stationery brands / tutoring services.</p>
                 </div>
-                <div class="compact-grid" id="achievementsList"></div>
-                <div class="next-achievement-hint" id="nextAchievementHint"></div>
-            </div>
-            <div class="fun-facts-side">
-                <div class="fun-facts-header" id="funFactsHeader">📐 几何趣味知识</div>
-                <div class="fun-fact-content" id="sideFact">
-                    你知道吗？泰勒斯发现半圆所对的圆周角永远是90°。
-                </div>
-                <div class="scoring-rules" id="scoringRulesPanel">
-                    <div class="scoring-header" id="scoringHeader">🎯 得分规则</div>
-                    <ul class="scoring-list" id="scoringList">
-                        <li>✅ 基础完成: <strong>60分</strong></li>
-                        <li>🔍 探索互动 (≥20次拖动): <strong>20分</strong></li>
-                        <li>🎯 精准挑战 (完美定理): <strong>20分</strong></li>
-                        <li>⭐ 每关满分: <strong>100分 → 3星</strong></li>
-                    </ul>
-                </div>
-            </div>
+              </div>
+            </section>
+          </div>
         </div>
+
+      </article>
     </div>
+  </div>
+  <script src="assets/app.js"></script>
+  <script>
+    // Initialize GeoGebra Applet
+    var parameters = {
+      "id": "ggbApplet",
+      "width": 600,
+      "height": 450,
+      "appName": "geometry",
+      "perspective": "G",
+      "showMenuBar": false,
+      "showAlgebraInput": false,
+      "showToolBar": false,
+      "showResetIcon": true,
+      "enableLabelDrags": false,
+      "enableShiftDragZoom": true,
+      "enableRightClick": false,
+      "showZoomButtons": true,
+      "useBrowserForJS": false,
+      "language": "zh",
+      "appletOnLoad": function(api) {
+        // Draw Coordinate Center
+        api.evalCommand("O = (0,0)");
+        api.evalCommand("SetCaption(O, \"圆心\")");
+        api.evalCommand("ShowLabel(O, true)");
+        
+        // Draw Circle
+        api.evalCommand("c = Circle(O, 3)");
+        api.evalCommand("SetColor(c, 0, 154, 68)"); // Green color
+        api.evalCommand("SetLineThickness(c, 4)");
 
-    <div id="gameScreen" class="game-screen hidden">
-        <div class="game-top">
-            <button id="backBtn">↩️ 返回</button>
-            <h3 id="levelTitle">关卡1</h3>
-            <div class="level-info">
-                <span id="currentScore">🎯 得分：0</span>
-                <span id="levelStar">☆☆☆</span>
-            </div>
-        </div>
+        // Draw a Point on circle
+        api.evalCommand("A = Point(c)");
+        api.evalCommand("SetCaption(A, \"切点\")");
+        api.evalCommand("ShowLabel(A, true)");
 
-        <div class="mission-box">
-            <h4 id="missionTitle">📌 任务</h4>
-            <p id="missionDesc">拖动点完成挑战</p>
-        </div>
+        // Draw Radius
+        api.evalCommand("r = Segment(O, A)");
+        api.evalCommand("SetColor(r, 0, 0, 255)"); // Blue radius
+        api.evalCommand("SetLineThickness(r, 3)");
 
-        <div class="canvas-container">
-            <canvas id="gameCanvas" width="800" height="600"></canvas>
-            <div id="popFeedback" class="pop-feedback hidden">+10</div>
-        </div>
+        // Draw Tangent
+        api.evalCommand("t = Tangent(A, c)");
+        api.evalCommand("SetColor(t, 255, 0, 0)"); // Red tangent
+        api.evalCommand("SetLineThickness(t, 3)");
 
-        <div class="info-box">
-            <div id="theoremDesc" class="theorem-box">📐 定理展示</div>
-            <div id="aiHintBox" class="hint-box hidden"></div>
-            <div class="data-panel" id="dataDisplay"></div>
-            <div class="btn-group">
-                <button id="submitBtn">✅ 提交挑战</button>
-                <button id="resetLevelBtn">🔄 重置关卡</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="resultModal" class="modal hidden">
-        <div class="modal-content">
-            <h2 id="resultTitle">🎉 关卡完成 🎉</h2>
-            <div id="resultStar">⭐⭐⭐</div>
-            <p id="resultScore">🏅 最终得分：100</p>
-            <p id="resultDesc">✨ 恭喜你完成挑战 ✨</p>
-            <button id="nextLevelBtn">🚀 下一关</button>
-            <button id="backToSelectBtn">🗂️ 返回关卡选择</button>
-        </div>
-    </div>
-
-    <div id="ruleModal" class="modal hidden">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2 id="ruleTitle">🎈 玩法说明</h2>
-            <div id="ruleContent"></div>
-        </div>
-    </div>
-</div>
-
-<script src="index.js"></script>
+        // Draw angle between radius and tangent to prove 90 degrees
+        api.evalCommand("B = A + (y(A), -x(A))"); 
+        api.evalCommand("alpha = Angle(O, A, B)");
+        api.evalCommand("SetColor(alpha, 0, 0, 0)");
+      }
+    };
+    
+    // Inject the applet into the page after DOM is ready
+    var applet = new GGBApplet(parameters, true);
+    window.addEventListener("load", function() {
+        applet.inject('ggb-element');
+    });
+  </script>
 </body>
 </html>
