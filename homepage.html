@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Circle Geometry Studio - 圆几何学习平台</title>
+  <link rel="stylesheet" href="styles/template.css" />
+  <script src="https://www.geogebra.org/apps/deployggb.js"></script>
+  <style>
+    /* Page-specific styles */
+    .hero-section {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 32px;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+
+    .hero-text {
+      padding: 32px;
+    }
+
+    .hero-text h1 {
+      margin-bottom: 20px;
+    }
+
+    .hero-text p {
+      font-size: var(--font-size-lg);
+      max-width: 480px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 28px;
+    }
+
+    .hero-visual {
+      position: relative;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      background: white;
+    }
+
+    .geogebra-wrapper {
+      position: relative;
+      width: 100%;
+      padding-bottom: 75%;
+      overflow: hidden;
+      background: linear-gradient(180deg, #f8faff, #f0f4ff);
+    }
+
+    #ggb-element {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .visual-badge {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 2;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.95);
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      color: var(--theme-primary);
+      box-shadow: 0 4px 16px rgba(92, 108, 255, 0.2);
+      backdrop-filter: blur(8px);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .feature-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: "";
+      position: absolute;
+      top: -20px;
+      right: -20px;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      opacity: 0.15;
+    }
+
+    .feature-card:nth-child(1)::before { background: var(--theme-primary); }
+    .feature-card:nth-child(2)::before { background: var(--theme-pink); }
+    .feature-card:nth-child(3)::before { background: var(--theme-gold); }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+    }
+
+    .rules-section {
+      padding: 32px;
+      border-radius: var(--radius-xl);
+      background: linear-gradient(135deg, rgba(232,240,255,0.96), rgba(245,238,255,0.92));
+      border: 1px solid rgba(220,229,255,0.96);
+      margin-bottom: 40px;
+    }
+
+    .rules-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .rule-counter {
+      padding: 6px 16px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--theme-primary), var(--theme-secondary));
+      color: white;
+      font-size: var(--font-size-sm);
+      font-weight: 700;
+    }
+
+    .rule-content {
+      min-height: 120px;
+      padding: 24px;
+      border-radius: var(--radius-lg);
+      background: rgba(255,255,255,0.8);
+      border-left: 4px solid var(--theme-primary);
+      margin-bottom: 16px;
+    }
+
+    .rule-title {
+      font-size: var(--font-size-xl);
+      font-weight: 800;
+      color: var(--theme-primary);
+      margin: 0 0 10px;
+    }
+
+    .rule-text {
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .slider-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .slider-btn {
+      padding: 10px 24px;
+      border: none;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.9);
+      color: var(--theme-primary);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .slider-btn:hover {
+      background: var(--theme-primary);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .ai-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .contact-form button {
+      padding: 14px;
+      border-radius: var(--radius-md);
+    }
+
+    @media (max-width: 1024px) {
+      .hero-section {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-visual {
+        order: -1;
+      }
+
+      .ai-section {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero-text h1 {
+        font-size: clamp(1.8rem, 6vw, 2.5rem);
+      }
+
+      .hero-actions {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="brand">
+        <div class="brand-logo">◎</div>
+        <div class="brand-title">CirCleLearning</div>
+      </div>
+      
+      <nav class="nav-links">
+        <a href="index.html" class="active">🏠 首页</a>
+        <a href="game.html">🎮 游戏</a>
+        <a href="quiz.html">📝 测验</a>
+      </nav>
+
+      <div class="header-actions">
+        <button id="toggle_lang" class="btn-lang">En/Ch</button>
+        <button id="toggle_mode" class="btn-mode">🌙</button>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-text">
+        <h1 data-zh="探索圆的奥秘" data-en="Explore the Mysteries of Circles">探索圆的奥秘</h1>
+        <p data-zh="极简高效的交互式数学学习平台，让 GCSE 与中考的圆几何变得直观易懂。" data-en="A minimalist interactive math-learning platform making GCSE circle geometry highly visual and intuitive.">
+          极简高效的交互式数学学习平台，让 GCSE 与中考的圆几何变得直观易懂。
+        </p>
+        <div class="hero-actions">
+          <button id="startLearningBtn" class="btn btn-primary" data-zh="开始学习" data-en="Start Learning">开始学习</button>
+          <button id="learnMoreBtn" class="btn btn-secondary" data-zh="了解更多" data-en="Learn More">了解更多</button>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="geogebra-wrapper">
+          <div id="ggb-element"></div>
+        </div>
+        <div class="visual-badge" data-zh="交互式演示" data-en="Interactive Demo">交互式演示</div>
+      </div>
+    </section>
+
+    <!-- Features Grid -->
+    <section id="featuresSection" class="features-grid">
+      <article class="card">
+        <div class="feature-icon">🎯</div>
+        <h3 data-zh="极简无扰" data-en="Minimalism">极简无扰</h3>
+        <p data-zh="去繁就简的界面设计，让你专注于几何连接本身。" data-en="Clutter-free design focused on core geometric connections.">
+          去繁就简的界面设计，让你专注于几何连接本身。
+        </p>
+      </article>
+
+      <article class="card">
+        <div class="feature-icon">🎮</div>
+        <h3 data-zh="高交互挑战" data-en="Interactive Game">高交互挑战</h3>
+        <p data-zh="通过拖拽判断与动态演示，深刻记忆规则。" data-en="Remember rules through dragging, testing and visual motions.">
+          通过拖拽判断与动态演示，深刻记忆规则。
+        </p>
+      </article>
+
+      <article class="card">
+        <div class="feature-icon">📊</div>
+        <h3 data-zh="智能分级测试" data-en="Level-based Quiz">智能分级测试</h3>
+        <p data-zh="根据题库提取及动态难度进阶的测验闭环。" data-en="Dynamic difficulty quizzes using a built-in question bank.">
+          根据题库提取及动态难度进阶的测验闭环。
+        </p>
+      </article>
+    </section>
+
+    <!-- Rules Slider -->
+    <section class="rules-section">
+      <div class="rules-header">
+        <h2 data-zh="📐 核心定理" data-en="📐 Circle Rules">📐 核心定理</h2>
+        <span id="rule_counter" class="rule-counter">1 / 4</span>
+      </div>
+      
+      <div class="rule-content">
+        <h3 id="rule_title" class="rule-title"></h3>
+        <p id="rule_text" class="rule-text"></p>
+      </div>
+
+      <div class="slider-controls">
+        <button id="prev_rule" class="slider-btn" data-zh="上一条" data-en="Prev">&lt; 上一条</button>
+        <button id="next_rule" class="slider-btn" data-zh="下一条" data-en="Next">下一条 &gt;</button>
+      </div>
+    </section>
+
+    <!-- AI & Contact Section -->
+    <section class="ai-section">
+      <article class="card card-warning">
+        <h3 data-zh="👋 AI 学习助理" data-en="👋 AI Assistant">👋 AI 学习助理</h3>
+        <p data-zh="你好！我是你的专属 AI 导师。我可以帮你解析圆定理规则，规划从基础到进阶的复习路线。想立刻开始吗？" data-en="Hello! I am your AI tutor. I can interpret circle rules and build your path from basics to advanced. Ready?">
+          你好！我是你的专属 AI 导师。我可以帮你解析圆定理规则，规划从基础到进阶的复习路线。想立刻开始吗？
+        </p>
+        <button id="aiChatBtn" class="btn btn-primary" data-zh="即刻对话" data-en="Start Chat">即刻对话</button>
+      </article>
+
+      <article class="card card-info">
+        <h3 data-zh="📧 联系我们" data-en="📧 Contact Us">📧 联系我们</h3>
+        <form id="contact_form" class="contact-form">
+          <input type="text" class="form-control" placeholder="Name" required />
+          <input type="email" class="form-control" placeholder="Email" required />
+          <textarea class="form-control" placeholder="Tell us how we can help..." required></textarea>
+          <button type="submit" class="btn btn-primary">Submit</button>
+          <p id="contact_status"></p>
+        </form>
+      </article>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>© 2024 CirCleLearning. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <script src="assets/app.js"></script>
+  <script>
+    var ggbApi = null;
+    
+    function updateGeoGebraLabels(isChinese) {
+      if (!ggbApi) return;
+      const centerLabel = isChinese ? "圆心" : "Center";
+      const pointLabel = isChinese ? "切点" : "Tangent Point";
+      ggbApi.evalCommand(`SetCaption(O, "${centerLabel}")`);
+      ggbApi.evalCommand(`SetCaption(A, "${pointLabel}")`);
+    }
+
+    function updateGeoGebraContrast(isHighContrast) {
+      if (!ggbApi) return;
+      if (isHighContrast) {
+        ggbApi.evalCommand("SetColor(c, 255, 215, 0)");
+        ggbApi.evalCommand("SetColor(r, 255, 255, 255)");
+        ggbApi.evalCommand("SetColor(t, 255, 255, 255)");
+        ggbApi.evalCommand("SetColor(O, 255, 255, 255)");
+        ggbApi.evalCommand("SetColor(A, 255, 0, 0)");
+        ggbApi.evalCommand("SetColor(alpha, 255, 255, 255)");
+      } else {
+        ggbApi.evalCommand("SetColor(c, 0, 0, 0)");
+        ggbApi.evalCommand("SetColor(r, 0, 0, 0)");
+        ggbApi.evalCommand("SetColor(t, 0, 0, 0)");
+        ggbApi.evalCommand("SetColor(O, 0, 0, 0)");
+        ggbApi.evalCommand("SetColor(A, 255, 0, 0)");
+        ggbApi.evalCommand("SetColor(alpha, 0, 0, 0)");
+      }
+    }
+
+    var parameters = {
+      "id": "ggbApplet",
+      "width": 600,
+      "height": 450,
+      "appName": "geometry",
+      "perspective": "G",
+      "showMenuBar": false,
+      "showAlgebraInput": false,
+      "showToolBar": false,
+      "showResetIcon": false,
+      "enableLabelDrags": false,
+      "enableShiftDragZoom": true,
+      "enableRightClick": false,
+      "showZoomButtons": false,
+      "useBrowserForJS": false,
+      "language": "zh",
+      "borderColor": "none",
+      "appletOnLoad": function(api) {
+        ggbApi = api;
+        
+        api.evalCommand("O = (0,0)");
+        api.evalCommand("SetCaption(O, \"圆心\")");
+        api.evalCommand("ShowLabel(O, true)");
+        api.evalCommand("SetPointSize(O, 8)");
+        
+        api.evalCommand("c = Circle(O, 3)");
+        api.evalCommand("SetColor(c, 0, 0, 0)");
+        api.evalCommand("SetLineThickness(c, 4)");
+
+        api.evalCommand("A = Point(c)");
+        api.evalCommand("SetCaption(A, \"切点\")");
+        api.evalCommand("ShowLabel(A, true)");
+        api.evalCommand("SetPointSize(A, 8)");
+        api.evalCommand("SetColor(A, 255, 0, 0)");
+
+        api.evalCommand("r = Segment(O, A)");
+        api.evalCommand("SetColor(r, 0, 0, 0)");
+        api.evalCommand("SetLineThickness(r, 3)");
+
+        api.evalCommand("t = Tangent(A, c)");
+        api.evalCommand("SetColor(t, 0, 0, 0)");
+        api.evalCommand("SetLineThickness(t, 3)");
+
+        api.evalCommand("B = A + (y(A), -x(A))"); 
+        api.evalCommand("alpha = Angle(O, A, B)");
+        api.evalCommand("SetColor(alpha, 0, 0, 0)");
+        
+        api.evalCommand("SetViewDirection((0, 0, 1))");
+        api.evalCommand("ZoomIn(1.5)");
+      }
+    };
+    
+    var applet = new GGBApplet(parameters, true);
+    window.addEventListener("load", function() {
+        applet.inject('ggb-element');
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const langBtn = document.getElementById('toggle_lang');
+      if (langBtn) {
+        const originalToggle = window.toggle_language;
+        window.toggle_language = function() {
+          originalToggle();
+          setTimeout(() => {
+            updateGeoGebraLabels(is_zh);
+          }, 100);
+        };
+      }
+
+      const startLearningBtn = document.getElementById('startLearningBtn');
+      if (startLearningBtn) {
+        startLearningBtn.addEventListener('click', function() {
+          window.location.href = 'game.html';
+        });
+      }
+
+      const learnMoreBtn = document.getElementById('learnMoreBtn');
+      if (learnMoreBtn) {
+        learnMoreBtn.addEventListener('click', function() {
+          const featuresSection = document.getElementById('featuresSection');
+          if (featuresSection) {
+            featuresSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      }
+
+      const aiChatBtn = document.getElementById('aiChatBtn');
+      if (aiChatBtn) {
+        aiChatBtn.addEventListener('click', function() {
+          alert(is_zh ? '🎉 AI 学习助理即将上线！\n\n我们正在开发智能导师功能，敬请期待。\n\n目前您可以：\n• 通过游戏学习圆几何定理\n• 完成测验检验学习成果' : '🎉 AI Assistant Coming Soon!\n\nWe are developing the AI tutor feature. Stay tuned!\n\nFor now, you can:\n• Learn circle geometry through games\n• Test your knowledge with quizzes');
+        });
+      }
+    });
+  </script>
+</body>
+</html>
