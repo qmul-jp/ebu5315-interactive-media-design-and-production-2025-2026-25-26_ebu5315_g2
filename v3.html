@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Circle Theorem Game - V3</title>
+    <link rel="stylesheet" href="v3style.css">
+</head>
+<body>
+    <nav class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span> > </span>
+        <span>Game</span>
+    </nav>
+
+    <div class="game-container">
+        <header class="game-header">
+            <h1>Circle Theorem Lab</h1>
+            <p>Version 3: Multi‑Level & Responsive</p>
+            <div class="level-tabs">
+                <button class="level-btn active" data-level="1">Level 1</button>
+                <button class="level-btn" data-level="2">Level 2</button>
+            </div>
+        </header>
+
+        <div class="canvas-wrapper">
+            <canvas id="gameCanvas" width="800" height="600"></canvas>
+        </div>
+
+        <div class="info-panel">
+            <h3 id="theoremTitle">Central Angle = 2 × Inscribed Angle</h3>
+
+            <div class="angle-display">
+                <div class="item">
+                    <span>Central Angle:</span>
+                    <span id="centralAngle">0°</span>
+                </div>
+                <div class="item">
+                    <span>Inscribed Angle:</span>
+                    <span id="inscribedAngle">0°</span>
+                </div>
+            </div>
+
+            <button id="resetBtn" class="btn">Reset</button>
+        </div>
+    </div>
+
+    <script src="v3script.js"></script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<svg width="1600" height="260" viewBox="0 0 1600 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="hill1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#D8F1E4" stop-opacity="0.95"></stop>
+      <stop offset="1" stop-color="#BFE8D0" stop-opacity="0.95"></stop>
+    </linearGradient>
+
+    <linearGradient id="hill2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#DDF3FA" stop-opacity="0.92"></stop>
+      <stop offset="1" stop-color="#C6EAF6" stop-opacity="0.92"></stop>
+    </linearGradient>
+
+    <linearGradient id="hill3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F7ECD3" stop-opacity="0.9"></stop>
+      <stop offset="1" stop-color="#F1DFC1" stop-opacity="0.9"></stop>
+    </linearGradient>
+
+    <linearGradient id="crystalBlue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#AEE7FF"></stop>
+      <stop offset="1" stop-color="#85CFFF"></stop>
+    </linearGradient>
+
+    <linearGradient id="crystalPurple" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#D3C3FF"></stop>
+      <stop offset="1" stop-color="#A98EFF"></stop>
+    </linearGradient>
+
+    <linearGradient id="flowerPink" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFD6E5"></stop>
+      <stop offset="1" stop-color="#FFBBD5"></stop>
+    </linearGradient>
+
+    <filter id="softGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="6" result="blur"></feGaussianBlur>
+      <feMerge>
+        <feMergeNode in="blur"></feMergeNode>
+        <feMergeNode in="SourceGraphic"></feMergeNode>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- 远景坡面 -->
+  <path d="M0 185C120 150 250 150 360 180C470 210 620 210 760 180C900 150 1040 145 1180 175C1320 205 1450 205 1600 170V260H0V185Z" fill="url(#hill1)"></path>
+
+  <path d="M0 210C180 175 320 185 470 210C620 235 770 230 930 205C1090 180 1260 178 1420 204C1500 217 1550 222 1600 214V260H0V210Z" fill="url(#hill2)"></path>
+
+  <path d="M0 230C120 210 240 220 360 236C500 255 660 250 800 228C950 205 1100 210 1260 230C1380 245 1500 247 1600 238V260H0V230Z" fill="url(#hill3)"></path>
+
+  <!-- 左侧花草 -->
+  <circle cx="110" cy="212" r="16" fill="#C9EFD6"></circle>
+  <circle cx="92" cy="226" r="11" fill="#B9E7C9"></circle>
+  <circle cx="128" cy="228" r="10" fill="#D8F4E0"></circle>
+
+  <circle cx="165" cy="214" r="7" fill="url(#flowerPink)"></circle>
+  <circle cx="158" cy="219" r="4" fill="#FFE9AA"></circle>
+  <circle cx="192" cy="228" r="6" fill="#FFE6C2"></circle>
+  <circle cx="188" cy="232" r="3" fill="#FFC9DE"></circle>
+
+  <!-- 左侧几何晶体 -->
+  <polygon points="240,218 252,192 266,218 252,238" fill="url(#crystalBlue)" opacity="0.9"></polygon>
+  <polygon points="270,228 282,202 295,228 282,246" fill="url(#crystalPurple)" opacity="0.82"></polygon>
+
+  <!-- 中间轨道 -->
+  <path d="M520 214C580 176 700 166 810 186C910 204 1010 198 1085 176" stroke="#A7B8FF" stroke-opacity="0.35" stroke-width="3" stroke-linecap="round"></path>
+  <circle cx="620" cy="192" r="4" fill="#FCE8A8" opacity="0.8"></circle>
+  <circle cx="760" cy="188" r="4" fill="#D6CCFF" opacity="0.8"></circle>
+  <circle cx="940" cy="189" r="4" fill="#BDEBFF" opacity="0.8"></circle>
+
+  <!-- 量角器感弧线 -->
+  <path d="M720 230A65 65 0 0 1 850 230" stroke="#F7DDA8" stroke-opacity="0.28" stroke-width="3" stroke-linecap="round"></path>
+  <path d="M742 224L746 216" stroke="#F7DDA8" stroke-opacity="0.25" stroke-width="2" stroke-linecap="round"></path>
+  <path d="M780 218L780 208" stroke="#F7DDA8" stroke-opacity="0.25" stroke-width="2" stroke-linecap="round"></path>
+  <path d="M820 224L816 216" stroke="#F7DDA8" stroke-opacity="0.25" stroke-width="2" stroke-linecap="round"></path>
+
+  <!-- 星点 -->
+  <circle cx="520" cy="178" r="3" fill="#FFFFFF" opacity="0.7" filter="url(#softGlow)"></circle>
+  <circle cx="880" cy="172" r="3" fill="#FFF0BA" opacity="0.7" filter="url(#softGlow)"></circle>
+  <circle cx="1035" cy="184" r="2.5" fill="#FFD6E5" opacity="0.7" filter="url(#softGlow)"></circle>
+
+  <!-- 右侧灌木 -->
+  <circle cx="1320" cy="220" r="18" fill="#CFEFD8"></circle>
+  <circle cx="1342" cy="229" r="12" fill="#BFE6C8"></circle>
+  <circle cx="1365" cy="221" r="14" fill="#DDF4E2"></circle>
+
+  <!-- 右侧小花 -->
+  <circle cx="1260" cy="225" r="7" fill="#FFD1E1"></circle>
+  <circle cx="1255" cy="230" r="3.5" fill="#FFE8A2"></circle>
+
+  <!-- 右侧云朵 -->
+  <circle cx="1450" cy="185" r="24" fill="#FFFFFF" fill-opacity="0.72"></circle>
+  <circle cx="1480" cy="172" r="34" fill="#FFFFFF" fill-opacity="0.82"></circle>
+  <circle cx="1516" cy="186" r="22" fill="#FFFFFF" fill-opacity="0.7"></circle>
+
+  <!-- 右侧几何道具（圆规感） -->
+  <path d="M1380 218L1390 190" stroke="#B0BFFF" stroke-opacity="0.45" stroke-width="4" stroke-linecap="round"></path>
+  <path d="M1390 190L1402 220" stroke="#D0B6FF" stroke-opacity="0.42" stroke-width="4" stroke-linecap="round"></path>
+  <circle cx="1390" cy="190" r="4" fill="#FFF0BA" opacity="0.85"></circle>
+
+  <!-- 小星 -->
+  <circle cx="1424" cy="152" r="3" fill="#FFFFFF" opacity="0.75" filter="url(#softGlow)"></circle>
+  <circle cx="1542" cy="164" r="3" fill="#FFF0BA" opacity="0.75" filter="url(#softGlow)"></circle>
+</svg>

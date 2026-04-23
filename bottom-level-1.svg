@@ -1,0 +1,56 @@
+<svg viewBox="0 0 1600 260" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- 草地渐变 -->
+    <linearGradient id="hillBlue" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#E3F0FF"></stop>
+      <stop offset="1" stop-color="#CFE4FF"></stop>
+    </linearGradient>
+
+    <linearGradient id="hillPurple" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#EFE6FF"></stop>
+      <stop offset="1" stop-color="#DDD0FF"></stop>
+    </linearGradient>
+
+    <linearGradient id="crystal1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#AEE7FF"></stop>
+      <stop offset="1" stop-color="#7ACBFF"></stop>
+    </linearGradient>
+
+    <linearGradient id="crystal2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#D8C6FF"></stop>
+      <stop offset="1" stop-color="#A98EFF"></stop>
+    </linearGradient>
+  </defs>
+
+  <!-- 草坡层 -->
+  <path d="M0 180C200 140 400 150 600 180C800 210 1000 200 1200 170C1400 140 1500 150 1600 170V260H0V180Z" fill="url(#hillBlue)"></path>
+  <path d="M0 210C200 180 400 190 600 210C800 230 1000 220 1200 200C1400 180 1500 190 1600 210V260H0V210Z" fill="url(#hillPurple)"></path>
+
+  <!-- 左侧晶体 -->
+  <polygon points="180,210 200,170 220,210" fill="url(#crystal1)" opacity="0.9"></polygon>
+  <polygon points="210,220 230,185 250,220" fill="url(#crystal2)" opacity="0.8"></polygon>
+
+  <!-- 小花 -->
+  <circle cx="140" cy="220" r="6" fill="#FFD6E5"></circle>
+  <circle cx="140" cy="225" r="3" fill="#FFF2A8"></circle>
+
+  <!-- 星轨 -->
+  <path d="M500 180C650 150 900 150 1100 180" stroke="#B9C8FF" stroke-width="3" opacity="0.4" fill="none"></path>
+
+  <!-- 星点 -->
+  <circle cx="600" cy="165" r="3" fill="#FFFFFF" opacity="0.8"></circle>
+  <circle cx="800" cy="160" r="3" fill="#FFF2A8" opacity="0.8"></circle>
+  <circle cx="1000" cy="168" r="3" fill="#FFD6E5" opacity="0.8"></circle>
+
+  <!-- 量角器弧线 -->
+  <path d="M720 230A60 60 0 0 1 860 230" stroke="#F6DDAA" stroke-width="2" opacity="0.3" fill="none"></path>
+
+  <!-- 右侧云 -->
+  <circle cx="1400" cy="170" r="28" fill="#FFFFFF" opacity="0.7"></circle>
+  <circle cx="1430" cy="160" r="36" fill="#FFFFFF" opacity="0.85"></circle>
+  <circle cx="1470" cy="175" r="24" fill="#FFFFFF" opacity="0.7"></circle>
+
+  <!-- 右侧小花 -->
+  <circle cx="1320" cy="220" r="6" fill="#FFD6E5"></circle>
+  <circle cx="1320" cy="225" r="3" fill="#FFF2A8"></circle>
+</svg>
