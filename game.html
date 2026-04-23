@@ -7,56 +7,182 @@
   <link rel="stylesheet" href="styles/template.css" />
   <link rel="stylesheet" href="styles/game.css" />
 </head>
-<body class="doc_page">
-  <div class="doc_container">
-    <div class="doc_top_bar">
-      <div class="top_brand">
-        <div class="top_logo_square"></div>
-        <div class="top_title">CirCleLearning</div>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="brand">
+        <div class="brand-logo">◎</div>
+        <div class="brand-title">CirCleLearning</div>
       </div>
-      <div class="top_actions">
-        <span>login</span>
-        <button id="toggle_lang">En/Ch</button>
-        <button id="toggle_mode">Night/Day</button>
-      </div>
-    </div>
-    
-    <div class="doc_layout">
-      <aside class="doc_sidebar">
-        <a href="index.html" class="doc_nav_item ">home</a>
-        <a href="game.html" class="doc_nav_item active">games</a>
-        <a href="quiz.html" class="doc_nav_item ">quiz</a>
-      </aside>
+      
+      <nav class="nav-links">
+        <a href="index.html">🏠 首页</a>
+        <a href="game.html" class="active">🎮 游戏</a>
+        <a href="quiz.html">📝 测验</a>
+      </nav>
 
-      <article class="doc_main">
-
-  <div class="doc_container">
-    <div class="doc_top_bar">
-      <div class="top_brand">
-        <div class="top_logo_square"></div>
-        <div class="top_title">CirCleLearning</div>
+      <div class="header-actions">
+        <button id="toggle_lang" class="btn-lang">En/Ch</button>
+        <button id="toggle_mode" class="btn-mode">🌙</button>
       </div>
-      <div class="top_actions">
-        <span>login</span>
-        <button id="toggle_lang">En/Ch</button>
-        <button id="toggle_mode">Night/Day</button>
-      </div>
-    </div>
-    
-    <div class="doc_layout">
-      <aside class="doc_sidebar">
-        <a href="index.html" class="doc_nav_item">home</a>
-        <a href="game.html" class="doc_nav_item active">games</a>
-        <a href="quiz.html" class="doc_nav_item">quiz</a>
-      </aside>
+    </header>
 
-      <article class="doc_main" style="padding:0;">
-        <iframe src="../index.html" style="width:100%; height:800px; border:none;"></iframe>
-      </article>
-    </div>
-  </div>
-      </article>
-    </div>
+    <!-- Main Content -->
+    <article class="game-content">
+      <div id="levelThemeBg"></div>
+      <div class="game-container">
+        <header class="game-header">
+          <h1 id="gameTitle">⚡ 圆几何探险 · 定理游乐园 ⚡</h1>
+          <div class="score-board">
+            <span id="totalScoreText">🏆 总得分：0</span>
+            <span id="starCount">⭐ 0/15</span>
+          </div>
+          <div class="control-group">
+            <button id="howToPlayBtn" class="btn btn-secondary">📖 玩法说明</button>
+            <button id="aiHintBtn" class="btn btn-primary">✨ AI提示</button>
+            <button id="contrastBtn" class="btn btn-outline">🎨 高对比度</button>
+            <select id="langSelect">
+              <option value="zh" selected>🇨🇳 中文</option>
+              <option value="en">🇬🇧 English</option>
+            </select>
+          </div>
+        </header>
+
+        <div id="levelSelect" class="level-select">
+          <h2 id="selectTitle">🗺️ 选择关卡 · 开启几何之旅</h2>
+         <div class="explore-hub" id="exploreHub">
+          <div class="hero-panel today-panel card card-warning">
+            <div class="hero-badge badge badge-primary" id="todayBadge">📅 今日挑战</div>
+            <h3 id="todayTitle">角度观察</h3>
+            <p id="todayDesc">观察同弧对应的圆心角与圆周角关系</p>
+            <button id="todayChallengeBtn" class="btn btn-primary">开始挑战</button>
+          </div>
+
+          <div class="hero-panel progress-panel card">
+            <div class="hero-badge badge badge-success" id="progressBadge">📊 学习进度</div>
+            <div class="progress-stats">
+              <div class="progress-item">
+                <span class="progress-label" id="levelProgressLabel">已通关</span>
+                <strong id="levelProgressText">0 / 5</strong>
+              </div>
+              <div class="progress-item">
+                <span class="progress-label" id="starProgressLabel">获得星星</span>
+                <strong id="starProgressText">0 / 15</strong>
+              </div>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-tip" id="progressTip">💡 完成所有关卡解锁终极挑战！</div>
+          </div>
+
+          <div class="hero-panel guide-panel card card-info">
+            <div class="hero-badge badge badge-info" id="guideBadge">📖 快速指南</div>
+            <ul class="quick-guide">
+              <li id="guideItem1">拖动圆上的点探索规律</li>
+              <li id="guideItem2">观察角度变化并发现关系</li>
+              <li id="guideItem3">完成挑战获得星星奖励</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="level-path-strip" id="levelPathStrip">
+          <span class="path-node active" id="pathNode0">关卡 1</span>
+          <span class="path-line"></span>
+          <span class="path-node" id="pathNode1">关卡 2</span>
+          <span class="path-line"></span>
+          <span class="path-node" id="pathNode2">关卡 3</span>
+          <span class="path-line"></span>
+          <span class="path-node" id="pathNode3">关卡 4</span>
+          <span class="path-line"></span>
+          <span class="path-node" id="pathNode4">关卡 5</span>
+        </div>
+            <div class="level-grid" id="levelGrid"></div>
+
+            <div class="footer-rich">
+              <div class="achievements-compact card">
+                <div class="compact-header">
+                  <span id="achievementsTitle">🏆 成就系统</span>
+                  <span class="stars-progress-small" id="starsTotalDisplay">⭐ 0/15</span>
+                </div>
+                <div class="compact-grid" id="achievementsList"></div>
+                <div class="next-achievement-hint" id="nextAchievementHint"></div>
+              </div>
+              <div class="fun-facts-side card card-info">
+                <div class="fun-facts-header" id="funFactsHeader">📐 几何趣味知识</div>
+                <div class="fun-fact-content" id="sideFact">
+                  你知道吗？泰勒斯发现半圆所对的圆周角永远是90°。
+                </div>
+                <div class="scoring-rules" id="scoringRulesPanel">
+                  <div class="scoring-header" id="scoringHeader">🎯 得分规则</div>
+                  <ul class="scoring-list" id="scoringList">
+                    <li>✅ 基础完成: <strong>60分</strong></li>
+                    <li>🔍 探索互动 (≥20次拖动): <strong>20分</strong></li>
+                    <li>🎯 精准挑战 (完美定理): <strong>20分</strong></li>
+                    <li>⭐ 每关满分: <strong>100分 → 3星</strong></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <div id="gameScreen" class="game-screen hidden">
+          <div class="game-top">
+            <button id="backBtn" class="btn btn-secondary">↩️ 返回</button>
+            <h3 id="levelTitle">关卡1</h3>
+            <div class="level-info">
+              <span id="currentScore">🎯 得分：0</span>
+              <span id="levelStar">☆☆☆</span>
+            </div>
+          </div>
+
+          <div class="mission-box card">
+            <h4 id="missionTitle">📌 任务</h4>
+            <p id="missionDesc">拖动点完成挑战</p>
+          </div>
+
+          <div class="canvas-container">
+            <canvas id="gameCanvas" width="800" height="600"></canvas>
+            <div id="popFeedback" class="pop-feedback hidden">+10</div>
+          </div>
+
+          <div class="info-box card">
+            <div id="theoremDesc" class="theorem-box">📐 定理展示</div>
+            <div id="aiHintBox" class="hint-box hidden"></div>
+            <div class="data-panel" id="dataDisplay"></div>
+            <div class="btn-group">
+              <button id="submitBtn" class="btn btn-primary">✅ 提交挑战</button>
+              <button id="resetLevelBtn" class="btn btn-secondary">🔄 重置关卡</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="resultModal" class="modal hidden">
+          <div class="modal-content card">
+            <h2 id="resultTitle">🎉 关卡完成 🎉</h2>
+            <div id="resultStar">⭐⭐⭐</div>
+            <p id="resultScore">🏅 最终得分：100</p>
+            <p id="resultDesc">✨ 恭喜你完成挑战 ✨</p>
+            <button id="nextLevelBtn" class="btn btn-primary">🚀 下一关</button>
+            <button id="backToSelectBtn" class="btn btn-secondary">🗂️ 返回关卡选择</button>
+          </div>
+        </div>
+
+        <div id="ruleModal" class="modal hidden">
+          <div class="modal-content card">
+            <span class="close">&times;</span>
+            <h2 id="ruleTitle">🎈 玩法说明</h2>
+            <div id="ruleContent"></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>© 2024 CirCleLearning. All rights reserved.</p>
+    </footer>
   </div>
   <script src="assets/app.js"></script>
   <script src="assets/game.js"></script>
