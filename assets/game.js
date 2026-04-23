@@ -30,7 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const howToPlayBtn = document.getElementById('howToPlayBtn');
     const aiHintBtn = document.getElementById('aiHintBtn');
-    const langSelect = document.getElementById('langSelect');
     const backBtn = document.getElementById('backBtn');
     const submitBtn = document.getElementById('submitBtn');
     const resetLevelBtn = document.getElementById('resetLevelBtn');
@@ -1033,14 +1032,7 @@ checkMicroMilestones(); draw(); });
         renderAchievements();
     }
 
-    langSelect.addEventListener('change', () => {
-        currentLang = langSelect.value;
-        updateLang();
-        if (!levelSelect.classList.contains('hidden')) draw();
-    });
-
     loadGameData();
-    langSelect.value = currentLang;
     updateLang();
     renderLevelGrid();
     updateFooterLanguage();
@@ -1367,21 +1359,22 @@ function updateExploreHubLanguage() {
     const todayBtn = document.getElementById('todayChallengeBtn');
     if (todayBtn) todayBtn.textContent = t.todayBtn;
 }
-langSelect.addEventListener('change', (e) => {
-    currentLang = e.target.value;
-
-    // 你原本已有的语言更新函数
+function updateGameLanguage(isChinese) {
+    currentLang = isChinese ? 'zh' : 'en';
+    
     if (typeof updateFooterLanguage === 'function') updateFooterLanguage();
     if (typeof renderLevelGrid === 'function') renderLevelGrid();
     if (typeof renderAchievements === 'function') renderAchievements();
-
-    // 新增模块同步切换
+    if (typeof updateLang === 'function') updateLang();
+    
     updateExploreHubLanguage();
     updateHubProgress();
     updateTodayChallenge();
     updateAchievementSummary();
     highlightLevelPath();
-});
+}
+
+window.updateGameLanguage = updateGameLanguage;
 /* =========================================
    按关卡切换底部主题
 ========================================= */

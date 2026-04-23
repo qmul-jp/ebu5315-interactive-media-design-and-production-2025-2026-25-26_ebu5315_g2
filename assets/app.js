@@ -86,6 +86,10 @@ function toggle_language() {
     lang_label.textContent = is_zh ? "中文" : "English";
   }
   render_rule();
+  
+  if (typeof window.updateGameLanguage === 'function') {
+    window.updateGameLanguage(is_zh);
+  }
 }
 
 function bind_common_actions() {
