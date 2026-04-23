@@ -59,6 +59,11 @@ function apply_mode() {
   if (mode_label) {
     mode_label.textContent = is_high_contrast ? (is_zh ? "高对比度" : "High Contrast") : (is_zh ? "标准模式" : "Standard");
   }
+  
+  // 更新 Canvas 颜色
+  if (typeof window.updateCanvasContrast === 'function') {
+    window.updateCanvasContrast(is_high_contrast);
+  }
 }
 
 function render_rule() {

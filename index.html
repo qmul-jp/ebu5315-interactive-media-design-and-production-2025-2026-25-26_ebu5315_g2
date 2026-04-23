@@ -257,7 +257,7 @@
 
       <div class="hero-visual">
         <div class="geogebra-wrapper">
-          <div id="ggb-element"></div>
+          <canvas id="circleCanvas" width="800" height="600"></canvas>
         </div>
         <div class="visual-badge" data-zh="交互式演示" data-en="Interactive Demo">交互式演示</div>
       </div>
@@ -338,98 +338,202 @@
 
   <script src="assets/app.js"></script>
   <script>
-    var ggbApi = null;
+    // Canvas 圆形演示
+    let circleCanvas = null;
+    let ctx = null;
+    let center = { x: 400, y: 300 };
+    let radius = 150;
+    let pointA = { x: center.x + radius, y: center.y };
+    let isDragging = false;
+    let currentLang = 'zh';
     
-    function updateGeoGebraLabels(isChinese) {
-      if (!ggbApi) return;
-      const centerLabel = isChinese ? "圆心" : "Center";
-      const pointLabel = isChinese ? "切点" : "Tangent Point";
-      ggbApi.evalCommand(`SetCaption(O, "${centerLabel}")`);
-      ggbApi.evalCommand(`SetCaption(A, "${pointLabel}")`);
+    function initCanvas() {
+      circleCanvas = document.getElementById('circleCanvas');
+      if (!circleCanvas) return;
+      
+      ctx = circleCanvas.getContext('2d');
+      
+      // 设置 Canvas 大小
+      function resizeCanvas() {
+        const container = circleCanvas.parentElement;
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+        circleCanvas.width = width;
+        circleCanvas.height = height;
+        center = { x: width / 2, y: height / 2 };
+        radius = Math.min(width, height) * 0.3;
+        pointA = { x: center.x + radius, y: center.y };
+        drawCircle();
+      }
+      
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+      
+      // 添加鼠标事件
+      circleCanvas.addEventListener('mousedown', handleMouseDown);
+      circleCanvas.addEventListener('mousemove', handleMouseMove);
+      circleCanvas.addEventListener('mouseup', handleMouseUp);
+      circleCanvas.addEventListener('mouseleave', handleMouseUp);
+      
+      // 添加触摸事件
+      circleCanvas.addEventListener('touchstart', handleTouchStart);
+      circleCanvas.addEventListener('touchmove', handleTouchMove);
+      circleCanvas.addEventListener('touchend', handleTouchEnd);
+      
+      drawCircle();
     }
-
-    function updateGeoGebraContrast(isHighContrast) {
-      if (!ggbApi) return;
-      if (isHighContrast) {
-        ggbApi.evalCommand("SetColor(c, 255, 215, 0)");
-        ggbApi.evalCommand("SetColor(r, 255, 255, 255)");
-        ggbApi.evalCommand("SetColor(t, 255, 255, 255)");
-        ggbApi.evalCommand("SetColor(O, 255, 255, 255)");
-        ggbApi.evalCommand("SetColor(A, 255, 0, 0)");
-        ggbApi.evalCommand("SetColor(alpha, 255, 255, 255)");
-      } else {
-        ggbApi.evalCommand("SetColor(c, 0, 0, 0)");
-        ggbApi.evalCommand("SetColor(r, 0, 0, 0)");
-        ggbApi.evalCommand("SetColor(t, 0, 0, 0)");
-        ggbApi.evalCommand("SetColor(O, 0, 0, 0)");
-        ggbApi.evalCommand("SetColor(A, 255, 0, 0)");
-        ggbApi.evalCommand("SetColor(alpha, 0, 0, 0)");
+    
+    function drawCircle() {
+      if (!ctx) return;
+      
+      const isHighContrast = document.body.classList.contains('high-contrast');
+      
+      // 清空画布
+      ctx.clearRect(0, 0, circleCanvas.width, circleCanvas.height);
+      
+      // 设置颜色
+      const circleColor = isHighContrast ? '#ffd700' : '#000000';
+      const lineColor = isHighContrast ? '#ffffff' : '#000000';
+      const pointAColor = '#ff0000';
+      const centerColor = isHighContrast ? '#ffffff' : '#000000';
+      const textColor = isHighContrast ? '#ffffff' : '#000000';
+      
+      // 绘制圆
+      ctx.beginPath();
+      ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = circleColor;
+      ctx.stroke();
+      
+      // 绘制半径
+      ctx.beginPath();
+      ctx.moveTo(center.x, center.y);
+      ctx.lineTo(pointA.x, pointA.y);
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = lineColor;
+      ctx.stroke();
+      
+      // 计算切线
+      const dx = pointA.x - center.x;
+      const dy = pointA.y - center.y;
+      const tangentAngle = Math.atan2(dy, dx) + Math.PI / 2;
+      const tangentLength = radius * 2;
+      
+      const tangentStartX = pointA.x - Math.cos(tangentAngle) * tangentLength;
+      const tangentStartY = pointA.y - Math.sin(tangentAngle) * tangentLength;
+      const tangentEndX = pointA.x + Math.cos(tangentAngle) * tangentLength;
+      const tangentEndY = pointA.y + Math.sin(tangentAngle) * tangentLength;
+      
+      // 绘制切线
+      ctx.beginPath();
+      ctx.moveTo(tangentStartX, tangentStartY);
+      ctx.lineTo(tangentEndX, tangentEndY);
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = lineColor;
+      ctx.stroke();
+      
+      // 绘制圆心
+      ctx.beginPath();
+      ctx.arc(center.x, center.y, 8, 0, 2 * Math.PI);
+      ctx.fillStyle = centerColor;
+      ctx.fill();
+      
+      // 绘制点 A
+      ctx.beginPath();
+      ctx.arc(pointA.x, pointA.y, 8, 0, 2 * Math.PI);
+      ctx.fillStyle = pointAColor;
+      ctx.fill();
+      
+      // 绘制标签
+      ctx.font = '16px Arial';
+      ctx.fillStyle = textColor;
+      ctx.textAlign = 'center';
+      ctx.fillText(currentLang === 'zh' ? '圆心' : 'Center', center.x, center.y - 15);
+      ctx.fillText(currentLang === 'zh' ? '切点' : 'Tangent Point', pointA.x, pointA.y - 15);
+      
+      // 绘制角度标记
+      const angleRadius = 30;
+      ctx.beginPath();
+      ctx.arc(pointA.x, pointA.y, angleRadius, tangentAngle - Math.PI / 2, tangentAngle);
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = lineColor;
+      ctx.stroke();
+      
+      // 绘制角度标签
+      const angleLabelX = pointA.x + Math.cos(tangentAngle - Math.PI / 4) * (angleRadius + 15);
+      const angleLabelY = pointA.y + Math.sin(tangentAngle - Math.PI / 4) * (angleRadius + 15);
+      ctx.fillText('90°', angleLabelX, angleLabelY);
+    }
+    
+    function handleMouseDown(e) {
+      const rect = circleCanvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const distance = Math.sqrt((x - pointA.x) ** 2 + (y - pointA.y) ** 2);
+      if (distance <= 15) {
+        isDragging = true;
       }
     }
-
-    var parameters = {
-      "id": "ggbApplet",
-      "width": "100%",
-      "height": 500,
-      "appName": "geometry",
-      "perspective": "G",
-      "showMenuBar": false,
-      "showAlgebraInput": false,
-      "showToolBar": false,
-      "showResetIcon": false,
-      "enableLabelDrags": false,
-      "enableShiftDragZoom": true,
-      "enableRightClick": false,
-      "showZoomButtons": false,
-      "useBrowserForJS": false,
-      "language": "zh",
-      "borderColor": "none",
-      "showPerspectives": false,
-      "allowStyleBar": false,
-      "showAxes": false,
-      "showGrid": false,
-      "allowUpscale": true,
-      "clickToLoad": false,
-      "errorDialogsActive": false,
-      "appletOnLoad": function(api) {
-        ggbApi = api;
-        
-        api.evalCommand("O = (0,0)");
-        api.evalCommand("SetCaption(O, \"圆心\")");
-        api.evalCommand("ShowLabel(O, true)");
-        api.evalCommand("SetPointSize(O, 8)");
-        
-        api.evalCommand("c = Circle(O, 3)");
-        api.evalCommand("SetColor(c, 0, 0, 0)");
-        api.evalCommand("SetLineThickness(c, 4)");
-
-        api.evalCommand("A = Point(c)");
-        api.evalCommand("SetCaption(A, \"切点\")");
-        api.evalCommand("ShowLabel(A, true)");
-        api.evalCommand("SetPointSize(A, 8)");
-        api.evalCommand("SetColor(A, 255, 0, 0)");
-
-        api.evalCommand("r = Segment(O, A)");
-        api.evalCommand("SetColor(r, 0, 0, 0)");
-        api.evalCommand("SetLineThickness(r, 3)");
-
-        api.evalCommand("t = Tangent(A, c)");
-        api.evalCommand("SetColor(t, 0, 0, 0)");
-        api.evalCommand("SetLineThickness(t, 3)");
-
-        api.evalCommand("B = A + (y(A), -x(A))"); 
-        api.evalCommand("alpha = Angle(O, A, B)");
-        api.evalCommand("SetColor(alpha, 0, 0, 0)");
-        
-        api.evalCommand("SetViewDirection((0, 0, 1))");
-        api.evalCommand("ZoomIn(1.5)");
-      }
-    };
     
-    var applet = new GGBApplet(parameters, true);
-    window.addEventListener("load", function() {
-        applet.inject('ggb-element');
-    });
+    function handleMouseMove(e) {
+      if (!isDragging) return;
+      
+      const rect = circleCanvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      // 计算点 A 在圆上的位置
+      const dx = x - center.x;
+      const dy = y - center.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      
+      if (distance > 0) {
+        pointA.x = center.x + (dx / distance) * radius;
+        pointA.y = center.y + (dy / distance) * radius;
+        drawCircle();
+      }
+    }
+    
+    function handleMouseUp() {
+      isDragging = false;
+    }
+    
+    function handleTouchStart(e) {
+      e.preventDefault();
+      if (e.touches.length > 0) {
+        const touch = e.touches[0];
+        handleMouseDown(touch);
+      }
+    }
+    
+    function handleTouchMove(e) {
+      e.preventDefault();
+      if (e.touches.length > 0) {
+        const touch = e.touches[0];
+        handleMouseMove(touch);
+      }
+    }
+    
+    function handleTouchEnd() {
+      handleMouseUp();
+    }
+    
+    function updateCanvasLanguage(isChinese) {
+      currentLang = isChinese ? 'zh' : 'en';
+      drawCircle();
+    }
+    
+    function updateCanvasContrast(isHighContrast) {
+      drawCircle();
+    }
+    
+    // 暴露函数给全局
+    window.updateCanvasLanguage = updateCanvasLanguage;
+    window.updateCanvasContrast = updateCanvasContrast;
+    
+    // 初始化 Canvas
+    window.addEventListener('load', initCanvas);
 
     document.addEventListener('DOMContentLoaded', function() {
       const langBtn = document.getElementById('toggle_lang');
@@ -438,7 +542,9 @@
         window.toggle_language = function() {
           originalToggle();
           setTimeout(() => {
-            updateGeoGebraLabels(is_zh);
+            if (typeof updateCanvasLanguage === 'function') {
+              updateCanvasLanguage(is_zh);
+            }
           }, 100);
         };
       }
