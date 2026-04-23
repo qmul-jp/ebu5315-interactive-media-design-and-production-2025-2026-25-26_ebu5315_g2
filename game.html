@@ -3,9 +3,48 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Circle Geometry Studio - Games</title>
+  <meta name="description" content="Circle Geometry Games - Interactive learning platform for circle theorems" />
+  <meta name="theme-color" content="#5c6cff" />
+  <title>Circle Geometry Studio - 游戏</title>
   <link rel="stylesheet" href="styles/template.css" />
   <link rel="stylesheet" href="styles/game.css" />
+  <style>
+    /* Safari Compatibility Fixes */
+    @supports (-webkit-backdrop-filter: none) {
+      .card {
+        -webkit-backdrop-filter: blur(10px);
+      }
+      
+      .header {
+        -webkit-backdrop-filter: blur(10px);
+      }
+      
+      .footer {
+        -webkit-backdrop-filter: blur(10px);
+      }
+    }
+    
+    /* Safari CSS Grid Fix */
+    @media not all and (min-resolution:.001dpcm) {
+      @supports (-webkit-appearance:none) {
+        .grid-3 {
+          display: -webkit-flex;
+          -webkit-flex-wrap: wrap;
+          -webkit-justify-content: space-between;
+        }
+        
+        .grid-3 > * {
+          -webkit-flex: 0 0 calc(33.333% - 16px);
+          margin-bottom: 24px;
+        }
+      }
+    }
+    
+    /* Safari Canvas Fix */
+    canvas {
+      -webkit-tap-highlight-color: transparent;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -33,89 +72,89 @@
       <div id="levelThemeBg"></div>
       <div class="game-container">
         <header class="game-header">
-          <h1 id="gameTitle">⚡ 圆几何探险 · 定理游乐园 ⚡</h1>
+          <h1 id="gameTitle" data-zh="⚡ 圆几何探险 · 定理游乐园 ⚡" data-en="⚡ Circle Geometry Adventure ⚡">⚡ 圆几何探险 · 定理游乐园 ⚡</h1>
           <div class="score-board">
-            <span id="totalScoreText">🏆 总得分：0</span>
-            <span id="starCount">⭐ 0/15</span>
+            <span id="totalScoreText" data-zh="🏆 总得分：0" data-en="🏆 Total Score: 0">🏆 总得分：0</span>
+            <span id="starCount" data-zh="⭐ 0/15" data-en="⭐ 0/15">⭐ 0/15</span>
           </div>
           <div class="control-group">
-            <button id="howToPlayBtn" class="btn btn-secondary">📖 玩法说明</button>
-            <button id="aiHintBtn" class="btn btn-primary">✨ AI提示</button>
+            <button id="howToPlayBtn" class="btn btn-secondary" data-zh="📖 玩法说明" data-en="📖 How to Play">📖 玩法说明</button>
+            <button id="aiHintBtn" class="btn btn-primary" data-zh="✨ AI提示" data-en="✨ AI Hint">✨ AI提示</button>
           </div>
         </header>
 
         <div id="levelSelect" class="level-select">
-          <h2 id="selectTitle">🗺️ 选择关卡 · 开启几何之旅</h2>
+          <h2 id="selectTitle" data-zh="🗺️ 选择关卡 · 开启几何之旅" data-en="🗺️ Select Level · Start Geometry Journey">🗺️ 选择关卡 · 开启几何之旅</h2>
          <div class="explore-hub" id="exploreHub">
           <div class="hero-panel today-panel card card-warning">
-            <div class="hero-badge badge badge-primary" id="todayBadge">📅 今日挑战</div>
-            <h3 id="todayTitle">角度观察</h3>
-            <p id="todayDesc">观察同弧对应的圆心角与圆周角关系</p>
-            <button id="todayChallengeBtn" class="btn btn-primary">开始挑战</button>
+            <div class="hero-badge badge badge-primary" id="todayBadge" data-zh="📅 今日挑战" data-en="📅 Today's Challenge">📅 今日挑战</div>
+            <h3 id="todayTitle" data-zh="角度观察" data-en="Angle Observation">角度观察</h3>
+            <p id="todayDesc" data-zh="观察同弧对应的圆心角与圆周角关系" data-en="Observe the relationship between central and inscribed angles">观察同弧对应的圆心角与圆周角关系</p>
+            <button id="todayChallengeBtn" class="btn btn-primary" data-zh="开始挑战" data-en="Start Challenge">开始挑战</button>
           </div>
 
           <div class="hero-panel progress-panel card">
-            <div class="hero-badge badge badge-success" id="progressBadge">📊 学习进度</div>
+            <div class="hero-badge badge badge-success" id="progressBadge" data-zh="📊 学习进度" data-en="📊 Learning Progress">📊 学习进度</div>
             <div class="progress-stats">
               <div class="progress-item">
-                <span class="progress-label" id="levelProgressLabel">已通关</span>
+                <span class="progress-label" id="levelProgressLabel" data-zh="已通关" data-en="Completed">已通关</span>
                 <strong id="levelProgressText">0 / 5</strong>
               </div>
               <div class="progress-item">
-                <span class="progress-label" id="starProgressLabel">获得星星</span>
+                <span class="progress-label" id="starProgressLabel" data-zh="获得星星" data-en="Stars Earned">获得星星</span>
                 <strong id="starProgressText">0 / 15</strong>
               </div>
             </div>
             <div class="progress-bar">
               <div class="progress-fill" id="progressFill"></div>
             </div>
-            <div class="progress-tip" id="progressTip">💡 完成所有关卡解锁终极挑战！</div>
+            <div class="progress-tip" id="progressTip" data-zh="💡 完成所有关卡解锁终极挑战！" data-en="💡 Complete all levels to unlock the ultimate challenge!">💡 完成所有关卡解锁终极挑战！</div>
           </div>
 
           <div class="hero-panel guide-panel card card-info">
-            <div class="hero-badge badge badge-info" id="guideBadge">📖 快速指南</div>
+            <div class="hero-badge badge badge-info" id="guideBadge" data-zh="📖 快速指南" data-en="📖 Quick Guide">📖 快速指南</div>
             <ul class="quick-guide">
-              <li id="guideItem1">拖动圆上的点探索规律</li>
-              <li id="guideItem2">观察角度变化并发现关系</li>
-              <li id="guideItem3">完成挑战获得星星奖励</li>
+              <li id="guideItem1" data-zh="拖动圆上的点探索规律" data-en="Drag points on the circle to explore patterns">拖动圆上的点探索规律</li>
+              <li id="guideItem2" data-zh="观察角度变化并发现关系" data-en="Observe angle changes and discover relationships">观察角度变化并发现关系</li>
+              <li id="guideItem3" data-zh="完成挑战获得星星奖励" data-en="Complete challenges to earn star rewards">完成挑战获得星星奖励</li>
             </ul>
           </div>
         </div>
 
         <div class="level-path-strip" id="levelPathStrip">
-          <span class="path-node active" id="pathNode0">关卡 1</span>
+          <span class="path-node active" id="pathNode0" data-zh="关卡 1" data-en="Level 1">关卡 1</span>
           <span class="path-line"></span>
-          <span class="path-node" id="pathNode1">关卡 2</span>
+          <span class="path-node" id="pathNode1" data-zh="关卡 2" data-en="Level 2">关卡 2</span>
           <span class="path-line"></span>
-          <span class="path-node" id="pathNode2">关卡 3</span>
+          <span class="path-node" id="pathNode2" data-zh="关卡 3" data-en="Level 3">关卡 3</span>
           <span class="path-line"></span>
-          <span class="path-node" id="pathNode3">关卡 4</span>
+          <span class="path-node" id="pathNode3" data-zh="关卡 4" data-en="Level 4">关卡 4</span>
           <span class="path-line"></span>
-          <span class="path-node" id="pathNode4">关卡 5</span>
+          <span class="path-node" id="pathNode4" data-zh="关卡 5" data-en="Level 5">关卡 5</span>
         </div>
             <div class="level-grid" id="levelGrid"></div>
 
             <div class="footer-rich">
               <div class="achievements-compact card">
                 <div class="compact-header">
-                  <span id="achievementsTitle">🏆 成就系统</span>
-                  <span class="stars-progress-small" id="starsTotalDisplay">⭐ 0/15</span>
+                  <span id="achievementsTitle" data-zh="🏆 成就系统" data-en="🏆 Achievement System">🏆 成就系统</span>
+                  <span class="stars-progress-small" id="starsTotalDisplay" data-zh="⭐ 0/15" data-en="⭐ 0/15">⭐ 0/15</span>
                 </div>
                 <div class="compact-grid" id="achievementsList"></div>
                 <div class="next-achievement-hint" id="nextAchievementHint"></div>
               </div>
               <div class="fun-facts-side card card-info">
-                <div class="fun-facts-header" id="funFactsHeader">📐 几何趣味知识</div>
+                <div class="fun-facts-header" id="funFactsHeader" data-zh="📐 几何趣味知识" data-en="📐 Geometry Fun Facts">📐 几何趣味知识</div>
                 <div class="fun-fact-content" id="sideFact">
                   你知道吗？泰勒斯发现半圆所对的圆周角永远是90°。
                 </div>
                 <div class="scoring-rules" id="scoringRulesPanel">
-                  <div class="scoring-header" id="scoringHeader">🎯 得分规则</div>
+                  <div class="scoring-header" id="scoringHeader" data-zh="🎯 得分规则" data-en="🎯 Scoring Rules">🎯 得分规则</div>
                   <ul class="scoring-list" id="scoringList">
-                    <li>✅ 基础完成: <strong>60分</strong></li>
-                    <li>🔍 探索互动 (≥20次拖动): <strong>20分</strong></li>
-                    <li>🎯 精准挑战 (完美定理): <strong>20分</strong></li>
-                    <li>⭐ 每关满分: <strong>100分 → 3星</strong></li>
+                    <li data-zh="✅ 基础完成: <strong>60分</strong>" data-en="✅ Basic Completion: <strong>60 points</strong>">✅ 基础完成: <strong>60分</strong></li>
+                    <li data-zh="🔍 探索互动 (≥20次拖动): <strong>20分</strong>" data-en="🔍 Exploration (≥20 drags): <strong>20 points</strong>">🔍 探索互动 (≥20次拖动): <strong>20分</strong></li>
+                    <li data-zh="🎯 精准挑战 (完美定理): <strong>20分</strong>" data-en="🎯 Precision Challenge: <strong>20 points</strong>">🎯 精准挑战 (完美定理): <strong>20分</strong></li>
+                    <li data-zh="⭐ 每关满分: <strong>100分 → 3星</strong>" data-en="⭐ Full Score per level: <strong>100 points → 3 stars</strong>">⭐ 每关满分: <strong>100分 → 3星</strong></li>
                   </ul>
                 </div>
               </div>
@@ -124,17 +163,17 @@
 
         <div id="gameScreen" class="game-screen hidden">
           <div class="game-top">
-            <button id="backBtn" class="btn btn-secondary">↩️ 返回</button>
-            <h3 id="levelTitle">关卡1</h3>
+            <button id="backBtn" class="btn btn-secondary" data-zh="↩️ 返回" data-en="↩️ Back">↩️ 返回</button>
+            <h3 id="levelTitle" data-zh="关卡1" data-en="Level 1">关卡1</h3>
             <div class="level-info">
-              <span id="currentScore">🎯 得分：0</span>
+              <span id="currentScore" data-zh="🎯 得分：0" data-en="🎯 Score: 0">🎯 得分：0</span>
               <span id="levelStar">☆☆☆</span>
             </div>
           </div>
 
           <div class="mission-box card">
-            <h4 id="missionTitle">📌 任务</h4>
-            <p id="missionDesc">拖动点完成挑战</p>
+            <h4 id="missionTitle" data-zh="📌 任务" data-en="📌 Mission">📌 任务</h4>
+            <p id="missionDesc" data-zh="拖动点完成挑战" data-en="Drag points to complete the challenge">拖动点完成挑战</p>
           </div>
 
           <div class="canvas-container">
@@ -143,31 +182,31 @@
           </div>
 
           <div class="info-box card">
-            <div id="theoremDesc" class="theorem-box">📐 定理展示</div>
+            <div id="theoremDesc" class="theorem-box" data-zh="📐 定理展示" data-en="📐 Theorem Display">📐 定理展示</div>
             <div id="aiHintBox" class="hint-box hidden"></div>
             <div class="data-panel" id="dataDisplay"></div>
             <div class="btn-group">
-              <button id="submitBtn" class="btn btn-primary">✅ 提交挑战</button>
-              <button id="resetLevelBtn" class="btn btn-secondary">🔄 重置关卡</button>
+              <button id="submitBtn" class="btn btn-primary" data-zh="✅ 提交挑战" data-en="✅ Submit Challenge">✅ 提交挑战</button>
+              <button id="resetLevelBtn" class="btn btn-secondary" data-zh="🔄 重置关卡" data-en="🔄 Reset Level">🔄 重置关卡</button>
             </div>
           </div>
         </div>
 
         <div id="resultModal" class="modal hidden">
           <div class="modal-content card">
-            <h2 id="resultTitle">🎉 关卡完成 🎉</h2>
+            <h2 id="resultTitle" data-zh="🎉 关卡完成 🎉" data-en="🎉 Level Complete 🎉">🎉 关卡完成 🎉</h2>
             <div id="resultStar">⭐⭐⭐</div>
-            <p id="resultScore">🏅 最终得分：100</p>
-            <p id="resultDesc">✨ 恭喜你完成挑战 ✨</p>
-            <button id="nextLevelBtn" class="btn btn-primary">🚀 下一关</button>
-            <button id="backToSelectBtn" class="btn btn-secondary">🗂️ 返回关卡选择</button>
+            <p id="resultScore" data-zh="🏅 最终得分：100" data-en="🏅 Final Score: 100">🏅 最终得分：100</p>
+            <p id="resultDesc" data-zh="✨ 恭喜你完成挑战 ✨" data-en="✨ Congratulations! You completed the challenge! ✨">✨ 恭喜你完成挑战 ✨</p>
+            <button id="nextLevelBtn" class="btn btn-primary" data-zh="🚀 下一关" data-en="🚀 Next Level">🚀 下一关</button>
+            <button id="backToSelectBtn" class="btn btn-secondary" data-zh="🗂️ 返回关卡选择" data-en="🗂️ Back to Level Select">🗂️ 返回关卡选择</button>
           </div>
         </div>
 
         <div id="ruleModal" class="modal hidden">
           <div class="modal-content card">
             <span class="close">&times;</span>
-            <h2 id="ruleTitle">🎈 玩法说明</h2>
+            <h2 id="ruleTitle" data-zh="🎈 玩法说明" data-en="🎈 How to Play">🎈 玩法说明</h2>
             <div id="ruleContent"></div>
           </div>
         </div>
@@ -176,7 +215,7 @@
 
     <!-- Footer -->
     <footer class="footer">
-      <p>© 2024 CirCleLearning. All rights reserved.</p>
+      <p data-zh="© 2024 CirCleLearning. 保留所有权利。" data-en="© 2024 CirCleLearning. All rights reserved.">© 2024 CirCleLearning. 保留所有权利。</p>
     </footer>
   </div>
   <script src="assets/app.js"></script>
