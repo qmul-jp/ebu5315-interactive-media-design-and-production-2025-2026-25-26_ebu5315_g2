@@ -476,6 +476,186 @@ select {
     line-height: 1.65;
 }
 
+.interaction-panel {
+    grid-column: 1 / -1;
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(230px, 0.9fr) minmax(260px, 1.1fr) minmax(260px, 1fr);
+    gap: 14px;
+    align-items: stretch;
+    padding: 14px;
+    border-radius: 30px;
+    background:
+        radial-gradient(circle at 8% 18%, rgba(255,255,255,0.82), transparent 26%),
+        linear-gradient(135deg, rgba(237,249,255,0.92), rgba(255,245,219,0.88) 48%, rgba(255,234,245,0.88));
+    border: 1px solid rgba(255,255,255,0.82);
+    box-shadow:
+        0 18px 38px rgba(60, 85, 160, 0.14),
+        inset 0 1px 0 rgba(255,255,255,0.88);
+    overflow: hidden;
+}
+
+.interaction-panel::before {
+    content: "";
+    position: absolute;
+    inset: auto -12% -70% 18%;
+    height: 130%;
+    pointer-events: none;
+    background:
+        radial-gradient(circle, rgba(91, 208, 255, 0.18), transparent 32%),
+        radial-gradient(circle at 72% 45%, rgba(255, 188, 88, 0.22), transparent 28%);
+    transform: rotate(-3deg);
+}
+
+.coach-card,
+.metric-chip,
+.goal-radar {
+    position: relative;
+    z-index: 1;
+    border-radius: 22px;
+    background: rgba(255,255,255,0.72);
+    border: 1px solid rgba(255,255,255,0.84);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.82);
+}
+
+.coach-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+}
+
+.coach-avatar {
+    display: grid;
+    place-items: center;
+    flex: 0 0 58px;
+    width: 58px;
+    height: 58px;
+    border-radius: 20px;
+    background:
+        radial-gradient(circle at 30% 24%, rgba(255,255,255,0.92), transparent 34%),
+        linear-gradient(145deg, #ffe17a, #ff8fb8 58%, #8bdcff);
+    box-shadow: 0 12px 24px rgba(244, 90, 166, 0.20);
+    font-size: 1.9rem;
+    animation: coachFloat 2.8s ease-in-out infinite;
+}
+
+.coach-copy {
+    min-width: 0;
+}
+
+.coach-name {
+    color: #263a75;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+}
+
+.coach-status {
+    color: #65708f;
+    font-size: 0.92rem;
+    font-weight: 800;
+    line-height: 1.45;
+}
+
+.play-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.metric-chip {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 78px;
+    padding: 12px;
+}
+
+.metric-label {
+    color: #7b6680;
+    font-size: 0.78rem;
+    font-weight: 900;
+}
+
+.metric-value {
+    color: #243766;
+    font-size: 1.34rem;
+    line-height: 1.1;
+    margin-top: 6px;
+}
+
+.goal-radar {
+    padding: 14px;
+}
+
+.goal-radar-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+    color: #7b6680;
+    font-size: 0.82rem;
+    font-weight: 900;
+}
+
+#goalTitle {
+    color: #273c75;
+    font-size: 0.94rem;
+    text-align: right;
+}
+
+.goal-progress {
+    height: 12px;
+    margin: 12px 0 10px;
+    border-radius: 999px;
+    background: rgba(210, 222, 255, 0.72);
+    overflow: hidden;
+    box-shadow: inset 0 1px 3px rgba(65, 81, 145, 0.12);
+}
+
+.goal-progress-fill {
+    width: 0%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #6dd8ff, #7cf2b4, #ffe17a, #ff8fb8);
+    box-shadow: 0 0 18px rgba(124, 242, 180, 0.42);
+    transition: width 0.24s ease;
+}
+
+.goal-hint {
+    color: #68728f;
+    font-size: 0.86rem;
+    font-weight: 800;
+    line-height: 1.45;
+}
+
+.interaction-panel[data-mood="track"] {
+    box-shadow: 0 18px 42px rgba(74, 201, 240, 0.22);
+}
+
+.interaction-panel[data-mood="near"],
+.interaction-panel[data-mood="precise"] {
+    background:
+        radial-gradient(circle at 8% 18%, rgba(255,255,255,0.86), transparent 26%),
+        linear-gradient(135deg, rgba(230,255,245,0.94), rgba(255,248,202,0.94) 48%, rgba(255,229,244,0.92));
+}
+
+.interaction-panel[data-mood="precise"] .coach-avatar {
+    animation: coachCelebrate 0.8s ease both;
+}
+
+@keyframes coachFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+@keyframes coachCelebrate {
+    0% { transform: scale(1); }
+    45% { transform: scale(1.12) rotate(-4deg); }
+    100% { transform: scale(1); }
+}
+
 /* Canvas stage */
 .canvas-container {
     position: relative;
@@ -999,6 +1179,10 @@ select {
         grid-template-columns: 1fr;
     }
 
+    .interaction-panel {
+        grid-template-columns: 1fr;
+    }
+
     .info-box {
         order: 3;
     }
@@ -1027,6 +1211,7 @@ select {
     }
 
     .mission-box,
+    .interaction-panel,
     .canvas-container,
     .info-box,
     .footer-rich,
@@ -1038,6 +1223,10 @@ select {
 
     .btn-group {
         flex-direction: column;
+    }
+
+    .play-metrics {
+        grid-template-columns: 1fr;
     }
 
     .footer-rich {
@@ -1071,6 +1260,19 @@ select {
     .compact-grid .achievement-card {
         min-width: calc(50% - 6px);
     }
+
+    .coach-card {
+        align-items: flex-start;
+    }
+
+    .goal-radar-head {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    #goalTitle {
+        text-align: left;
+    }
 }
 
 /* High contrast */
@@ -1085,6 +1287,7 @@ body.high-contrast .game-container::before,
 body.high-contrast .game-header::before,
 body.high-contrast .game-screen::before,
 body.high-contrast .canvas-container::before,
+body.high-contrast .interaction-panel::before,
 body.high-contrast .info-box::before {
     display: none !important;
 }
@@ -1094,6 +1297,10 @@ body.high-contrast .level-card,
 body.high-contrast .game-screen,
 body.high-contrast .game-top,
 body.high-contrast .mission-box,
+body.high-contrast .interaction-panel,
+body.high-contrast .coach-card,
+body.high-contrast .metric-chip,
+body.high-contrast .goal-radar,
 body.high-contrast .canvas-container,
 body.high-contrast .info-box,
 body.high-contrast .theorem-box,
@@ -1112,6 +1319,7 @@ body.high-contrast .scoring-rules {
 body.high-contrast .data-item,
 body.high-contrast .score-board,
 body.high-contrast .fun-fact-content,
+body.high-contrast .goal-progress,
 body.high-contrast .compact-grid .achievement-card {
     background: #1a1a1a !important;
     color: #fff !important;
@@ -8196,5 +8404,2094 @@ body.high-contrast.level-theme-4 #levelSelect::after,
 body.high-contrast.level-theme-4 .game-screen::after,
 body.high-contrast.level-theme-4 .game-screen::before {
     display: none !important;
+}
+
+button:focus-visible,
+select:focus-visible,
+.level-card:focus-visible {
+    outline: 3px solid rgba(35, 50, 95, 0.85);
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ===== Theme Refresh: Level 4 + Level 5 ===== */
+
+@keyframes quadGardenDrift {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(0, -10px, 0) scale(1.02); }
+}
+
+@keyframes quadSparkle {
+    0%, 100% { opacity: 0.52; transform: scale(1); }
+    50% { opacity: 0.92; transform: scale(1.08); }
+}
+
+@keyframes finaleConfettiFloat {
+    0% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(0, -8px, 0); }
+    100% { transform: translate3d(0, 3px, 0); }
+}
+
+@keyframes finaleHaloPulse {
+    0%, 100% { opacity: 0.52; transform: scale(1); }
+    50% { opacity: 0.88; transform: scale(1.04); }
+}
+
+body.level-theme-4 {
+    background:
+        radial-gradient(circle at 14% 18%, rgba(255,255,255,0.84) 0 7%, transparent 18%),
+        radial-gradient(circle at 84% 16%, rgba(255,202,222,0.52) 0 8%, transparent 18%),
+        radial-gradient(circle at 18% 82%, rgba(168,233,203,0.48) 0 8%, transparent 18%),
+        radial-gradient(circle at 82% 78%, rgba(255,225,138,0.42) 0 8%, transparent 18%),
+        linear-gradient(160deg, #f7fbff 0%, #e9f7f1 28%, #fff6d9 62%, #ffe9ef 100%);
+    animation: quadGardenDrift 14s ease-in-out infinite;
+}
+
+body.level-theme-4::before {
+    background:
+        radial-gradient(circle at 34% 34%, rgba(255,181,92,0.58) 0 10px, transparent 11px),
+        radial-gradient(circle at 66% 34%, rgba(255,129,176,0.54) 0 10px, transparent 11px),
+        radial-gradient(circle at 68% 66%, rgba(99,204,149,0.56) 0 10px, transparent 11px),
+        radial-gradient(circle at 32% 68%, rgba(109,182,255,0.54) 0 10px, transparent 11px),
+        linear-gradient(35deg, transparent 47.6%, rgba(255,181,92,0.18) 48.2% 49.2%, transparent 49.8%),
+        linear-gradient(145deg, transparent 47.6%, rgba(255,129,176,0.18) 48.2% 49.2%, transparent 49.8%),
+        linear-gradient(0deg, transparent 31.7%, rgba(255,216,137,0.12) 32% 32.8%, transparent 33.3%),
+        linear-gradient(90deg, transparent 31.5%, rgba(126,206,165,0.10) 31.8% 32.6%, transparent 33.1%),
+        radial-gradient(circle at 18% 22%, rgba(255,163,197,0.40) 0 3px, transparent 4px),
+        radial-gradient(circle at 28% 72%, rgba(108,205,160,0.42) 0 3px, transparent 4px),
+        radial-gradient(circle at 72% 28%, rgba(255,197,92,0.42) 0 3px, transparent 4px),
+        radial-gradient(circle at 82% 66%, rgba(118,182,255,0.40) 0 3px, transparent 4px),
+        radial-gradient(circle at 50% 16%, transparent 0 52px, rgba(255,183,96,0.16) 54px 58px, transparent 61px),
+        radial-gradient(circle at 50% 50%, transparent 0 170px, rgba(95,181,136,0.10) 173px 177px, transparent 181px),
+        radial-gradient(circle at 50% 50%, transparent 0 240px, rgba(255,166,193,0.10) 243px 247px, transparent 251px);
+    background-size: auto;
+    opacity: 0.95;
+    animation: quadSparkle 6.5s ease-in-out infinite;
+}
+
+body.level-theme-4::after {
+    background:
+        linear-gradient(28deg, transparent 34%, rgba(255,186,98,0.10) 35% 35.9%, transparent 36.8%),
+        linear-gradient(152deg, transparent 34%, rgba(104,203,151,0.10) 35% 35.9%, transparent 36.8%),
+        radial-gradient(circle at 50% 50%, transparent 0 18%, rgba(255,255,255,0.28) 18.6% 19.6%, transparent 20.4%),
+        radial-gradient(circle at 50% 50%, transparent 0 22%, rgba(255,176,89,0.18) 23% 25%, transparent 26%),
+        radial-gradient(circle at 50% 50%, transparent 0 31%, rgba(103,191,145,0.16) 32% 34%, transparent 35%),
+        linear-gradient(0deg, transparent 49.4%, rgba(116,177,250,0.14) 49.7% 50.3%, transparent 50.6%),
+        linear-gradient(90deg, transparent 49.4%, rgba(255,151,184,0.14) 49.7% 50.3%, transparent 50.6%),
+        linear-gradient(45deg, transparent 49.5%, rgba(255,201,108,0.10) 49.8% 50.2%, transparent 50.5%),
+        linear-gradient(135deg, transparent 49.5%, rgba(106,201,155,0.10) 49.8% 50.2%, transparent 50.5%);
+    opacity: 0.72;
+}
+
+body.level-theme-4 .game-screen {
+    background:
+        linear-gradient(180deg, rgba(255,255,255,0.78), rgba(255,247,237,0.62)),
+        rgba(255,255,255,0.34);
+    border: 1px solid rgba(255,214,165,0.65);
+    box-shadow:
+        0 28px 60px rgba(237, 160, 104, 0.16),
+        inset 0 1px 0 rgba(255,255,255,0.82);
+}
+
+body.level-theme-4 .game-screen::before {
+    background:
+        radial-gradient(circle at 33% 33%, rgba(255,187,101,0.18) 0 14px, transparent 15px),
+        radial-gradient(circle at 67% 33%, rgba(255,136,183,0.18) 0 14px, transparent 15px),
+        radial-gradient(circle at 68% 67%, rgba(104,205,151,0.18) 0 14px, transparent 15px),
+        radial-gradient(circle at 32% 67%, rgba(114,184,255,0.18) 0 14px, transparent 15px),
+        linear-gradient(34deg, transparent 49.1%, rgba(255,196,110,0.11) 49.4% 50.1%, transparent 50.4%),
+        linear-gradient(146deg, transparent 49.1%, rgba(113,201,155,0.11) 49.4% 50.1%, transparent 50.4%),
+        radial-gradient(circle at 16% 22%, rgba(255,185,114,0.14), transparent 18%),
+        radial-gradient(circle at 84% 24%, rgba(255,155,191,0.14), transparent 18%),
+        radial-gradient(circle at 18% 82%, rgba(114,207,158,0.12), transparent 18%),
+        radial-gradient(circle at 82% 78%, rgba(114,178,255,0.12), transparent 18%),
+        radial-gradient(circle at 50% 50%, transparent 0 26%, rgba(255,187,98,0.10) 27% 29%, transparent 30%);
+    animation: quadGardenDrift 12s ease-in-out infinite;
+    opacity: 0.88;
+}
+
+body.level-theme-4 .game-screen::after {
+    background:
+        radial-gradient(circle at 50% 50%, transparent 0 37%, rgba(255,255,255,0.46) 37.6% 38.4%, transparent 39.2%),
+        radial-gradient(circle at 50% 50%, transparent 0 42%, rgba(255,196,110,0.10) 42.6% 43.3%, transparent 44%),
+        radial-gradient(circle at 24% 30%, rgba(255,255,255,0.72) 0 8px, transparent 9px),
+        radial-gradient(circle at 75% 28%, rgba(255,255,255,0.68) 0 7px, transparent 8px),
+        radial-gradient(circle at 27% 74%, rgba(255,255,255,0.64) 0 6px, transparent 7px),
+        radial-gradient(circle at 74% 72%, rgba(255,255,255,0.64) 0 6px, transparent 7px),
+        repeating-linear-gradient(90deg, transparent 0 58px, rgba(255,201,108,0.05) 58px 60px);
+    opacity: 0.62;
+}
+
+body.level-theme-4 .canvas-container {
+    background:
+        linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,245,231,0.74)),
+        rgba(255,255,255,0.44);
+    border: 1px solid rgba(255,210,149,0.72);
+    box-shadow:
+        0 26px 52px rgba(240, 167, 110, 0.18),
+        inset 0 1px 0 rgba(255,255,255,0.86);
+}
+
+body.level-theme-4 .canvas-container::before {
+    background:
+        radial-gradient(circle at 50% 0%, rgba(255,255,255,0.88), transparent 34%),
+        radial-gradient(circle at 14% 20%, rgba(255,182,108,0.18), transparent 22%),
+        radial-gradient(circle at 86% 18%, rgba(255,152,197,0.16), transparent 22%),
+        radial-gradient(circle at 50% 100%, rgba(116,202,160,0.12), transparent 26%),
+        linear-gradient(35deg, transparent 47.8%, rgba(255,182,108,0.08) 48.3% 49.1%, transparent 49.6%),
+        linear-gradient(145deg, transparent 47.8%, rgba(104,201,150,0.08) 48.3% 49.1%, transparent 49.6%);
+}
+
+body.level-theme-4 .canvas-container::after {
+    right: -10px;
+    left: auto;
+    bottom: -16px;
+    width: 180px;
+    height: 128px;
+    opacity: 0.46;
+    background:
+        radial-gradient(circle at 24% 58%, rgba(255,196,99,0.58) 0 12px, transparent 13px),
+        radial-gradient(circle at 55% 42%, rgba(255,144,186,0.48) 0 9px, transparent 10px),
+        radial-gradient(circle at 76% 64%, rgba(104,201,150,0.52) 0 10px, transparent 11px),
+        linear-gradient(135deg, transparent 43%, rgba(113,177,255,0.30) 44% 56%, transparent 57%);
+    filter: blur(0.2px) drop-shadow(0 10px 14px rgba(238, 168, 108, 0.18));
+}
+
+body.level-theme-4 #gameCanvas {
+    background:
+        radial-gradient(circle at 50% 16%, rgba(255,255,255,0.98), rgba(255,247,223,0.98) 40%, rgba(239,250,243,1) 100%),
+        linear-gradient(transparent 95%, rgba(255,183,96,0.04) 95%),
+        linear-gradient(90deg, transparent 95%, rgba(104,199,151,0.04) 95%);
+    background-size: auto, 42px 42px, 42px 42px;
+    box-shadow:
+        inset 0 0 0 1px rgba(255,194,108,0.12),
+        inset 0 -14px 28px rgba(255,183,96,0.08);
+}
+
+body.level-theme-4 .mission-box::before {
+    background: linear-gradient(180deg, #ffb25f, #ff7fa9);
+    box-shadow:
+        0 0 18px rgba(255,160,96,0.30),
+        0 0 24px rgba(255,127,169,0.16);
+}
+
+body.level-theme-4 .info-box::before,
+body.level-theme-4 .footer-rich::before,
+body.level-theme-4 .game-header::before,
+body.level-theme-4 .game-container::before {
+    background:
+        radial-gradient(circle at 20% 20%, rgba(255,194,108,0.16), transparent 18%),
+        radial-gradient(circle at 80% 22%, rgba(255,142,189,0.16), transparent 18%),
+        radial-gradient(circle at 50% 92%, rgba(105,197,148,0.12), transparent 22%);
+}
+
+body.level-theme-5 {
+    background:
+        radial-gradient(circle at 50% 14%, rgba(255,255,255,0.90) 0 8%, transparent 18%),
+        radial-gradient(circle at 14% 22%, rgba(255,187,115,0.46) 0 9%, transparent 18%),
+        radial-gradient(circle at 86% 20%, rgba(123,201,255,0.40) 0 9%, transparent 18%),
+        radial-gradient(circle at 16% 82%, rgba(255,120,168,0.36) 0 10%, transparent 18%),
+        radial-gradient(circle at 84% 78%, rgba(118,224,173,0.34) 0 10%, transparent 18%),
+        linear-gradient(160deg, #fff5d8 0%, #ffe8ef 24%, #e8f4ff 54%, #edfce8 100%);
+    animation: finaleConfettiFloat 18s ease-in-out infinite;
+}
+
+body.level-theme-5::before {
+    background:
+        radial-gradient(circle at 24% 34%, rgba(255,189,95,0.54) 0 14px, transparent 15px),
+        radial-gradient(circle at 40% 24%, rgba(108,193,255,0.52) 0 12px, transparent 13px),
+        radial-gradient(circle at 60% 24%, rgba(255,127,171,0.48) 0 12px, transparent 13px),
+        radial-gradient(circle at 76% 34%, rgba(94,214,154,0.50) 0 14px, transparent 15px),
+        linear-gradient(90deg, transparent 23.8%, rgba(255,195,103,0.14) 24.2% 24.8%, transparent 25.2%),
+        linear-gradient(90deg, transparent 39.8%, rgba(108,193,255,0.14) 40.2% 40.8%, transparent 41.2%),
+        linear-gradient(90deg, transparent 59.2%, rgba(255,127,171,0.14) 59.6% 60.2%, transparent 60.6%),
+        linear-gradient(90deg, transparent 75.2%, rgba(94,214,154,0.14) 75.6% 76.2%, transparent 76.6%),
+        radial-gradient(circle at 50% 50%, transparent 0 110px, rgba(255,182,92,0.18) 112px 118px, transparent 122px),
+        radial-gradient(circle at 50% 50%, transparent 0 172px, rgba(102,181,255,0.14) 174px 180px, transparent 184px),
+        radial-gradient(circle at 50% 50%, transparent 0 235px, rgba(255,130,173,0.12) 237px 243px, transparent 247px),
+        radial-gradient(circle at 20% 26%, rgba(255,183,96,0.44) 0 3px, transparent 4px),
+        radial-gradient(circle at 80% 25%, rgba(107,190,255,0.46) 0 3px, transparent 4px),
+        radial-gradient(circle at 24% 78%, rgba(255,122,170,0.42) 0 3px, transparent 4px),
+        radial-gradient(circle at 76% 76%, rgba(94,214,154,0.40) 0 3px, transparent 4px);
+    background-size: auto;
+    opacity: 0.98;
+    animation: finaleHaloPulse 7s ease-in-out infinite;
+}
+
+body.level-theme-5::after {
+    background:
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.34) 0 7%, transparent 9%),
+        radial-gradient(circle at 50% 50%, transparent 0 10%, rgba(255,214,118,0.18) 10.5% 11.8%, transparent 12.8%),
+        linear-gradient(0deg, transparent 49.4%, rgba(255,196,96,0.14) 49.7% 50.3%, transparent 50.6%),
+        linear-gradient(90deg, transparent 49.4%, rgba(104,187,255,0.12) 49.7% 50.3%, transparent 50.6%),
+        linear-gradient(45deg, transparent 49.4%, rgba(255,126,170,0.10) 49.7% 50.3%, transparent 50.6%),
+        linear-gradient(135deg, transparent 49.4%, rgba(103,214,154,0.10) 49.7% 50.3%, transparent 50.6%),
+        radial-gradient(circle at 50% 50%, transparent 0 15%, rgba(255,210,113,0.18) 16% 18%, transparent 19%),
+        radial-gradient(circle at 50% 50%, transparent 0 25%, rgba(103,187,255,0.12) 26% 28%, transparent 29%);
+    opacity: 0.74;
+}
+
+body.level-theme-5 .game-screen {
+    background:
+        linear-gradient(180deg, rgba(255,255,255,0.80), rgba(255,244,228,0.68)),
+        rgba(255,255,255,0.34);
+    border: 1px solid rgba(255,205,132,0.70);
+    box-shadow:
+        0 30px 62px rgba(242, 164, 108, 0.18),
+        0 8px 24px rgba(108, 181, 255, 0.10),
+        inset 0 1px 0 rgba(255,255,255,0.86);
+}
+
+body.level-theme-5 .game-screen::before {
+    background:
+        radial-gradient(circle at 24% 20%, rgba(255,189,95,0.18) 0 16px, transparent 17px),
+        radial-gradient(circle at 40% 14%, rgba(108,193,255,0.16) 0 14px, transparent 15px),
+        radial-gradient(circle at 60% 14%, rgba(255,127,171,0.16) 0 14px, transparent 15px),
+        radial-gradient(circle at 76% 20%, rgba(94,214,154,0.16) 0 16px, transparent 17px),
+        linear-gradient(90deg, transparent 23.8%, rgba(255,194,101,0.10) 24.2% 24.8%, transparent 25.2%),
+        linear-gradient(90deg, transparent 39.8%, rgba(108,193,255,0.10) 40.2% 40.8%, transparent 41.2%),
+        linear-gradient(90deg, transparent 59.2%, rgba(255,127,171,0.10) 59.6% 60.2%, transparent 60.6%),
+        linear-gradient(90deg, transparent 75.2%, rgba(94,214,154,0.10) 75.6% 76.2%, transparent 76.6%),
+        radial-gradient(circle at 50% 50%, rgba(255,224,134,0.18) 0 11%, transparent 16%),
+        radial-gradient(circle at 50% 50%, transparent 0 22%, rgba(255,183,96,0.12) 23% 25%, transparent 26%),
+        radial-gradient(circle at 50% 50%, transparent 0 31%, rgba(104,188,255,0.10) 32% 34%, transparent 35%),
+        radial-gradient(circle at 22% 20%, rgba(255,138,182,0.14), transparent 18%),
+        radial-gradient(circle at 78% 20%, rgba(107,196,255,0.14), transparent 18%),
+        radial-gradient(circle at 18% 82%, rgba(101,215,157,0.12), transparent 18%),
+        radial-gradient(circle at 82% 78%, rgba(255,199,112,0.12), transparent 18%);
+    animation: finaleHaloPulse 8s ease-in-out infinite;
+    opacity: 0.90;
+}
+
+body.level-theme-5 .game-screen::after {
+    background:
+        radial-gradient(circle at 24% 20%, rgba(255,255,255,0.84) 0 6px, transparent 7px),
+        radial-gradient(circle at 40% 14%, rgba(255,255,255,0.82) 0 6px, transparent 7px),
+        radial-gradient(circle at 60% 14%, rgba(255,255,255,0.82) 0 6px, transparent 7px),
+        radial-gradient(circle at 76% 20%, rgba(255,255,255,0.84) 0 6px, transparent 7px),
+        radial-gradient(circle at 18% 18%, rgba(255,255,255,0.76) 0 8px, transparent 9px),
+        radial-gradient(circle at 82% 18%, rgba(255,255,255,0.76) 0 8px, transparent 9px),
+        radial-gradient(circle at 18% 82%, rgba(255,255,255,0.72) 0 7px, transparent 8px),
+        radial-gradient(circle at 82% 82%, rgba(255,255,255,0.72) 0 7px, transparent 8px),
+        radial-gradient(circle at 50% 10%, rgba(255,207,103,0.52) 0 5px, transparent 6px),
+        repeating-linear-gradient(45deg, transparent 0 64px, rgba(255,190,97,0.04) 64px 66px);
+    opacity: 0.66;
+}
+
+body.level-theme-5 .canvas-container {
+    background:
+        linear-gradient(180deg, rgba(255,255,255,0.90), rgba(255,248,234,0.78)),
+        rgba(255,255,255,0.46);
+    border: 1px solid rgba(255,207,132,0.74);
+    box-shadow:
+        0 28px 58px rgba(242, 165, 108, 0.18),
+        0 0 0 1px rgba(104,188,255,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.88);
+}
+
+body.level-theme-5 .canvas-container::before {
+    background:
+        radial-gradient(circle at 50% 0%, rgba(255,255,255,0.92), transparent 34%),
+        radial-gradient(circle at 14% 18%, rgba(255,184,96,0.18), transparent 20%),
+        radial-gradient(circle at 86% 18%, rgba(110,194,255,0.18), transparent 20%),
+        radial-gradient(circle at 50% 100%, rgba(255,132,176,0.12), transparent 24%),
+        radial-gradient(circle at 24% 10%, rgba(255,194,101,0.14) 0 8px, transparent 9px),
+        radial-gradient(circle at 40% 4%, rgba(108,193,255,0.12) 0 7px, transparent 8px),
+        radial-gradient(circle at 60% 4%, rgba(255,127,171,0.12) 0 7px, transparent 8px),
+        radial-gradient(circle at 76% 10%, rgba(94,214,154,0.12) 0 8px, transparent 9px);
+}
+
+body.level-theme-5 .canvas-container::after {
+    right: -14px;
+    left: auto;
+    bottom: -18px;
+    width: 196px;
+    height: 132px;
+    opacity: 0.48;
+    background:
+        radial-gradient(circle at 18% 60%, rgba(255,189,95,0.62) 0 12px, transparent 13px),
+        radial-gradient(circle at 40% 42%, rgba(108,193,255,0.54) 0 10px, transparent 11px),
+        radial-gradient(circle at 64% 70%, rgba(255,124,171,0.52) 0 10px, transparent 11px),
+        radial-gradient(circle at 82% 44%, rgba(96,212,154,0.50) 0 9px, transparent 10px),
+        linear-gradient(135deg, transparent 42%, rgba(255,206,107,0.28) 43% 56%, transparent 57%);
+    filter: drop-shadow(0 12px 18px rgba(240, 166, 109, 0.20));
+}
+
+body.level-theme-5 #gameCanvas {
+    background:
+        radial-gradient(circle at 50% 16%, rgba(255,255,255,0.99), rgba(255,248,223,0.98) 34%, rgba(233,246,255,0.98) 68%, rgba(239,252,234,1) 100%),
+        linear-gradient(transparent 95%, rgba(255,186,98,0.04) 95%),
+        linear-gradient(90deg, transparent 95%, rgba(107,193,255,0.04) 95%);
+    background-size: auto, 42px 42px, 42px 42px;
+    box-shadow:
+        inset 0 0 0 1px rgba(255,199,112,0.12),
+        inset 0 -16px 32px rgba(108,193,255,0.08);
+}
+
+body.level-theme-5 .mission-box::before {
+    background: linear-gradient(180deg, #ffb44b, #5fb7ff);
+    box-shadow:
+        0 0 20px rgba(255,180,75,0.28),
+        0 0 28px rgba(95,183,255,0.18);
+}
+
+body.level-theme-5 .info-box::before,
+body.level-theme-5 .footer-rich::before,
+body.level-theme-5 .game-header::before,
+body.level-theme-5 .game-container::before {
+    background:
+        radial-gradient(circle at 20% 22%, rgba(255,190,97,0.16), transparent 18%),
+        radial-gradient(circle at 80% 22%, rgba(109,193,255,0.16), transparent 18%),
+        radial-gradient(circle at 50% 96%, rgba(255,129,176,0.12), transparent 22%);
+}
+
+/* ===== Level 4 Mascots ===== */
+
+.level4-mascot,
+.level5-mascot {
+    position: absolute;
+    z-index: 2;
+    pointer-events: none;
+    transform-origin: center;
+}
+
+.level4-mascot::before,
+.level5-mascot::before {
+    content: "";
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.26), transparent 68%);
+    z-index: -1;
+    opacity: 0.72;
+}
+
+.level4-mascot {
+    filter:
+        drop-shadow(0 10px 16px rgba(230, 153, 100, 0.18))
+        drop-shadow(0 0 10px rgba(255, 212, 138, 0.18));
+}
+
+.mascot-quad-kite {
+    width: 62px;
+    height: 78px;
+}
+
+.mascot-quad-kite .kite-diamond {
+    position: absolute;
+    inset: 8px 10px 18px;
+    background:
+        radial-gradient(circle at 35% 24%, rgba(255,255,255,0.72) 0 14%, transparent 16%),
+        linear-gradient(180deg, #ffe27f, #ffb7c7 56%, #ff8cab 100%);
+    clip-path: polygon(50% 0%, 100% 48%, 52% 100%, 0% 48%);
+    border-radius: 10px;
+    box-shadow:
+        inset 0 2px 0 rgba(255,255,255,0.55),
+        inset 0 -5px 10px rgba(203, 96, 122, 0.18);
+}
+
+.mascot-quad-kite .kite-diamond::before {
+    content: "";
+    position: absolute;
+    inset: 8px;
+    border-radius: 8px;
+    border: 1.5px solid rgba(255,255,255,0.44);
+    clip-path: inherit;
+}
+
+.mascot-quad-kite .kite-line {
+    position: absolute;
+    left: 50%;
+    top: 18px;
+    width: 2px;
+    background: rgba(135, 96, 73, 0.34);
+    transform-origin: top center;
+}
+
+.mascot-quad-kite .kite-line-a {
+    height: 28px;
+    transform: translateX(-50%) rotate(33deg);
+}
+
+.mascot-quad-kite .kite-line-b {
+    height: 28px;
+    transform: translateX(-50%) rotate(-33deg);
+}
+
+.mascot-quad-kite .kite-face {
+    position: absolute;
+    left: 50%;
+    top: 26px;
+    width: 24px;
+    height: 18px;
+    transform: translateX(-50%);
+}
+
+.mascot-quad-kite .kite-face::before,
+.mascot-proof-bloom .bloom-face::before,
+.mascot-final-comet .comet-face::before,
+.mascot-grand-star .grand-star-face::before {
+    content: "";
+    position: absolute;
+    top: 6px;
+    left: -1px;
+    width: 5px;
+    height: 4px;
+    border-radius: 999px;
+    background: rgba(255, 149, 186, 0.46);
+    box-shadow: 16px 0 0 rgba(255, 149, 186, 0.46);
+}
+
+.mascot-quad-kite .kite-eye,
+.mascot-angle-gem .gem-eye,
+.mascot-proof-bloom .bloom-eye,
+.mascot-stage-badge .badge-eye,
+.mascot-final-comet .comet-eye,
+.mascot-grand-star .grand-star-eye {
+    position: absolute;
+    width: 4px;
+    height: 8px;
+    border-radius: 999px;
+    background: #2c315a;
+    animation: mascotBlink 4.2s ease-in-out infinite;
+}
+
+.mascot-quad-kite .kite-eye.left { left: 5px; }
+.mascot-quad-kite .kite-eye.right { right: 5px; animation-delay: 0.25s; }
+
+.mascot-quad-kite .kite-smile {
+    position: absolute;
+    left: 50%;
+    bottom: 1px;
+    width: 10px;
+    height: 6px;
+    border-bottom: 2px solid #7f4e61;
+    border-radius: 0 0 10px 10px;
+    transform: translateX(-50%);
+}
+
+.mascot-quad-kite .kite-tail {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 2px;
+    height: 22px;
+    background: linear-gradient(180deg, rgba(160,118,94,0.64), rgba(160,118,94,0));
+    transform: translateX(-50%);
+}
+
+.mascot-angle-gem {
+    width: 54px;
+    height: 54px;
+}
+
+.mascot-angle-gem .gem-body {
+    position: absolute;
+    inset: 7px;
+    background:
+        radial-gradient(circle at 34% 22%, rgba(255,255,255,0.74) 0 13%, transparent 15%),
+        linear-gradient(180deg, #9fe0ff, #88dfbc 56%, #6acfa0 100%);
+    clip-path: polygon(50% 0%, 92% 32%, 76% 100%, 24% 100%, 8% 32%);
+    border-radius: 12px;
+    box-shadow:
+        inset 0 2px 0 rgba(255,255,255,0.5),
+        inset 0 -6px 12px rgba(68, 171, 138, 0.16);
+}
+
+.mascot-angle-gem .gem-highlight {
+    position: absolute;
+    inset: 15px 21px 18px 16px;
+    background: rgba(255,255,255,0.38);
+    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+}
+
+.mascot-angle-gem .gem-highlight::after {
+    content: "";
+    position: absolute;
+    right: -7px;
+    top: 3px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.45);
+}
+
+.mascot-angle-gem .gem-eye.left { left: 19px; top: 20px; }
+.mascot-angle-gem .gem-eye.right { right: 19px; top: 20px; animation-delay: 0.2s; }
+
+.mascot-angle-gem .gem-blush {
+    position: absolute;
+    top: 27px;
+    width: 9px;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(255,143,175,0.44);
+}
+
+.mascot-angle-gem .gem-blush.left { left: 10px; }
+.mascot-angle-gem .gem-blush.right { right: 10px; }
+
+.mascot-proof-bloom {
+    width: 66px;
+    height: 66px;
+}
+
+.mascot-proof-bloom .bloom-core {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 35% 24%, rgba(255,255,255,0.72) 0 16%, transparent 18%),
+        linear-gradient(180deg, #ffe080, #ffbb68 65%, #ff9f5b 100%);
+    transform: translate(-50%, -50%);
+    box-shadow:
+        inset 0 2px 0 rgba(255,255,255,0.6),
+        0 6px 14px rgba(255, 178, 92, 0.18);
+}
+
+.mascot-proof-bloom .bloom-petal {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 18px;
+    height: 24px;
+    border-radius: 999px 999px 10px 10px;
+    background:
+        radial-gradient(circle at 40% 26%, rgba(255,255,255,0.52) 0 12%, transparent 14%),
+        linear-gradient(180deg, #ffc5d6, #ff94af 72%, #ff7c9d 100%);
+    transform-origin: 50% 100%;
+    box-shadow: inset 0 2px 0 rgba(255,255,255,0.45);
+}
+
+.mascot-proof-bloom .petal-1 { transform: translate(-50%, -125%) rotate(0deg); }
+.mascot-proof-bloom .petal-2 { transform: translate(15%, -95%) rotate(90deg); }
+.mascot-proof-bloom .petal-3 { transform: translate(-50%, 25%) rotate(180deg); }
+.mascot-proof-bloom .petal-4 { transform: translate(-115%, -95%) rotate(270deg); }
+
+.mascot-proof-bloom .bloom-face {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 20px;
+    height: 16px;
+    transform: translate(-50%, -35%);
+}
+
+.mascot-proof-bloom .bloom-eye.left { left: 3px; top: 1px; }
+.mascot-proof-bloom .bloom-eye.right { right: 3px; top: 1px; animation-delay: 0.25s; }
+
+.mascot-proof-bloom .bloom-mouth {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 10px;
+    height: 5px;
+    border-bottom: 2px solid #8b5862;
+    border-radius: 0 0 10px 10px;
+    transform: translateX(-50%);
+}
+
+.mascot-quad-kite.pos-quad-tl { top: 7%; left: 4%; animation: level4KiteFloatLeft 6.8s ease-in-out infinite; }
+.mascot-quad-kite.pos-quad-tr { top: 8%; right: 4%; animation: level4KiteFloatRight 7.2s ease-in-out infinite; }
+.mascot-angle-gem.pos-gem-left { top: 38%; left: 1.8%; animation: level4GemPulseLeft 5.8s ease-in-out infinite; }
+.mascot-angle-gem.pos-gem-right { top: 41%; right: 1.8%; animation: level4GemPulseRight 6.2s ease-in-out infinite; }
+.mascot-proof-bloom.pos-bloom-bl { bottom: 5%; left: 6%; animation: level4BloomSwayLeft 6s ease-in-out infinite; }
+.mascot-proof-bloom.pos-bloom-br { bottom: 5%; right: 6%; animation: level4BloomSwayRight 6.4s ease-in-out infinite; }
+.mascot-quad-guardian.pos-quad-guardian { right: 3.5%; bottom: 7%; animation: level4GuardianFloat 7.8s ease-in-out infinite; }
+
+@keyframes level4KiteFloatLeft {
+    0%, 100% { transform: translate3d(0, 0, 0) rotate(-4deg); }
+    50% { transform: translate3d(6px, -10px, 0) rotate(2deg); }
+}
+
+@keyframes level4KiteFloatRight {
+    0%, 100% { transform: translate3d(0, 0, 0) rotate(4deg); }
+    50% { transform: translate3d(-6px, -10px, 0) rotate(-2deg); }
+}
+
+@keyframes level4GemPulseLeft {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(4px, -6px, 0) scale(1.08); }
+}
+
+@keyframes level4GemPulseRight {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(-4px, -5px, 0) scale(1.07); }
+}
+
+@keyframes level4BloomSwayLeft {
+    0%, 100% { transform: rotate(-2deg) translateY(0); }
+    50% { transform: rotate(4deg) translateY(-6px); }
+}
+
+@keyframes level4BloomSwayRight {
+    0%, 100% { transform: rotate(2deg) translateY(0); }
+    50% { transform: rotate(-4deg) translateY(-6px); }
+}
+
+.mascot-quad-guardian {
+    width: 132px;
+    height: 150px;
+    z-index: 3;
+}
+
+.mascot-quad-guardian::before {
+    inset: -16px;
+    background: radial-gradient(circle, rgba(255, 224, 160, 0.34), transparent 70%);
+}
+
+.mascot-quad-guardian .guardian-cape {
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    bottom: 18px;
+    height: 78px;
+    border-radius: 46px 46px 28px 28px;
+    background:
+        linear-gradient(180deg, rgba(255,203,120,0.96), rgba(255,146,184,0.94));
+    box-shadow:
+        inset 0 2px 0 rgba(255,255,255,0.42),
+        0 12px 24px rgba(240, 156, 108, 0.18);
+}
+
+.mascot-quad-guardian .guardian-body {
+    position: absolute;
+    left: 50%;
+    top: 24px;
+    width: 76px;
+    height: 88px;
+    border-radius: 36px 36px 30px 30px;
+    transform: translateX(-50%);
+    background:
+        radial-gradient(circle at 38% 24%, rgba(255,255,255,0.76) 0 12%, transparent 14%),
+        linear-gradient(180deg, #fff0a8, #ffc57a 58%, #ff99b6 100%);
+    box-shadow:
+        inset 0 2px 0 rgba(255,255,255,0.62),
+        inset 0 -8px 12px rgba(213, 118, 145, 0.18);
+}
+
+.mascot-quad-guardian .guardian-crown {
+    position: absolute;
+    left: 50%;
+    top: 8px;
+    width: 64px;
+    height: 26px;
+    transform: translateX(-50%);
+}
+
+.mascot-quad-guardian .guardian-crown::before {
+    content: "";
+    position: absolute;
+    inset: 10px 4px 0;
+    border-radius: 12px 12px 8px 8px;
+    background: linear-gradient(180deg, #ffe88d, #ffbf61);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.64);
+}
+
+.mascot-quad-guardian .crown-gem {
+    position: absolute;
+    top: 0;
+    width: 14px;
+    height: 16px;
+    clip-path: polygon(50% 0%, 100% 55%, 50% 100%, 0% 55%);
+    background: linear-gradient(180deg, #fff9cf, #ff9fbd);
+}
+
+.mascot-quad-guardian .gem-a { left: 4px; }
+.mascot-quad-guardian .gem-b { left: 50%; transform: translateX(-50%); background: linear-gradient(180deg, #fff7ba, #88d8ff); }
+.mascot-quad-guardian .gem-c { right: 4px; background: linear-gradient(180deg, #fff5c7, #8fe1b3); }
+
+.mascot-quad-guardian .guardian-face {
+    position: absolute;
+    left: 50%;
+    top: 52px;
+    width: 34px;
+    height: 24px;
+    transform: translateX(-50%);
+}
+
+.mascot-quad-guardian .guardian-eye {
+    position: absolute;
+    top: 2px;
+    width: 6px;
+    height: 12px;
+    border-radius: 999px;
+    background: #334067;
+    animation: mascotBlink 4.6s ease-in-out infinite;
+}
+
+.mascot-quad-guardian .guardian-eye.left { left: 7px; }
+.mascot-quad-guardian .guardian-eye.right { right: 7px; animation-delay: 0.25s; }
+
+.mascot-quad-guardian .guardian-blush {
+    position: absolute;
+    top: 11px;
+    width: 10px;
+    height: 7px;
+    border-radius: 999px;
+    background: rgba(255, 148, 185, 0.46);
+}
+
+.mascot-quad-guardian .guardian-blush.left { left: -2px; }
+.mascot-quad-guardian .guardian-blush.right { right: -2px; }
+
+.mascot-quad-guardian .guardian-smile {
+    position: absolute;
+    left: 50%;
+    bottom: 1px;
+    width: 14px;
+    height: 7px;
+    border-bottom: 2px solid #905568;
+    border-radius: 0 0 12px 12px;
+    transform: translateX(-50%);
+}
+
+.mascot-quad-guardian .guardian-orb {
+    position: absolute;
+    bottom: 34px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 35% 28%, rgba(255,255,255,0.72) 0 18%, transparent 20%),
+        linear-gradient(180deg, #fff0a7, #8fd9ff);
+    box-shadow: 0 6px 12px rgba(132, 182, 255, 0.18);
+}
+
+.mascot-quad-guardian .orb-left { left: 8px; }
+.mascot-quad-guardian .orb-right { right: 8px; background: radial-gradient(circle at 35% 28%, rgba(255,255,255,0.72) 0 18%, transparent 20%), linear-gradient(180deg, #fff0a7, #ff9cb8); }
+
+@keyframes level4GuardianFloat {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(-4px, -10px, 0); }
+}
+
+/* ===== Level 5 Mascots ===== */
+
+.level5-mascot {
+    filter:
+        drop-shadow(0 12px 18px rgba(116, 153, 255, 0.16))
+        drop-shadow(0 0 12px rgba(255, 213, 120, 0.18));
+}
+
+.mascot-stage-badge {
+    width: 46px;
+    height: 46px;
+}
+
+.mascot-stage-badge .badge-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.82);
+    background:
+        radial-gradient(circle at 34% 22%, rgba(255,255,255,0.7) 0 16%, transparent 18%),
+        linear-gradient(180deg, #ffe182, #98d8ff 58%, #8bc3ff 100%);
+    box-shadow:
+        inset 0 2px 0 rgba(255,255,255,0.46),
+        0 6px 14px rgba(112, 171, 255, 0.16);
+}
+
+.mascot-stage-badge .badge-core {
+    position: absolute;
+    inset: 8px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.9);
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #4d5a8d;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+}
+
+.mascot-stage-badge .badge-face {
+    position: absolute;
+    left: 50%;
+    top: 62%;
+    width: 16px;
+    height: 10px;
+    transform: translate(-50%, -50%);
+}
+
+.mascot-stage-badge .badge-eye.left { left: 1px; top: 0; }
+.mascot-stage-badge .badge-eye.right { right: 1px; top: 0; animation-delay: 0.2s; }
+
+.mascot-final-comet {
+    width: 72px;
+    height: 52px;
+}
+
+.mascot-final-comet .comet-head {
+    position: absolute;
+    right: 8px;
+    top: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 34% 24%, rgba(255,255,255,0.7) 0 16%, transparent 18%),
+        linear-gradient(180deg, #ffe07d, #ffb0c6 70%, #ff95b2 100%);
+    box-shadow:
+        inset 0 2px 0 rgba(255,255,255,0.55),
+        inset 0 -6px 10px rgba(209, 102, 138, 0.16);
+}
+
+.mascot-final-comet .comet-tail {
+    position: absolute;
+    left: 0;
+    top: 15px;
+    width: 42px;
+    height: 16px;
+    border-radius: 999px 0 0 999px;
+    background:
+        linear-gradient(90deg, rgba(108,193,255,0), rgba(108,193,255,0.72) 36%, rgba(255,216,113,0.86) 100%);
+    filter: blur(0.5px);
+}
+
+.mascot-final-comet .comet-face {
+    position: absolute;
+    right: 13px;
+    top: 17px;
+    width: 18px;
+    height: 12px;
+}
+
+.mascot-final-comet .comet-eye.left { left: 2px; top: 0; }
+.mascot-final-comet .comet-eye.right { right: 2px; top: 0; animation-delay: 0.2s; }
+
+.mascot-final-comet .comet-mouth {
+    position: absolute;
+    left: 50%;
+    bottom: -1px;
+    width: 8px;
+    height: 4px;
+    border-bottom: 2px solid #90556b;
+    border-radius: 0 0 10px 10px;
+    transform: translateX(-50%);
+}
+
+.mascot-grand-star {
+    width: 60px;
+    height: 60px;
+}
+
+.mascot-grand-star .grand-star-body {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 36% 20%, rgba(255,255,255,0.72) 0 16%, transparent 18%),
+        linear-gradient(180deg, #ffe58c, #ffc973 60%, #ffad61 100%);
+    clip-path: polygon(50% 0%, 62% 34%, 100% 36%, 70% 58%, 80% 100%, 50% 74%, 20% 100%, 30% 58%, 0% 36%, 38% 34%);
+    filter:
+        drop-shadow(0 8px 12px rgba(255, 191, 94, 0.24))
+        drop-shadow(0 0 10px rgba(255, 223, 135, 0.18));
+}
+
+.mascot-grand-star .grand-star-face {
+    position: absolute;
+    left: 50%;
+    top: 52%;
+    width: 24px;
+    height: 16px;
+    transform: translate(-50%, -50%);
+}
+
+.mascot-grand-star .grand-star-eye.left { left: 4px; top: 0; }
+.mascot-grand-star .grand-star-eye.right { right: 4px; top: 0; animation-delay: 0.22s; }
+
+.mascot-grand-star .grand-star-smile {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 10px;
+    height: 5px;
+    border-bottom: 2px solid #8d5d44;
+    border-radius: 0 0 10px 10px;
+    transform: translateX(-50%);
+}
+
+.mascot-stage-badge .badge-ring::before,
+.mascot-grand-star .grand-star-body::before {
+    content: "";
+    position: absolute;
+    inset: 6px;
+    border-radius: inherit;
+    border: 1px solid rgba(255,255,255,0.34);
+}
+
+.mascot-grand-star .grand-star-body::before {
+    inset: 10px;
+    clip-path: inherit;
+}
+
+.mascot-stage-badge .badge-face::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -1px;
+    width: 8px;
+    height: 4px;
+    border-bottom: 2px solid #7d6898;
+    border-radius: 0 0 10px 10px;
+    transform: translateX(-50%);
+}
+
+.mascot-stage-badge.pos-stage-1 { top: 6%; left: 21%; animation: level5BadgeHop1 5.5s ease-in-out infinite; }
+.mascot-stage-badge.pos-stage-2 { top: 3%; left: 38%; animation: level5BadgeHop2 5.8s ease-in-out infinite; }
+.mascot-stage-badge.pos-stage-3 { top: 3%; right: 38%; animation: level5BadgeHop3 6s ease-in-out infinite; }
+.mascot-stage-badge.pos-stage-4 { top: 6%; right: 21%; animation: level5BadgeHop4 5.7s ease-in-out infinite; }
+.mascot-final-comet.pos-comet-left { top: 26%; left: 3%; animation: level5CometFloatLeft 8s ease-in-out infinite; }
+.mascot-final-comet.pos-comet-right { top: 28%; right: 3%; animation: level5CometFloatRight 8.4s ease-in-out infinite; }
+.mascot-grand-star.pos-grand-star { bottom: 4%; left: 50%; transform: translateX(-50%); animation: level5GrandStarBob 6.2s ease-in-out infinite; }
+.mascot-final-conductor.pos-final-conductor { left: 4%; bottom: 5%; animation: level5ConductorFloat 8.2s ease-in-out infinite; }
+
+@keyframes mascotBlink {
+    0%, 44%, 100% { transform: scaleY(1); }
+    46%, 48% { transform: scaleY(0.2); }
+}
+
+@keyframes level5BadgeHop1 {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+@keyframes level5BadgeHop2 {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes level5BadgeHop3 {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-9px); }
+}
+
+@keyframes level5BadgeHop4 {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+@keyframes level5CometFloatLeft {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(10px, -8px, 0); }
+}
+
+@keyframes level5CometFloatRight {
+    0%, 100% { transform: translate3d(0, 0, 0) scaleX(-1); }
+    50% { transform: translate3d(-10px, -8px, 0) scaleX(-1); }
+}
+
+@keyframes level5GrandStarBob {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-8px); }
+}
+
+.mascot-final-conductor {
+    width: 142px;
+    height: 162px;
+    z-index: 3;
+}
+
+.mascot-final-conductor::before {
+    inset: -18px;
+    background: radial-gradient(circle, rgba(255, 231, 164, 0.36), transparent 72%);
+}
+
+.mascot-final-conductor .conductor-aura {
+    position: absolute;
+    inset: 10px 8px 28px;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle, rgba(255,255,255,0.24), transparent 58%),
+        linear-gradient(180deg, rgba(132,196,255,0.18), rgba(255,165,199,0.08));
+}
+
+.mascot-final-conductor .conductor-cape {
+    position: absolute;
+    left: 18px;
+    right: 18px;
+    bottom: 18px;
+    height: 86px;
+    border-radius: 52px 52px 30px 30px;
+    background:
+        linear-gradient(180deg, rgba(136,206,255,0.96), rgba(163,154,255,0.92) 48%, rgba(255,156,190,0.92));
+    box-shadow:
+        inset 0 2px 0 rgba(255,255,255,0.44),
+        0 14px 28px rgba(127, 157, 255, 0.16);
+}
+
+.mascot-final-conductor .conductor-body {
+    position: absolute;
+    left: 50%;
+    top: 28px;
+    width: 80px;
+    height: 94px;
+    border-radius: 38px 38px 32px 32px;
+    transform: translateX(-50%);
+    background:
+        radial-gradient(circle at 36% 22%, rgba(255,255,255,0.76) 0 12%, transparent 14%),
+        linear-gradient(180deg, #fff4b2, #a7dbff 54%, #ffb3cd 100%);
+    box-shadow:
+        inset 0 2px 0 rgba(255,255,255,0.64),
+        inset 0 -8px 12px rgba(153, 118, 222, 0.18);
+}
+
+.mascot-final-conductor .conductor-halo {
+    position: absolute;
+    left: 50%;
+    top: 6px;
+    width: 66px;
+    height: 20px;
+    border-radius: 999px;
+    border: 3px solid rgba(255,232,152,0.9);
+    box-shadow: 0 0 14px rgba(255,221,127,0.34);
+    transform: translateX(-50%);
+}
+
+.mascot-final-conductor .conductor-face {
+    position: absolute;
+    left: 50%;
+    top: 58px;
+    width: 36px;
+    height: 24px;
+    transform: translateX(-50%);
+}
+
+.mascot-final-conductor .conductor-eye {
+    position: absolute;
+    top: 2px;
+    width: 6px;
+    height: 12px;
+    border-radius: 999px;
+    background: #36436d;
+    animation: mascotBlink 4.8s ease-in-out infinite;
+}
+
+.mascot-final-conductor .conductor-eye.left { left: 7px; }
+.mascot-final-conductor .conductor-eye.right { right: 7px; animation-delay: 0.22s; }
+
+.mascot-final-conductor .conductor-blush {
+    position: absolute;
+    top: 11px;
+    width: 10px;
+    height: 7px;
+    border-radius: 999px;
+    background: rgba(255, 149, 191, 0.44);
+}
+
+.mascot-final-conductor .conductor-blush.left { left: -1px; }
+.mascot-final-conductor .conductor-blush.right { right: -1px; }
+
+.mascot-final-conductor .conductor-smile {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 14px;
+    height: 7px;
+    border-bottom: 2px solid #8c5f83;
+    border-radius: 0 0 12px 12px;
+    transform: translateX(-50%);
+}
+
+.mascot-final-conductor .conductor-wand {
+    position: absolute;
+    right: 18px;
+    bottom: 38px;
+    width: 46px;
+    height: 6px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #fff0af, #ffc876);
+    transform: rotate(-24deg);
+    box-shadow: 0 0 10px rgba(255, 213, 120, 0.28);
+}
+
+.mascot-final-conductor .conductor-star {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    background: linear-gradient(180deg, #ffe486, #ffbf6c);
+    clip-path: polygon(50% 0%, 62% 34%, 100% 36%, 70% 58%, 80% 100%, 50% 74%, 20% 100%, 30% 58%, 0% 36%, 38% 34%);
+}
+
+.mascot-final-conductor .star-a {
+    left: 8px;
+    top: 34px;
+    filter: drop-shadow(0 0 8px rgba(255, 214, 121, 0.28));
+}
+
+.mascot-final-conductor .star-b {
+    right: 10px;
+    top: 20px;
+    width: 14px;
+    height: 14px;
+    filter: drop-shadow(0 0 8px rgba(130, 196, 255, 0.24));
+}
+
+@keyframes level5ConductorFloat {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(4px, -10px, 0); }
+}
+
+body.high-contrast .level4-mascot,
+body.high-contrast .level5-mascot {
+    opacity: 0.88;
+}
+
+/* ===== Geometry Arcade: Angle Launcher ===== */
+.geometry-arcade-card {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+    margin: 22px 0 18px;
+    padding: 22px;
+    border-radius: 34px;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 12% 18%, rgba(255,255,255,0.88), transparent 22%),
+        radial-gradient(circle at 88% 24%, rgba(255,223,132,0.32), transparent 24%),
+        linear-gradient(135deg, rgba(231,248,255,0.96), rgba(255,246,214,0.96) 48%, rgba(255,232,245,0.94));
+    border: 1px solid rgba(255,255,255,0.86);
+    box-shadow:
+        0 24px 52px rgba(62, 88, 160, 0.16),
+        inset 0 1px 0 rgba(255,255,255,0.88);
+}
+
+.geometry-arcade-card::before {
+    content: "";
+    position: absolute;
+    right: 140px;
+    top: 50%;
+    width: 210px;
+    height: 210px;
+    border-radius: 50%;
+    border: 2px dashed rgba(67, 97, 238, 0.20);
+    transform: translateY(-50%);
+    animation: arcadeOrbitBreathe 4.6s ease-in-out infinite;
+}
+
+.geometry-arcade-card::after {
+    content: "15° 30° 45° 90°";
+    position: absolute;
+    right: 34px;
+    bottom: 18px;
+    color: rgba(39, 52, 95, 0.16);
+    font-size: 1.55rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    pointer-events: none;
+}
+
+.geometry-arcade-card.mirror-card {
+    background:
+        radial-gradient(circle at 12% 18%, rgba(255,255,255,0.88), transparent 22%),
+        radial-gradient(circle at 88% 24%, rgba(134,235,255,0.30), transparent 24%),
+        linear-gradient(135deg, rgba(240,255,248,0.96), rgba(234,246,255,0.96) 48%, rgba(255,241,221,0.94));
+}
+
+.geometry-arcade-card.mirror-card::before {
+    border-style: solid;
+    border-color: rgba(46, 196, 182, 0.20);
+    transform: translateY(-50%) rotate(18deg);
+}
+
+.geometry-arcade-card.mirror-card::after {
+    content: "mirror axis reflection symmetry";
+}
+
+.geometry-arcade-card.polygon-card {
+    background:
+        radial-gradient(circle at 12% 18%, rgba(255,255,255,0.9), transparent 22%),
+        radial-gradient(circle at 86% 22%, rgba(255,190,85,0.30), transparent 24%),
+        linear-gradient(135deg, rgba(246,255,237,0.96), rgba(235,247,255,0.96) 48%, rgba(255,243,221,0.94));
+}
+
+.geometry-arcade-card.polygon-card::before {
+    border-radius: 28% 72% 40% 60%;
+    border-color: rgba(255, 190, 85, 0.24);
+    transform: translateY(-50%) rotate(-12deg);
+}
+
+.geometry-arcade-card.polygon-card::after {
+    content: "area perimeter vertex drag";
+}
+
+.arcade-copy {
+    position: relative;
+    z-index: 1;
+    max-width: 540px;
+}
+
+.arcade-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.68);
+    border: 1px solid rgba(255,255,255,0.84);
+    color: #49609d;
+    font-size: 0.82rem;
+    font-weight: 900;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.72);
+}
+
+.arcade-copy h3 {
+    margin: 10px 0 6px;
+    color: #243766;
+    font-size: clamp(1.5rem, 3vw, 2.35rem);
+    line-height: 1.05;
+    letter-spacing: -0.05em;
+}
+
+.arcade-copy p {
+    color: #64708f;
+    font-weight: 800;
+    line-height: 1.55;
+}
+
+#openArcadeBtn {
+    position: relative;
+    z-index: 1;
+    flex: 0 0 auto;
+    min-width: 150px;
+    background:
+        radial-gradient(circle at 30% 20%, rgba(255,255,255,0.5), transparent 24%),
+        linear-gradient(135deg, #2ec4b6, #6a8cff 56%, #ff8fb8);
+    box-shadow:
+        0 18px 30px rgba(106, 140, 255, 0.28),
+        inset 0 1px 0 rgba(255,255,255,0.36);
+}
+
+#openArcadeBtn:hover {
+    transform: translateY(-4px) scale(1.02);
+}
+
+#openMirrorBtn {
+    position: relative;
+    z-index: 1;
+    flex: 0 0 auto;
+    min-width: 170px;
+    background:
+        radial-gradient(circle at 30% 20%, rgba(255,255,255,0.5), transparent 24%),
+        linear-gradient(135deg, #5be7c4, #68c7ff 56%, #ffbe55);
+    box-shadow:
+        0 18px 30px rgba(46, 196, 182, 0.22),
+        inset 0 1px 0 rgba(255,255,255,0.36);
+}
+
+#openMirrorBtn:hover {
+    transform: translateY(-4px) scale(1.02);
+}
+
+#openPolygonBtn {
+    position: relative;
+    z-index: 1;
+    flex: 0 0 auto;
+    min-width: 170px;
+    background:
+        radial-gradient(circle at 30% 20%, rgba(255,255,255,0.5), transparent 24%),
+        linear-gradient(135deg, #ffbe55, #7ee081 48%, #68c7ff);
+    box-shadow:
+        0 18px 30px rgba(255, 190, 85, 0.24),
+        inset 0 1px 0 rgba(255,255,255,0.36);
+}
+
+#openPolygonBtn:hover {
+    transform: translateY(-4px) scale(1.02);
+}
+
+.arcade-achievements-panel {
+    position: relative;
+    margin: 22px 0 20px;
+    padding: 22px;
+    overflow: hidden;
+    border-radius: 34px;
+    background:
+        radial-gradient(circle at 12% 8%, rgba(255,255,255,0.88), transparent 22%),
+        radial-gradient(circle at 88% 10%, rgba(255,190,85,0.22), transparent 24%),
+        linear-gradient(135deg, rgba(241,249,255,0.96), rgba(255,248,224,0.92) 52%, rgba(244,255,238,0.94));
+    border: 1px solid rgba(255,255,255,0.86);
+    box-shadow:
+        0 24px 52px rgba(62, 88, 160, 0.14),
+        inset 0 1px 0 rgba(255,255,255,0.88);
+}
+
+.arcade-achievements-panel::before {
+    content: "";
+    position: absolute;
+    right: -40px;
+    top: -52px;
+    width: 210px;
+    height: 210px;
+    border-radius: 44% 56% 52% 48%;
+    background:
+        conic-gradient(from 20deg, rgba(106,140,255,0.20), rgba(46,196,182,0.18), rgba(255,190,85,0.20), rgba(255,143,184,0.16), rgba(106,140,255,0.20));
+    filter: blur(8px);
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.arcade-achievements-panel[data-complete="true"] {
+    background:
+        radial-gradient(circle at 10% 10%, rgba(255,255,255,0.9), transparent 22%),
+        radial-gradient(circle at 86% 12%, rgba(255,224,132,0.34), transparent 26%),
+        linear-gradient(135deg, rgba(255,250,225,0.98), rgba(234,255,244,0.94) 52%, rgba(239,247,255,0.94));
+}
+
+.arcade-achievements-head {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.arcade-achievements-head h3 {
+    margin: 9px 0 0;
+    color: #243766;
+    font-size: clamp(1.45rem, 2.5vw, 2.2rem);
+    line-height: 1.05;
+    letter-spacing: -0.05em;
+}
+
+.arcade-achievements-progress {
+    flex: 0 0 auto;
+    min-width: 86px;
+    padding: 12px 16px;
+    border-radius: 999px;
+    color: #243766;
+    font-size: 1.15rem;
+    font-weight: 1000;
+    text-align: center;
+    background: rgba(255,255,255,0.78);
+    border: 1px solid rgba(255,255,255,0.9);
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.86),
+        0 12px 22px rgba(71, 89, 145, 0.12);
+}
+
+.arcade-achievements-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 12px;
+}
+
+.arcade-achievement {
+    display: grid;
+    grid-template-columns: 46px minmax(0, 1fr);
+    gap: 10px;
+    align-items: center;
+    min-height: 86px;
+    padding: 13px;
+    border-radius: 22px;
+    background: rgba(255,255,255,0.66);
+    border: 1px solid rgba(255,255,255,0.86);
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.82),
+        0 12px 24px rgba(57, 81, 150, 0.08);
+    transition: transform 0.18s ease, filter 0.18s ease, box-shadow 0.18s ease;
+}
+
+.arcade-achievement:hover {
+    transform: translateY(-3px);
+}
+
+.arcade-achievement.locked {
+    filter: saturate(0.55);
+    opacity: 0.62;
+}
+
+.arcade-achievement.unlocked {
+    background:
+        radial-gradient(circle at 20% 18%, rgba(255,255,255,0.92), transparent 34%),
+        linear-gradient(135deg, rgba(255,242,177,0.84), rgba(224,255,238,0.82));
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.9),
+        0 14px 26px rgba(255, 190, 85, 0.14);
+}
+
+.arcade-achievement-icon {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 16px;
+    font-size: 1.45rem;
+    background: rgba(255,255,255,0.76);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.78);
+}
+
+.arcade-achievement-copy strong {
+    display: block;
+    color: #243766;
+    font-size: 0.95rem;
+    line-height: 1.2;
+}
+
+.arcade-achievement-copy span {
+    display: block;
+    margin-top: 4px;
+    color: #66718f;
+    font-size: 0.78rem;
+    font-weight: 800;
+    line-height: 1.35;
+}
+
+.arcade-achievements-hint {
+    position: relative;
+    z-index: 1;
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-radius: 18px;
+    color: #4f5d87;
+    font-size: 0.92rem;
+    font-weight: 900;
+    background: rgba(255,255,255,0.66);
+    border: 1px solid rgba(255,255,255,0.82);
+}
+
+.arcade-achievement-toast {
+    position: fixed;
+    z-index: 9999;
+    top: 22px;
+    right: 22px;
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 8px 12px;
+    align-items: center;
+    min-width: min(320px, calc(100vw - 44px));
+    padding: 14px 16px;
+    border-radius: 22px;
+    color: #243766;
+    background:
+        radial-gradient(circle at 18% 20%, rgba(255,255,255,0.92), transparent 30%),
+        linear-gradient(135deg, rgba(255,240,166,0.96), rgba(221,255,238,0.96));
+    border: 1px solid rgba(255,255,255,0.9);
+    box-shadow:
+        0 20px 44px rgba(57, 81, 150, 0.20),
+        inset 0 1px 0 rgba(255,255,255,0.88);
+    animation: arcadeAchievementToastIn 0.42s cubic-bezier(.2,.9,.2,1.2) both;
+}
+
+.arcade-achievement-toast.is-leaving {
+    animation: arcadeAchievementToastOut 0.36s ease both;
+}
+
+.arcade-achievement-toast span {
+    grid-row: 1 / span 2;
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 15px;
+    font-size: 1.5rem;
+    background: rgba(255,255,255,0.72);
+}
+
+.arcade-achievement-toast strong {
+    font-size: 0.82rem;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.arcade-achievement-toast em {
+    color: #40507d;
+    font-style: normal;
+    font-size: 1rem;
+    font-weight: 1000;
+}
+
+@keyframes arcadeAchievementToastIn {
+    from {
+        opacity: 0;
+        transform: translate3d(18px, -12px, 0) scale(0.92);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+}
+
+@keyframes arcadeAchievementToastOut {
+    to {
+        opacity: 0;
+        transform: translate3d(18px, -10px, 0) scale(0.96);
+    }
+}
+
+.arcade-modal-content {
+    width: min(96vw, 1040px);
+    max-height: 92vh;
+    overflow: auto;
+    padding: 26px;
+    text-align: left;
+    background:
+        radial-gradient(circle at 12% 8%, rgba(255,255,255,0.92), transparent 24%),
+        radial-gradient(circle at 88% 18%, rgba(255,224,132,0.28), transparent 22%),
+        linear-gradient(180deg, rgba(255,252,239,0.96), rgba(239,249,255,0.94) 54%, rgba(255,239,247,0.94));
+}
+
+.arcade-modal-content::after {
+    content: "";
+    position: absolute;
+    inset: 14px;
+    border-radius: 26px;
+    pointer-events: none;
+    border: 1px solid rgba(255,255,255,0.64);
+}
+
+.arcade-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 3;
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    min-height: 42px;
+    padding: 0;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.86);
+    color: #30406f;
+    box-shadow: 0 10px 20px rgba(71, 89, 145, 0.14);
+}
+
+.arcade-modal-head {
+    position: relative;
+    z-index: 1;
+    padding-right: 56px;
+    margin-bottom: 20px;
+}
+
+.arcade-modal-head h2 {
+    margin: 10px 0 8px;
+    color: #243766;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    letter-spacing: -0.06em;
+}
+
+.arcade-modal-head p {
+    max-width: 760px;
+    color: #63708e;
+    font-weight: 800;
+    line-height: 1.6;
+}
+
+.arcade-layout {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 250px;
+    gap: 18px;
+    align-items: stretch;
+}
+
+.arcade-stage {
+    position: relative;
+    min-height: 360px;
+    padding: 14px;
+    border-radius: 32px;
+    background:
+        linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,248,232,0.64)),
+        rgba(255,255,255,0.58);
+    border: 1px solid rgba(255,255,255,0.86);
+    box-shadow:
+        0 20px 40px rgba(57, 81, 150, 0.14),
+        inset 0 1px 0 rgba(255,255,255,0.84);
+}
+
+.arcade-stage::before {
+    content: "";
+    position: absolute;
+    inset: 26px;
+    border-radius: 50%;
+    pointer-events: none;
+    background:
+        conic-gradient(from 0deg, rgba(106,140,255,0.18), rgba(46,196,182,0.16), rgba(255,224,131,0.18), rgba(255,143,184,0.16), rgba(106,140,255,0.18));
+    filter: blur(24px);
+    opacity: 0.58;
+}
+
+.mirror-modal-content {
+    background:
+        radial-gradient(circle at 12% 8%, rgba(255,255,255,0.92), transparent 24%),
+        radial-gradient(circle at 88% 18%, rgba(91,231,196,0.24), transparent 22%),
+        linear-gradient(180deg, rgba(246,255,248,0.96), rgba(239,249,255,0.94) 54%, rgba(255,247,232,0.94));
+}
+
+.mirror-stage::before {
+    background:
+        conic-gradient(from 45deg, rgba(46,196,182,0.18), rgba(106,140,255,0.16), rgba(255,190,85,0.18), rgba(46,196,182,0.18));
+}
+
+.polygon-modal-content {
+    background:
+        radial-gradient(circle at 12% 8%, rgba(255,255,255,0.92), transparent 24%),
+        radial-gradient(circle at 88% 18%, rgba(255,190,85,0.24), transparent 22%),
+        linear-gradient(180deg, rgba(248,255,238,0.96), rgba(239,249,255,0.94) 54%, rgba(255,246,230,0.94));
+}
+
+.polygon-stage::before {
+    background:
+        conic-gradient(from -25deg, rgba(255,190,85,0.20), rgba(126,224,129,0.18), rgba(104,199,255,0.18), rgba(255,190,85,0.20));
+}
+
+#mirrorCanvas {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 24px;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    contain: layout paint;
+    background: #f9fcff;
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.82),
+        inset 0 -18px 36px rgba(46, 196, 182, 0.08);
+}
+
+#mirrorCanvas:active {
+    cursor: grabbing;
+}
+
+#mirrorCanvas.is-dragging {
+    cursor: grabbing;
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.82),
+        inset 0 -18px 36px rgba(46, 196, 182, 0.08),
+        0 0 0 4px rgba(46, 196, 182, 0.12);
+}
+
+#mirrorCanvas[data-mood="close"] {
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.82),
+        0 0 0 4px rgba(104, 199, 255, 0.14);
+}
+
+#mirrorCanvas[data-mood="ready"],
+#mirrorCanvas[data-mood="perfect"] {
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.82),
+        0 0 0 5px rgba(46, 196, 182, 0.18),
+        0 16px 34px rgba(46, 196, 182, 0.16);
+}
+
+#mirrorCheckBtn {
+    transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+}
+
+#mirrorCheckBtn.is-ready,
+#mirrorCheckBtn.is-perfect {
+    filter: saturate(1.12);
+    transform: translateY(-2px);
+    box-shadow: 0 16px 28px rgba(46, 196, 182, 0.24);
+}
+
+#mirrorCheckBtn.is-perfect {
+    background: linear-gradient(135deg, #ffbe55, #2ec4b6);
+}
+
+#mirrorLocks {
+    color: #ff8f5f;
+}
+
+#mirrorCanvas[data-mood="far"] {
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.82),
+        inset 0 -18px 36px rgba(46, 196, 182, 0.08),
+        0 0 0 3px rgba(141, 162, 207, 0.08);
+}
+
+#polygonCanvas {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 24px;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    contain: layout paint;
+    background: #f9fcff;
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.82),
+        inset 0 -18px 36px rgba(255, 190, 85, 0.08);
+}
+
+#polygonCanvas:active,
+#polygonCanvas.is-dragging {
+    cursor: grabbing;
+}
+
+#polygonCanvas[data-mood="close"] {
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.82),
+        0 0 0 4px rgba(255, 190, 85, 0.16);
+}
+
+#polygonCanvas[data-mood="ready"],
+#polygonCanvas[data-mood="perfect"] {
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.82),
+        0 0 0 5px rgba(126, 224, 129, 0.20),
+        0 16px 34px rgba(126, 224, 129, 0.15);
+}
+
+#polygonCanvas[data-mood="far"] {
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.82),
+        inset 0 -18px 36px rgba(255, 190, 85, 0.08),
+        0 0 0 3px rgba(141, 162, 207, 0.08);
+}
+
+#polygonCheckBtn {
+    transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+}
+
+#polygonCheckBtn.is-ready,
+#polygonCheckBtn.is-perfect {
+    filter: saturate(1.12);
+    transform: translateY(-2px);
+    box-shadow: 0 16px 28px rgba(126, 224, 129, 0.22);
+}
+
+#polygonCheckBtn.is-perfect {
+    background: linear-gradient(135deg, #ffbe55, #7ee081);
+}
+
+#polygonArea {
+    color: #2ec4b6;
+}
+
+#polygonPerimeter {
+    color: #ff9c5f;
+}
+
+#arcadeCanvas {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 24px;
+    cursor: crosshair;
+    touch-action: none;
+    contain: layout paint;
+    background: #f9fcff;
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.82),
+        inset 0 -18px 36px rgba(106, 140, 255, 0.08);
+}
+
+.arcade-live-aim {
+    position: absolute;
+    z-index: 2;
+    inset: 14px;
+    pointer-events: none;
+    overflow: hidden;
+    border-radius: 24px;
+    contain: layout paint;
+}
+
+.arcade-aim-ray {
+    position: absolute;
+    left: 50%;
+    top: calc(52.38% - 3px);
+    width: min(31vw, 206px);
+    height: 6px;
+    border-radius: 999px;
+    transform: translateZ(0) rotate(0deg);
+    transform-origin: 0 50%;
+    background: linear-gradient(90deg, #2ec4b6, #80f0c8 48%, #ffe083);
+    box-shadow:
+        0 0 12px rgba(46, 196, 182, 0.36),
+        0 0 18px rgba(255, 224, 131, 0.24);
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+#arcadeCanvas.is-aiming + .arcade-live-aim .arcade-aim-ray {
+    box-shadow: 0 0 8px rgba(46, 196, 182, 0.24);
+}
+
+#arcadeCanvas.is-aiming + .arcade-live-aim .arcade-aim-ray::after {
+    box-shadow: 0 0 8px rgba(255, 143, 184, 0.20);
+}
+
+.arcade-aim-ray::after {
+    content: "";
+    position: absolute;
+    right: -8px;
+    top: 50%;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 35% 30%, rgba(255,255,255,0.9), transparent 28%),
+        linear-gradient(135deg, #ffe083, #ff8fb8);
+    transform: translateY(-50%);
+    box-shadow: 0 0 14px rgba(255, 143, 184, 0.32);
+}
+
+.arcade-aim-core {
+    position: absolute;
+    left: 50%;
+    top: 52.38%;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #27345f;
+    border: 4px solid rgba(255,255,255,0.92);
+    box-shadow: 0 8px 16px rgba(39, 52, 95, 0.18);
+    transform: translate(-50%, -50%);
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+.arcade-toast {
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    top: 50%;
+    padding: 14px 20px;
+    border-radius: 999px;
+    color: #243766;
+    font-size: 1.2rem;
+    font-weight: 1000;
+    background: rgba(255,255,255,0.88);
+    border: 1px solid rgba(255,255,255,0.9);
+    box-shadow: 0 18px 36px rgba(57, 81, 150, 0.20);
+    transform: translate(-50%, -50%);
+    animation: arcadeToastPop 0.78s ease both;
+}
+
+.arcade-toast.perfect {
+    background: linear-gradient(135deg, #fff1a8, #ffbfd4);
+}
+
+.arcade-toast.hit {
+    background: linear-gradient(135deg, #dfffee, #cfe9ff);
+}
+
+.arcade-toast.close {
+    background: linear-gradient(135deg, #fff4c7, #ffe0c8);
+}
+
+.arcade-toast.miss {
+    background: linear-gradient(135deg, #eef2ff, #f7e7ff);
+}
+
+.arcade-side {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.arcade-stat,
+.arcade-readout,
+.arcade-tip {
+    border-radius: 22px;
+    background: rgba(255,255,255,0.72);
+    border: 1px solid rgba(255,255,255,0.86);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.82);
+}
+
+.arcade-stat {
+    padding: 14px 16px;
+}
+
+.arcade-stat span {
+    display: block;
+    color: #74809e;
+    font-size: 0.78rem;
+    font-weight: 900;
+}
+
+.arcade-stat strong {
+    display: block;
+    margin-top: 4px;
+    color: #243766;
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.arcade-readout {
+    padding: 14px;
+    color: #344674;
+    font-size: 0.94rem;
+    font-weight: 900;
+    line-height: 1.5;
+}
+
+#arcadeStartBtn,
+#arcadeShootBtn,
+#polygonStartBtn,
+#polygonCheckBtn {
+    width: 100%;
+    min-height: 48px;
+}
+
+#arcadeStartBtn,
+#polygonStartBtn {
+    background: linear-gradient(135deg, #ffbe55, #ff8fb8);
+    box-shadow: 0 14px 24px rgba(255, 143, 184, 0.24);
+}
+
+#arcadeShootBtn,
+#polygonCheckBtn {
+    background: linear-gradient(135deg, #2ec4b6, #6a8cff);
+    box-shadow: 0 14px 24px rgba(46, 196, 182, 0.22);
+}
+
+.arcade-tip {
+    margin: 0;
+    padding: 14px;
+    color: #66718f;
+    font-size: 0.9rem;
+    font-weight: 800;
+    line-height: 1.55;
+}
+
+@keyframes arcadeToastPop {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -36%) scale(0.86);
+    }
+    35% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.08);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -66%) scale(0.96);
+    }
+}
+
+@keyframes arcadeOrbitBreathe {
+    0%, 100% {
+        transform: translateY(-50%) scale(1);
+        opacity: 0.76;
+    }
+    50% {
+        transform: translateY(-50%) scale(1.06);
+        opacity: 0.42;
+    }
+}
+
+@media (max-width: 860px) {
+    .geometry-arcade-card {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    #openArcadeBtn {
+        width: 100%;
+    }
+
+    #openMirrorBtn,
+    #openPolygonBtn {
+        width: 100%;
+    }
+
+    .arcade-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .arcade-achievements-head {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .arcade-side {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .arcade-readout,
+    #arcadeStartBtn,
+    #arcadeShootBtn,
+    #polygonStartBtn,
+    #polygonCheckBtn,
+    .arcade-tip {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 560px) {
+    .arcade-modal-content {
+        padding: 18px;
+    }
+
+    .arcade-stage {
+        min-height: auto;
+        padding: 10px;
+        border-radius: 24px;
+    }
+
+    .arcade-side {
+        grid-template-columns: 1fr;
+    }
+
+    .arcade-stat strong {
+        font-size: 1.55rem;
+    }
+}
+
+body.high-contrast .geometry-arcade-card,
+body.high-contrast .arcade-achievements-panel,
+body.high-contrast .arcade-achievement,
+body.high-contrast .arcade-achievements-hint,
+body.high-contrast .arcade-modal-content,
+body.high-contrast .arcade-stage,
+body.high-contrast .arcade-stat,
+body.high-contrast .arcade-readout,
+body.high-contrast .arcade-tip {
+    background: #111 !important;
+    color: #fff !important;
+    border-color: #fff !important;
+    box-shadow: none !important;
+}
+
+body.high-contrast .arcade-kicker,
+body.high-contrast .arcade-copy h3,
+body.high-contrast .arcade-achievements-head h3,
+body.high-contrast .arcade-achievement-copy strong,
+body.high-contrast .arcade-achievement-copy span,
+body.high-contrast .arcade-modal-head h2,
+body.high-contrast .arcade-stat strong,
+body.high-contrast .arcade-readout {
+    color: #fff !important;
 }
 /*over*/

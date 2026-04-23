@@ -18,6 +18,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const missionTitle = document.getElementById('missionTitle');
     const missionDesc = document.getElementById('missionDesc');
     const theoremDesc = document.getElementById('theoremDesc');
+    const interactionPanel = document.getElementById('interactionPanel');
+    const coachEmoji = document.getElementById('coachEmoji');
+    const coachName = document.getElementById('coachName');
+    const coachStatus = document.getElementById('coachStatus');
+    const focusLabel = document.getElementById('focusLabel');
+    const focusValue = document.getElementById('focusValue');
+    const streakLabel = document.getElementById('streakLabel');
+    const streakValue = document.getElementById('streakValue');
+    const discoveriesLabel = document.getElementById('discoveriesLabel');
+    const discoveriesValue = document.getElementById('discoveriesValue');
+    const goalLabel = document.getElementById('goalLabel');
+    const goalTitle = document.getElementById('goalTitle');
+    const goalProgressFill = document.getElementById('goalProgressFill');
+    const goalHint = document.getElementById('goalHint');
     const aiHintBox = document.getElementById('aiHintBox');
     const dataDisplay = document.getElementById('dataDisplay');
     const resultTitle = document.getElementById('resultTitle');
@@ -44,6 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let levelScore = 0;
     let interactionCount = 0;
     let challengeProgress = { stage1: false, stage2: false, stage3: false, stage4: false };
+    const sharedState = window.__circleGameState || (window.__circleGameState = {});
     let gameData = {
         unlockedLevel: 1,
         totalScore: 0,
@@ -124,6 +139,100 @@ let hintTier = 0;
 let failCount = 0;
 let microMilestones = {};
 let lastEncourageKey = '';
+let pendingDragPointer = null;
+let dragFrameRequested = false;
+let lastFeedbackCheckAt = 0;
+let discoveryCount = 0;
+let explorationStreak = 0;
+let bestFocusScore = 0;
+let lastFocusScore = 0;
+let lastCoachMood = 'idle';
+
+function syncSharedState() {
+    sharedState.currentLang = currentLang;
+    sharedState.currentLevel = currentLevel;
+    sharedState.gameData = gameData;
+    sharedState.levelConfig = levelConfig;
+    sharedState.startLevel = startLevel;
+    sharedState.renderAchievements = renderAchievements;
+    sharedState.updateTotalScore = updateTotalScore;
+    sharedState.updateDataDisplay = updateDataDisplay;
+    window.startLevel = startLevel;
+    window.renderAchievements = renderAchievements;
+    window.updateTotalScore = updateTotalScore;
+    window.updateDataDisplay = updateDataDisplay;
+}
+
+function getScoreLabel() {
+    return currentLang === 'zh' ? '🎯 得分：' : '🎯 Score: ';
+}
+
+function getInteractionText() {
+    return {
+        zh: {
+            coachName: '几何小导游',
+            focus: '目标热度',
+            streak: '连贯探索',
+            streakValue: (n) => `${n} 连`,
+            discoveries: '发现数',
+            goal: '当前目标',
+            introTitle: '开始探索',
+            introHint: '先拖动任意可移动点，观察右侧数据变化。',
+            idle: '拖动一个点，看看规律会不会一直成立。',
+            moving: '正在采集你的拖动轨迹，继续观察数据变化。',
+            track: '方向对了，图形已经开始接近目标状态。',
+            near: '很接近了，微调一点点就可能触发发现。',
+            precise: '漂亮！这是一个非常精准的几何位置。',
+            streakReward: (n) => `连贯探索 x${n} +${Math.min(6, n)}`,
+            discoveryReward: '新发现 +4',
+            targets: [
+                '让圆心角接近圆周角的 2 倍',
+                '把切线调整到 90°',
+                '让两个同弦圆周角相等',
+                '让对角和接近 180°',
+                '逐步点亮四个终章阶段'
+            ],
+            hints: [
+                '拖动 C 点时，观察圆心角和圆周角是否保持比例。',
+                '先拖动 T 选切点，再拖动 P 调整切线方向。',
+                '分别移动 C 和 D，看看角度差如何变化。',
+                '移动四边形顶点，观察 A+C 的总和。',
+                '按照数据面板逐个完成 4 个阶段。'
+            ]
+        },
+        en: {
+            coachName: 'Geo Guide',
+            focus: 'Target Focus',
+            streak: 'Explore Streak',
+            streakValue: (n) => `${n}x`,
+            discoveries: 'Discoveries',
+            goal: 'Current Goal',
+            introTitle: 'Start Exploring',
+            introHint: 'Drag any movable point and watch the data change.',
+            idle: 'Drag a point and see whether the pattern stays true.',
+            moving: 'Tracking your movement. Keep watching the data.',
+            track: 'Good direction. The figure is moving toward the target.',
+            near: 'Very close. A tiny adjustment may trigger a discovery.',
+            precise: 'Beautiful! This is a very precise geometry position.',
+            streakReward: (n) => `Streak x${n} +${Math.min(6, n)}`,
+            discoveryReward: 'Discovery +4',
+            targets: [
+                'Make the central angle close to 2x the inscribed angle',
+                'Tune the tangent to 90°',
+                'Make the same-chord angles equal',
+                'Make opposite angles sum to 180°',
+                'Clear the four finale stages one by one'
+            ],
+            hints: [
+                'Drag C and watch whether the angle ratio stays stable.',
+                'Move T to choose the touch point, then move P to tune the line.',
+                'Move C and D separately and watch the angle difference.',
+                'Move the quadrilateral vertices and watch A+C.',
+                'Use the data panel to complete the four stages.'
+            ]
+        }
+    }[currentLang];
+}
 
 function resetInteractionEnhancers() {
     feedbackState = 'idle';
@@ -131,8 +240,17 @@ function resetInteractionEnhancers() {
     failCount = 0;
     microMilestones = {};
     lastEncourageKey = '';
+    lastFeedbackCheckAt = 0;
+    pendingDragPointer = null;
+    dragFrameRequested = false;
+    discoveryCount = 0;
+    explorationStreak = 0;
+    bestFocusScore = 0;
+    lastFocusScore = 0;
+    lastCoachMood = 'idle';
     canvasContainer.classList.remove('on-track', 'near-target', 'milestone');
     aiHintBox.classList.remove('hint-normal', 'hint-encourage', 'hint-deep', 'show-bump');
+    updateInteractionPanel('idle', 0);
 }
 
 function setCanvasMood(state) {
@@ -160,12 +278,55 @@ function showHintMessage(text, type = 'normal', duration = 2200) {
 
 function addRichScore(points, text = '+10', kind = 'explore') {
     levelScore += points;
-    currentScore.textContent = `🎯 得分：${levelScore}`;
+    currentScore.textContent = `${getScoreLabel()}${levelScore}`;
     popFeedback.textContent = text;
     popFeedback.classList.remove('hidden', 'feedback-explore', 'feedback-milestone', 'feedback-perfect');
     popFeedback.classList.add(`feedback-${kind}`);
     playBeep(kind === 'perfect' ? 1300 : 1000, 160);
     setTimeout(() => popFeedback.classList.add('hidden'), 850);
+}
+
+function getFocusScore() {
+    const info = getNearTargetInfo();
+    if (!Number.isFinite(info.value)) return 0;
+
+    if (currentLevel === 2) {
+        return Math.max(0, Math.min(100, Math.round(100 - info.value * 8)));
+    }
+    if (currentLevel === 5) {
+        return Math.max(0, Math.min(100, Math.round(100 - info.value * 10)));
+    }
+    return Math.max(0, Math.min(100, Math.round(100 - info.value * 6)));
+}
+
+function updateInteractionPanel(mood = 'moving', focusScore = getFocusScore()) {
+    if (!interactionPanel) return;
+
+    const text = getInteractionText();
+    const safeLevel = Math.max(1, Math.min(5, currentLevel));
+    const isPrecise = focusScore >= 92;
+    const panelMood = isPrecise ? 'precise' : mood;
+
+    interactionPanel.dataset.mood = panelMood;
+    coachEmoji.textContent = panelMood === 'precise' ? '🌟' : panelMood === 'near' ? '🎯' : panelMood === 'track' ? '🧭' : '👋';
+    coachName.textContent = text.coachName;
+    coachStatus.textContent = text[panelMood] || text.moving;
+    focusLabel.textContent = text.focus;
+    focusValue.textContent = `${focusScore}%`;
+    streakLabel.textContent = text.streak;
+    streakValue.textContent = text.streakValue(explorationStreak);
+    discoveriesLabel.textContent = text.discoveries;
+    discoveriesValue.textContent = discoveryCount;
+    goalLabel.textContent = text.goal;
+    goalTitle.textContent = interactionCount > 0 ? text.targets[safeLevel - 1] : text.introTitle;
+    goalHint.textContent = interactionCount > 0 ? text.hints[safeLevel - 1] : text.introHint;
+    goalProgressFill.style.width = `${focusScore}%`;
+}
+
+function awardDiscovery(text) {
+    discoveryCount++;
+    addRichScore(4, text || getInteractionText().discoveryReward, 'milestone');
+    updateInteractionPanel('precise');
 }
 
 function getNearTargetInfo() {
@@ -199,9 +360,13 @@ function getNearTargetInfo() {
 
 function maybeEncouragePlayer() {
     const info = getNearTargetInfo();
+    const focusScore = getFocusScore();
+    let mood = 'moving';
+
     if (info.near && lastEncourageKey !== 'near') {
         lastEncourageKey = 'near';
         setCanvasMood('near-target');
+        mood = 'near';
         showHintMessage(
             currentLang === 'zh' ? '很接近了，再微调一下位置！' : 'You are very close — try a tiny adjustment!',
             'encourage',
@@ -210,14 +375,39 @@ function maybeEncouragePlayer() {
     } else if (info.onTrack && !info.near && lastEncourageKey !== 'track') {
         lastEncourageKey = 'track';
         setCanvasMood('on-track');
+        mood = 'track';
         showHintMessage(
             currentLang === 'zh' ? '方向对了，继续观察图形变化。' : 'Good direction — keep observing the shape.',
             'normal',
             1500
         );
+    } else if (info.near) {
+        mood = 'near';
+    } else if (info.onTrack) {
+        mood = 'track';
     } else if (!info.onTrack) {
         lastEncourageKey = '';
         setCanvasMood('idle');
+        mood = 'moving';
+    }
+
+    if (focusScore > lastFocusScore + 3) {
+        explorationStreak++;
+    } else if (focusScore < lastFocusScore - 10) {
+        explorationStreak = Math.max(0, explorationStreak - 1);
+    }
+
+    if (explorationStreak > 0 && explorationStreak % 6 === 0 && bestFocusScore < focusScore && levelScore < 90) {
+        addRichScore(Math.min(6, explorationStreak), getInteractionText().streakReward(explorationStreak), 'explore');
+        bestFocusScore = focusScore;
+    }
+
+    if (focusScore > bestFocusScore) bestFocusScore = focusScore;
+    lastFocusScore = focusScore;
+
+    if (mood !== lastCoachMood || interactionCount % 6 === 0) {
+        lastCoachMood = mood;
+        updateInteractionPanel(mood, focusScore);
     }
 }
 
@@ -226,7 +416,7 @@ function checkMicroMilestones() {
         const diff = Math.abs(calcCentralAngle() - 2 * calcInscribedAngleAtC());
         if (!microMilestones.l1a && diff < 12) {
             microMilestones.l1a = true;
-            addRichScore(2, currentLang === 'zh' ? '发现规律 +2' : 'Pattern found +2', 'explore');
+            awardDiscovery(currentLang === 'zh' ? '发现规律 +4' : 'Pattern found +4');
             showHintMessage(currentLang === 'zh' ? '你已经观察到角度比例的稳定性。' : 'You are noticing a stable angle ratio.', 'normal');
         }
     }
@@ -234,7 +424,7 @@ function checkMicroMilestones() {
         const diff = Math.abs(calcTangentAngle() - 90);
         if (!microMilestones.l2a && diff < 6) {
             microMilestones.l2a = true;
-            addRichScore(3, currentLang === 'zh' ? '校准接近 +3' : 'Almost calibrated +3', 'explore');
+            awardDiscovery(currentLang === 'zh' ? '校准发现 +4' : 'Calibration found +4');
             showHintMessage(currentLang === 'zh' ? '切线快和半径形成直角了。' : 'The tangent is almost perpendicular to the radius.', 'encourage');
         }
     }
@@ -242,15 +432,29 @@ function checkMicroMilestones() {
         const diff = Math.abs(calcInscribedAngleAtC() - calcInscribedAngleAtD());
         if (!microMilestones.l3a && diff < 4) {
             microMilestones.l3a = true;
-            addRichScore(2, currentLang === 'zh' ? '同弦发现 +2' : 'Same chord found +2', 'explore');
+            awardDiscovery(currentLang === 'zh' ? '同弦发现 +4' : 'Same chord found +4');
         }
     }
     if (currentLevel === 4) {
         const diff = Math.abs(calcQuadSum() - 180);
         if (!microMilestones.l4a && diff < 8) {
             microMilestones.l4a = true;
-            addRichScore(3, currentLang === 'zh' ? '对角接近 +3' : 'Opposite angles close +3', 'explore');
+            awardDiscovery(currentLang === 'zh' ? '对角发现 +4' : 'Opposite angles found +4');
         }
+    }
+    if (currentLevel === 5) {
+        const stages = [
+            { key: 'l5s1', done: challengeProgress.stage1, text: currentLang === 'zh' ? '半圆直角发现 +4' : 'Semicircle discovery +4' },
+            { key: 'l5s2', done: challengeProgress.stage2, text: currentLang === 'zh' ? '切线长度发现 +4' : 'Tangent length discovery +4' },
+            { key: 'l5s3', done: challengeProgress.stage3, text: currentLang === 'zh' ? '同弦阶段发现 +4' : 'Chord stage discovery +4' },
+            { key: 'l5s4', done: challengeProgress.stage4, text: currentLang === 'zh' ? '终章定理发现 +4' : 'Final theorem discovery +4' }
+        ];
+        stages.forEach(stage => {
+            if (stage.done && !microMilestones[stage.key]) {
+                microMilestones[stage.key] = true;
+                awardDiscovery(stage.text);
+            }
+        });
     }
 }
 
@@ -325,6 +529,7 @@ function checkMicroMilestones() {
             selectTitle: "Select Level",
             totalScore: "Total Score: ",
             starCount: "⭐ ",
+            levelComplete: "Level Complete",
             ruleTitle: "How to Play",
             missionTitle: "Mission",
             nextLevel: "Next Level",
@@ -344,12 +549,12 @@ function checkMicroMilestones() {
                 gameRules: "🎯 Game Rules",
                 rule1: "1. Complete each level's challenge to unlock the next level",
                 rule2: "2. Each level has a maximum score of 100 points, up to 3 stars",
-                rule3: "3. Drag points on the circle to verify the circle theorem",
-                rule4: "4. Submit the challenge when you meet the mission requirements",
+                rule3: "3. Watch the guide panel: target focus, streak, and discoveries react to your movement",
+                rule4: "4. Submit the challenge when the theorem condition is met",
                 scoringRules: "📊 Scoring Rules",
                 score1: "• Basic Completion: 60 points",
-                score2: "• Exploration Interaction (≥20 drags): 20 points",
-                score3: "• Precision Challenge (perfect theorem): 20 points"
+                score2: "• Active Exploration (≥20 effective moves): 20 points",
+                score3: "• Discoveries, streak rewards, and precision can boost your score during play"
             },
             footer: {
                 achievementsTitle: "🏆 Achievements",
@@ -357,8 +562,8 @@ function checkMicroMilestones() {
                 scoringHeader: "🎯 Scoring Rules",
                 scoringItems: [
                     "✅ Basic Completion: <strong>60 pts</strong>",
-                    "🔍 Exploration Interaction (≥20 drags): <strong>20 pts</strong>",
-                    "🎯 Precision Challenge (perfect theorem): <strong>20 pts</strong>",
+                    "🔍 Active Exploration (≥20 effective moves): <strong>20 pts</strong>",
+                    "🎯 Discoveries + streaks: <strong>bonus during play</strong>",
                     "⭐ Max per level: <strong>100 pts → 3 stars</strong>"
                 ],
                 facts: [
@@ -387,6 +592,7 @@ function checkMicroMilestones() {
             selectTitle: "选择关卡",
             totalScore: "总得分：",
             starCount: "⭐ ",
+            levelComplete: "关卡完成",
             ruleTitle: "玩法说明",
             missionTitle: "任务",
             nextLevel: "下一关",
@@ -406,12 +612,12 @@ function checkMicroMilestones() {
                 gameRules: "🎯 游戏规则",
                 rule1: "1. 完成每一关的挑战以解锁下一关",
                 rule2: "2. 每关满分100分，最多3颗星",
-                rule3: "3. 拖动圆上的点来验证圆定理",
-                rule4: "4. 满足任务要求后提交挑战",
+                rule3: "3. 观察互动面板：目标热度、连贯探索、发现数会实时回应你的操作",
+                rule4: "4. 达到定理条件后提交挑战",
                 scoringRules: "📊 得分规则",
                 score1: "• 基础完成：60分",
-                score2: "• 探索互动（≥20次拖动）：20分",
-                score3: "• 精准挑战（完美定理）：20分"
+                score2: "• 有效探索（≥20次移动）：20分",
+                score3: "• 发现、连贯探索和精准位置会在游玩中追加奖励"
             },
             footer: {
                 achievementsTitle: "🏆 成就系统",
@@ -419,8 +625,8 @@ function checkMicroMilestones() {
                 scoringHeader: "🎯 得分规则",
                 scoringItems: [
                     "✅ 基础完成: <strong>60分</strong>",
-                    "🔍 探索互动 (≥20次拖动): <strong>20分</strong>",
-                    "🎯 精准挑战 (完美定理): <strong>20分</strong>",
+                    "🔍 有效探索 (≥20次移动): <strong>20分</strong>",
+                    "🎯 发现 + 连贯探索: <strong>游玩中加分</strong>",
                     "⭐ 每关满分: <strong>100分 → 3星</strong>"
                 ],
                 facts: [
@@ -449,11 +655,11 @@ function checkMicroMilestones() {
     let audioEnabled = false;
     function enableAudio(){ if(!audioEnabled) audioEnabled=true; }
     function playBeep(freq=800,duration=100){ if(!audioEnabled) return; try{ const audioCtx=new (window.AudioContext||window.webkitAudioContext)(); const oscillator=audioCtx.createOscillator(); const gainNode=audioCtx.createGain(); oscillator.connect(gainNode); gainNode.connect(audioCtx.destination); oscillator.frequency.value=freq; oscillator.type='sine'; gainNode.gain.setValueAtTime(0.3,audioCtx.currentTime); gainNode.gain.exponentialRampToValueAtTime(0.01,audioCtx.currentTime+duration/1000); oscillator.start(audioCtx.currentTime); oscillator.stop(audioCtx.currentTime+duration/1000); }catch(e){} }
-    function addScore(points,text="+10"){ levelScore+=points; currentScore.textContent=`🎯 得分：${levelScore}`; popFeedback.textContent=text; popFeedback.classList.remove('hidden'); playBeep(1000,150); setTimeout(()=>popFeedback.classList.add('hidden'),800); }
+    function addScore(points,text="+10"){ levelScore+=points; currentScore.textContent=`${getScoreLabel()}${levelScore}`; popFeedback.textContent=text; popFeedback.classList.remove('hidden'); playBeep(1000,150); setTimeout(()=>popFeedback.classList.add('hidden'),800); }
 
-    function saveGameData(){ localStorage.setItem('circleGameData', JSON.stringify(gameData)); }
-    function loadGameData(){ const saved=localStorage.getItem('circleGameData'); if(saved){ gameData=JSON.parse(saved); updateTotalScore(); } }
-    function updateTotalScore(){ totalScoreText.textContent=langPack[currentLang].totalScore+gameData.totalScore; let totalStars=0; gameData.levels.forEach(l=>totalStars+=l.stars); starCountSpan.textContent=langPack[currentLang].starCount+totalStars+"/15"; }
+    function saveGameData(){ localStorage.setItem('circleGameData', JSON.stringify(gameData)); syncSharedState(); }
+    function loadGameData(){ const saved=localStorage.getItem('circleGameData'); if(saved){ gameData=JSON.parse(saved); } updateTotalScore(); syncSharedState(); }
+    function updateTotalScore(){ totalScoreText.textContent=langPack[currentLang].totalScore+gameData.totalScore; let totalStars=0; gameData.levels.forEach(l=>totalStars+=l.stars); starCountSpan.textContent=langPack[currentLang].starCount+totalStars+"/15"; syncSharedState(); }
 
    function renderLevelGrid() {
     levelGrid.innerHTML = '';
@@ -463,6 +669,9 @@ function checkMicroMilestones() {
         const meta = LEVEL_META[level.id];
         const card = document.createElement('div');
         card.className = `level-card ${isUnlocked ? '' : 'locked'}`;
+        card.tabIndex = isUnlocked ? 0 : -1;
+        card.setAttribute('role', 'button');
+        card.setAttribute('aria-disabled', String(!isUnlocked));
 
         const diffClass =
             meta.diff[currentLang] === '入门' || meta.diff[currentLang] === 'Easy'
@@ -481,7 +690,15 @@ function checkMicroMilestones() {
             ${!isUnlocked ? `<div class="lock-tip">${currentLang === 'zh' ? '继续收集星星来解锁' : 'Collect more stars to unlock'}</div>` : ''}
         `;
 
-        if (isUnlocked) card.addEventListener('click', () => startLevel(level.id));
+        if (isUnlocked) {
+            card.addEventListener('click', () => startLevel(level.id));
+            card.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    startLevel(level.id);
+                }
+            });
+        }
         levelGrid.appendChild(card);
     });
 }
@@ -503,6 +720,16 @@ function checkMicroMilestones() {
         } else {
             removeLevel2Mascots();
         }
+        if (Number(levelId) === 4) {
+            setTimeout(() => injectLevel4Mascots(), 100);
+        } else {
+            removeLevel4Mascots();
+        }
+        if (Number(levelId) === 5) {
+            setTimeout(() => injectLevel5Mascots(), 100);
+        } else {
+            removeLevel5Mascots();
+        }
         enableAudio();
         currentLevel=levelId;
         levelScore=0;
@@ -511,16 +738,17 @@ function checkMicroMilestones() {
         const level=levelConfig[levelId-1];
         levelPoints=level.initPoints();
         resetInteractionEnhancers();
-        levelTitle.textContent=`关卡 ${levelId}: ${level.name[currentLang]}`;
+        levelTitle.textContent=`${currentLang === 'zh' ? '关卡' : 'Level'} ${levelId}: ${level.name[currentLang]}`;
         missionTitle.textContent=level.mission.title[currentLang];
         missionDesc.textContent=level.mission.desc[currentLang];
         theoremDesc.textContent=level.theorem[currentLang];
-        currentScore.textContent=`🎯 得分：0`;
+        currentScore.textContent=`${getScoreLabel()}0`;
         levelStar.textContent='☆☆☆';
         renderDataDisplay();
         levelSelect.classList.add('hidden');
         gameScreen.classList.remove('hidden');
-        draw();
+        syncSharedState();
+        drawScene();
     }
 
     function renderDataDisplay(){
@@ -751,6 +979,10 @@ function checkMicroMilestones() {
         else if(lvl===4) drawLevel4();
         else if(lvl===5) drawLevel5();
         updateDataDisplay();
+    }
+
+    function drawScene(){
+        draw();
         if(currentLevel===5) updateChallengeProgress();
     }
 
@@ -780,6 +1012,7 @@ if (!challengeProgress.stage4 && level.checkStage4()) {
         let completedCount=[challengeProgress.stage1,challengeProgress.stage2,challengeProgress.stage3,challengeProgress.stage4].filter(Boolean).length;
         const progEl=document.getElementById('data-progress');
         if(progEl) progEl.textContent=`${completedCount}/4 ${langPack[currentLang].completed}`;
+        checkMicroMilestones();
     }
 
     function updateDataDisplay(){
@@ -799,32 +1032,78 @@ if (!challengeProgress.stage4 && level.checkStage4()) {
         return {x:(clientX-rect.left)*scaleX, y:(clientY-rect.top)*scaleY};
     }
 
-    canvas.addEventListener('mousedown',(e)=>{ let m=getCanvasCoords(e); for(let p of Object.values(levelPoints)){ if(!p.fixed && getDistance(m,p)<15){ draggingPoint=p; break; } } });
-    canvas.addEventListener('mousemove',(e)=>{ if(!draggingPoint) return; let m=getCanvasCoords(e); interactionCount++; if(currentLevel===5 && draggingPoint.name==='P'){ draggingPoint.x=m.x; draggingPoint.y=m.y; } else { let ang=Math.atan2(m.y-circle.y,m.x-circle.x); draggingPoint.x=circle.x+circle.radius*Math.cos(ang); draggingPoint.y=circle.y+circle.radius*Math.sin(ang); } if(interactionCount%10===0 && levelScore<80) addScore(1,"+1");maybeEncouragePlayer();
-checkMicroMilestones(); draw(); });
-    canvas.addEventListener('mouseup',()=>{ draggingPoint=null; });
-    canvas.addEventListener('touchstart',(e)=>{ e.preventDefault(); let touch=e.touches[0]; let m=getCanvasCoords(touch); for(let p of Object.values(levelPoints)){ if(!p.fixed && getDistance(m,p)<20){ draggingPoint=p; break; } } },{passive:false});
-    canvas.addEventListener('touchmove',(e)=>{ e.preventDefault(); if(!draggingPoint) return; let touch=e.touches[0]; let m=getCanvasCoords(touch); interactionCount++; if(currentLevel===5 && draggingPoint.name==='P'){ draggingPoint.x=m.x; draggingPoint.y=m.y; } else { let ang=Math.atan2(m.y-circle.y,m.x-circle.x); draggingPoint.x=circle.x+circle.radius*Math.cos(ang); draggingPoint.y=circle.y+circle.radius*Math.sin(ang); } if(interactionCount%10===0 && levelScore<80) addScore(1,"+1");canvas.addEventListener('mousemove', (e) => {
-    if (!draggingPoint) return;
-    let m = getCanvasCoords(e);
-    interactionCount++;
-
-    if (currentLevel === 5 && draggingPoint.name === 'P') {
-        draggingPoint.x = m.x;
-        draggingPoint.y = m.y;
-    } else {
-        let ang = Math.atan2(m.y - circle.y, m.x - circle.x);
-        draggingPoint.x = circle.x + circle.radius * Math.cos(ang);
-        draggingPoint.y = circle.y + circle.radius * Math.sin(ang);
+    function beginDrag(pointer, hitRadius) {
+        for (const point of Object.values(levelPoints)) {
+            if (!point.fixed && getDistance(pointer, point) < hitRadius) {
+                draggingPoint = point;
+                pendingDragPointer = null;
+                dragFrameRequested = false;
+                break;
+            }
+        }
     }
 
-    if (interactionCount % 10 === 0 && levelScore < 80) addScore(1, "+1");
+    function scheduleDragFrame() {
+        if (dragFrameRequested) return;
+        dragFrameRequested = true;
 
-    maybeEncouragePlayer();
-    checkMicroMilestones();
-    draw();
-}); draw(); },{passive:false});
-    canvas.addEventListener('touchend',(e)=>{ e.preventDefault(); draggingPoint=null; });
+        requestAnimationFrame(() => {
+            dragFrameRequested = false;
+            if (!draggingPoint || !pendingDragPointer) return;
+
+            const pointer = pendingDragPointer;
+            pendingDragPointer = null;
+            applyDragMove(pointer);
+
+            if (draggingPoint && pendingDragPointer) {
+                scheduleDragFrame();
+            }
+        });
+    }
+
+    function applyDragMove(pointer) {
+        if (!draggingPoint) return;
+
+        interactionCount++;
+        if (currentLevel === 5 && draggingPoint.name === 'P') {
+            draggingPoint.x = pointer.x;
+            draggingPoint.y = pointer.y;
+        } else {
+            const ang = Math.atan2(pointer.y - circle.y, pointer.x - circle.x);
+            draggingPoint.x = circle.x + circle.radius * Math.cos(ang);
+            draggingPoint.y = circle.y + circle.radius * Math.sin(ang);
+        }
+
+        if (interactionCount % 10 === 0 && levelScore < 80) addScore(1, "+1");
+        const now = performance.now();
+        if (now - lastFeedbackCheckAt >= 80) {
+            lastFeedbackCheckAt = now;
+            maybeEncouragePlayer();
+            checkMicroMilestones();
+        }
+        drawScene();
+    }
+
+    function handleDragMove(pointer) {
+        if (!draggingPoint) return;
+        pendingDragPointer = pointer;
+        scheduleDragFrame();
+    }
+
+    function endDrag() {
+        draggingPoint = null;
+        pendingDragPointer = null;
+        dragFrameRequested = false;
+    }
+
+    canvas.addEventListener('mousedown',(e)=>{ beginDrag(getCanvasCoords(e), 15); });
+    canvas.addEventListener('mousemove',(e)=>{ handleDragMove(getCanvasCoords(e)); });
+    canvas.addEventListener('mouseup', endDrag);
+    canvas.addEventListener('mouseleave', endDrag);
+    canvas.addEventListener('touchstart',(e)=>{ e.preventDefault(); beginDrag(getCanvasCoords(e.touches[0]), 20); },{passive:false});
+    canvas.addEventListener('touchmove',(e)=>{ e.preventDefault(); handleDragMove(getCanvasCoords(e.touches[0])); },{passive:false});
+    canvas.addEventListener('touchend',(e)=>{ e.preventDefault(); endDrag(); },{passive:false});
+    canvas.addEventListener('touchcancel', endDrag, {passive:false});
 
     submitBtn.addEventListener('click', () => {
     const level = levelConfig[currentLevel - 1];
@@ -866,13 +1145,15 @@ checkMicroMilestones(); draw(); });
     // 成功后重置失败次数
     window.failCount = 0;
 
-    // 基础评分逻辑保持不变
-    let finalScore = 60;
-    if (interactionCount >= 20) finalScore += 20;
+    // 互动评分：有效拖动、发现奖励和连贯探索共同计入探索分，最高 20 分
+    const explorationBonus = Math.max(interactionCount >= 20 ? 20 : 0, Math.min(20, levelScore));
+    let finalScore = 60 + explorationBonus;
     if (isPrecise) finalScore += 20;
+    finalScore = Math.max(finalScore, levelScore);
+    finalScore = Math.min(100, finalScore);
 
     levelScore = finalScore;
-    currentScore.textContent = `🎯 得分：${levelScore}`;
+    currentScore.textContent = `${getScoreLabel()}${levelScore}`;
 
     // 星级判定保持不变
     let stars = 1;
@@ -939,9 +1220,9 @@ checkMicroMilestones(); draw(); });
 });
 
     resetLevelBtn.addEventListener('click',()=>{ startLevel(currentLevel); });
-    backBtn.addEventListener('click',()=>{ removeLevel3Mascots();gameScreen.classList.add('hidden'); levelSelect.classList.remove('hidden'); renderLevelGrid(); });
+    backBtn.addEventListener('click',()=>{ removeLevel3Mascots(); removeLevel4Mascots(); removeLevel5Mascots(); gameScreen.classList.add('hidden'); levelSelect.classList.remove('hidden'); renderLevelGrid(); });
     nextLevelBtn.addEventListener('click',()=>{ resultModal.classList.add('hidden'); if(currentLevel<levelConfig.length) startLevel(currentLevel+1); else { gameScreen.classList.add('hidden'); levelSelect.classList.remove('hidden'); renderLevelGrid(); } });
-    backToSelectBtn.addEventListener('click',()=>{ removeLevel3Mascots();resultModal.classList.add('hidden'); gameScreen.classList.add('hidden'); levelSelect.classList.remove('hidden'); renderLevelGrid(); });
+    backToSelectBtn.addEventListener('click',()=>{ removeLevel3Mascots(); removeLevel4Mascots(); removeLevel5Mascots(); resultModal.classList.add('hidden'); gameScreen.classList.add('hidden'); levelSelect.classList.remove('hidden'); renderLevelGrid(); });
     aiHintBtn.addEventListener('click',()=>{
     const level=levelConfig[currentLevel-1];
     if(currentLevel===5){
@@ -1016,10 +1297,13 @@ checkMicroMilestones(); draw(); });
         selectTitle.textContent = langPack[currentLang].selectTitle;
         ruleTitle.textContent = langPack[currentLang].ruleTitle;
         const level = levelConfig[currentLevel-1];
-        if (level && !levelSelect.classList.contains('hidden')) {
+        if (level && levelSelect.classList.contains('hidden')) {
+            levelTitle.textContent = `${currentLang === 'zh' ? '关卡' : 'Level'} ${currentLevel}: ${level.name[currentLang]}`;
             missionTitle.textContent = level.mission.title[currentLang];
             missionDesc.textContent = level.mission.desc[currentLang];
             theoremDesc.textContent = level.theorem[currentLang];
+            currentScore.textContent = `${getScoreLabel()}${levelScore}`;
+            updateInteractionPanel(lastCoachMood || 'idle', lastFocusScore || getFocusScore());
         }
         nextLevelBtn.textContent = langPack[currentLang].nextLevel;
         backToSelectBtn.textContent = langPack[currentLang].backToLevels;
@@ -1034,16 +1318,19 @@ checkMicroMilestones(); draw(); });
         renderDataDisplay();
         updateFooterLanguage();
         renderAchievements();
+        if (typeof window.refreshExploreHub === 'function') window.refreshExploreHub();
+        syncSharedState();
     }
 
     langSelect.addEventListener('change', () => {
         currentLang = langSelect.value;
         updateLang();
-        if (!levelSelect.classList.contains('hidden')) draw();
+        if (!levelSelect.classList.contains('hidden')) drawScene();
     });
 
     loadGameData();
     langSelect.value = currentLang;
+    syncSharedState();
     updateLang();
     renderLevelGrid();
     updateFooterLanguage();
@@ -1100,26 +1387,46 @@ const HUB_TODAY = {
     }
 };
 
+function getSharedGameState() {
+    return window.__circleGameState || {};
+}
+
+function getSharedLang() {
+    return getSharedGameState().currentLang || 'zh';
+}
+
+function getSharedGameData() {
+    return getSharedGameState().gameData || null;
+}
+
+function getSharedLevelConfig() {
+    return getSharedGameState().levelConfig || [];
+}
+
 function getCompletedLevels() {
-    if (!window.gameData || !Array.isArray(gameData.levels)) return 0;
+    const gameData = getSharedGameData();
+    if (!gameData || !Array.isArray(gameData.levels)) return 0;
     return gameData.levels.filter(level => (level.score || 0) > 0).length;
 }
 
 function getTotalStars() {
-    if (!window.gameData || !Array.isArray(gameData.levels)) return 0;
+    const gameData = getSharedGameData();
+    if (!gameData || !Array.isArray(gameData.levels)) return 0;
     return gameData.levels.reduce((sum, level) => sum + (level.stars || 0), 0);
 }
 
 function getTodayLevelId() {
-    if (!window.gameData || !gameData.unlockedLevel) return 1;
+    const gameData = getSharedGameData();
+    if (!gameData || !gameData.unlockedLevel) return 1;
     return Math.min(gameData.unlockedLevel, 5);
 }
 
 function updateHubProgress() {
     const completed = getCompletedLevels();
-    const totalLevels = window.levelConfig ? levelConfig.length : 5;
+    const totalLevels = getSharedLevelConfig().length || 5;
     const stars = getTotalStars();
     const maxStars = totalLevels * 3;
+    const currentLang = getSharedLang();
     const t = HUB_LANG[currentLang] || HUB_LANG.zh;
 
     const levelProgressText = document.getElementById('levelProgressText');
@@ -1142,6 +1449,7 @@ function updateHubProgress() {
 
 function updateTodayChallenge() {
     const levelId = getTodayLevelId();
+    const currentLang = getSharedLang();
     const todayTitle = document.getElementById('todayTitle');
     const todayDesc = document.getElementById('todayDesc');
     const todayBtn = document.getElementById('todayChallengeBtn');
@@ -1154,6 +1462,7 @@ function updateTodayChallenge() {
     todayBtn.textContent = (HUB_LANG[currentLang] || HUB_LANG.zh).todayBtn;
 
     todayBtn.onclick = () => {
+        const startLevel = getSharedGameState().startLevel;
         if (typeof startLevel === 'function') {
             startLevel(levelId);
         }
@@ -1164,12 +1473,14 @@ function rotateFunFacts() {
     const sideFact = document.getElementById('sideFact');
     if (!sideFact) return;
 
+    const currentLang = getSharedLang();
     const facts = HUB_FACTS[currentLang] || HUB_FACTS.zh;
     let currentIndex = Math.floor(Math.random() * facts.length);
 
     sideFact.textContent = facts[currentIndex];
 
-    setInterval(() => {
+    if (window.__hubFactsInterval) clearInterval(window.__hubFactsInterval);
+    window.__hubFactsInterval = setInterval(() => {
         currentIndex = (currentIndex + 1) % facts.length;
         sideFact.classList.add('is-switching');
         setTimeout(() => {
@@ -1183,6 +1494,7 @@ function updateAchievementSummary() {
     const box = document.querySelector('.achievements-compact');
     const completed = getCompletedLevels();
     const stars = getTotalStars();
+    const currentLang = getSharedLang();
     const t = HUB_LANG[currentLang] || HUB_LANG.zh;
 
     if (!box) return;
@@ -1201,7 +1513,7 @@ function updateAchievementSummary() {
 
 function highlightLevelPath() {
     const nodes = document.querySelectorAll('.level-path-strip .path-node');
-    const unlocked = window.gameData?.unlockedLevel || 1;
+    const unlocked = getSharedGameData()?.unlockedLevel || 1;
     nodes.forEach((node, index) => {
         node.classList.toggle('active', index < unlocked);
     });
@@ -1209,7 +1521,8 @@ function highlightLevelPath() {
 
 function addHubPointerEffect() {
     const hub = document.getElementById('exploreHub');
-    if (!hub) return;
+    if (!hub || hub.dataset.pointerBound === 'true') return;
+    hub.dataset.pointerBound = 'true';
 
     hub.addEventListener('mousemove', (e) => {
         const panels = hub.querySelectorAll('.hero-panel');
@@ -1258,6 +1571,16 @@ function initExploreHub() {
     } catch (e) { console.warn('rotateFunFacts failed:', e); }
 }
 
+function refreshExploreHub() {
+    updateExploreHubLanguage();
+    updateHubProgress();
+    updateTodayChallenge();
+    updateAchievementSummary();
+    highlightLevelPath();
+}
+
+window.refreshExploreHub = refreshExploreHub;
+
 /* 初始执行 - 提前到DOMContentLoaded避免空白 */
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => initExploreHub(), 0);
@@ -1269,25 +1592,6 @@ window.addEventListener('load', () => {
 });
 
 /* 如果你已有这些更新函数，补一层联动刷新 */
-const _originRenderAchievements = window.renderAchievements;
-if (typeof _originRenderAchievements === 'function') {
-    window.renderAchievements = function (...args) {
-        const result = _originRenderAchievements.apply(this, args);
-        updateHubProgress();
-        updateAchievementSummary();
-        highlightLevelPath();
-        return result;
-    };
-}
-
-const _originUpdateTotalScore = window.updateTotalScore;
-if (typeof _originUpdateTotalScore === 'function') {
-    window.updateTotalScore = function (...args) {
-        const result = _originUpdateTotalScore.apply(this, args);
-        updateHubProgress();
-        return result;
-    };
-}
 const HUB_LANG = {
     zh: {
         todayBadge: '🎯 今日挑战',
@@ -1344,6 +1648,7 @@ const HUB_LANG = {
     }
 };
 function updateExploreHubLanguage() {
+    const currentLang = getSharedLang();
     const t = HUB_LANG[currentLang] || HUB_LANG.zh;
 
     const setText = (id, value) => {
@@ -1370,21 +1675,6 @@ function updateExploreHubLanguage() {
     const todayBtn = document.getElementById('todayChallengeBtn');
     if (todayBtn) todayBtn.textContent = t.todayBtn;
 }
-langSelect.addEventListener('change', (e) => {
-    currentLang = e.target.value;
-
-    // 你原本已有的语言更新函数
-    if (typeof updateFooterLanguage === 'function') updateFooterLanguage();
-    if (typeof renderLevelGrid === 'function') renderLevelGrid();
-    if (typeof renderAchievements === 'function') renderAchievements();
-
-    // 新增模块同步切换
-    updateExploreHubLanguage();
-    updateHubProgress();
-    updateTodayChallenge();
-    updateAchievementSummary();
-    highlightLevelPath();
-});
 /* =========================================
    按关卡切换底部主题
 ========================================= */
@@ -1792,6 +2082,167 @@ function removeLevel2Mascots() {
     document.querySelectorAll('.level2-mascot').forEach(el => el.remove());
 }
 
+/* ===== Level 4 卡通形象函数 - 四边形花园伙伴 ===== */
+function injectLevel4Mascots() {
+    removeLevel4Mascots();
+
+    const canvasContainer = document.querySelector('.canvas-container');
+    if (!canvasContainer || !document.body.classList.contains('level-theme-4')) return;
+
+    const kitePositions = ['pos-quad-tl', 'pos-quad-tr'];
+    kitePositions.forEach(pos => {
+        const kite = document.createElement('div');
+        kite.className = `level4-mascot mascot-quad-kite ${pos}`;
+        kite.innerHTML = `
+            <div class="kite-diamond"></div>
+            <div class="kite-line kite-line-a"></div>
+            <div class="kite-line kite-line-b"></div>
+            <div class="kite-face">
+                <div class="kite-eye left"></div>
+                <div class="kite-eye right"></div>
+                <div class="kite-smile"></div>
+            </div>
+            <div class="kite-tail"></div>
+        `;
+        canvasContainer.appendChild(kite);
+    });
+
+    const gemPositions = ['pos-gem-left', 'pos-gem-right'];
+    gemPositions.forEach(pos => {
+        const gem = document.createElement('div');
+        gem.className = `level4-mascot mascot-angle-gem ${pos}`;
+        gem.innerHTML = `
+            <div class="gem-body"></div>
+            <div class="gem-highlight"></div>
+            <div class="gem-eye left"></div>
+            <div class="gem-eye right"></div>
+            <div class="gem-blush left"></div>
+            <div class="gem-blush right"></div>
+        `;
+        canvasContainer.appendChild(gem);
+    });
+
+    const bloomPositions = ['pos-bloom-bl', 'pos-bloom-br'];
+    bloomPositions.forEach(pos => {
+        const bloom = document.createElement('div');
+        bloom.className = `level4-mascot mascot-proof-bloom ${pos}`;
+        bloom.innerHTML = `
+            <div class="bloom-core"></div>
+            <div class="bloom-petal petal-1"></div>
+            <div class="bloom-petal petal-2"></div>
+            <div class="bloom-petal petal-3"></div>
+            <div class="bloom-petal petal-4"></div>
+            <div class="bloom-face">
+                <div class="bloom-eye left"></div>
+                <div class="bloom-eye right"></div>
+                <div class="bloom-mouth"></div>
+            </div>
+        `;
+        canvasContainer.appendChild(bloom);
+    });
+
+    const guardian = document.createElement('div');
+    guardian.className = 'level4-mascot mascot-quad-guardian pos-quad-guardian';
+    guardian.innerHTML = `
+        <div class="guardian-cape"></div>
+        <div class="guardian-body"></div>
+        <div class="guardian-crown">
+            <span class="crown-gem gem-a"></span>
+            <span class="crown-gem gem-b"></span>
+            <span class="crown-gem gem-c"></span>
+        </div>
+        <div class="guardian-face">
+            <div class="guardian-eye left"></div>
+            <div class="guardian-eye right"></div>
+            <div class="guardian-blush left"></div>
+            <div class="guardian-blush right"></div>
+            <div class="guardian-smile"></div>
+        </div>
+        <div class="guardian-orb orb-left"></div>
+        <div class="guardian-orb orb-right"></div>
+    `;
+    canvasContainer.appendChild(guardian);
+}
+
+function removeLevel4Mascots() {
+    document.querySelectorAll('.level4-mascot').forEach(el => el.remove());
+}
+
+/* ===== Level 5 卡通形象函数 - 终章星图精灵 ===== */
+function injectLevel5Mascots() {
+    removeLevel5Mascots();
+
+    const canvasContainer = document.querySelector('.canvas-container');
+    if (!canvasContainer || !document.body.classList.contains('level-theme-5')) return;
+
+    const badgePositions = ['pos-stage-1', 'pos-stage-2', 'pos-stage-3', 'pos-stage-4'];
+    badgePositions.forEach((pos, index) => {
+        const badge = document.createElement('div');
+        badge.className = `level5-mascot mascot-stage-badge ${pos}`;
+        badge.innerHTML = `
+            <div class="badge-ring"></div>
+            <div class="badge-core">${index + 1}</div>
+            <div class="badge-face">
+                <div class="badge-eye left"></div>
+                <div class="badge-eye right"></div>
+            </div>
+        `;
+        canvasContainer.appendChild(badge);
+    });
+
+    const cometPositions = ['pos-comet-left', 'pos-comet-right'];
+    cometPositions.forEach(pos => {
+        const comet = document.createElement('div');
+        comet.className = `level5-mascot mascot-final-comet ${pos}`;
+        comet.innerHTML = `
+            <div class="comet-head"></div>
+            <div class="comet-tail"></div>
+            <div class="comet-face">
+                <div class="comet-eye left"></div>
+                <div class="comet-eye right"></div>
+                <div class="comet-mouth"></div>
+            </div>
+        `;
+        canvasContainer.appendChild(comet);
+    });
+
+    const starGuide = document.createElement('div');
+    starGuide.className = 'level5-mascot mascot-grand-star pos-grand-star';
+    starGuide.innerHTML = `
+        <div class="grand-star-body"></div>
+        <div class="grand-star-face">
+            <div class="grand-star-eye left"></div>
+            <div class="grand-star-eye right"></div>
+            <div class="grand-star-smile"></div>
+        </div>
+    `;
+    canvasContainer.appendChild(starGuide);
+
+    const conductor = document.createElement('div');
+    conductor.className = 'level5-mascot mascot-final-conductor pos-final-conductor';
+    conductor.innerHTML = `
+        <div class="conductor-aura"></div>
+        <div class="conductor-cape"></div>
+        <div class="conductor-body"></div>
+        <div class="conductor-halo"></div>
+        <div class="conductor-face">
+            <div class="conductor-eye left"></div>
+            <div class="conductor-eye right"></div>
+            <div class="conductor-blush left"></div>
+            <div class="conductor-blush right"></div>
+            <div class="conductor-smile"></div>
+        </div>
+        <div class="conductor-wand"></div>
+        <div class="conductor-star star-a"></div>
+        <div class="conductor-star star-b"></div>
+    `;
+    canvasContainer.appendChild(conductor);
+}
+
+function removeLevel5Mascots() {
+    document.querySelectorAll('.level5-mascot').forEach(el => el.remove());
+}
+
 /* =========================================================
    Level 3 背景增强增量代码
    粘贴到 v4script.js 最底部
@@ -1986,5 +2437,1781 @@ function removeLevel2Mascots() {
         document.addEventListener('DOMContentLoaded', initLevel3Enhancement);
     } else {
         initLevel3Enhancement();
+    }
+})();
+
+/* =========================================================
+   Geometry Arcade Achievements
+   三个独立小游戏共用的成就系统
+========================================================= */
+(() => {
+    const STORAGE_KEY = 'geometryArcadeAchievements';
+
+    const achievementList = [
+        {
+            id: 'angle_first_shot',
+            icon: '🎯',
+            zh: { name: '第一道射线', desc: '在角度发射台完成一次发射' },
+            en: { name: 'First Ray', desc: 'Fire once in Angle Launcher' }
+        },
+        {
+            id: 'angle_perfect',
+            icon: '🌠',
+            zh: { name: '零误差命中', desc: '角度发射台打出一次完美命中' },
+            en: { name: 'Zero-Error Hit', desc: 'Score one perfect hit in Angle Launcher' }
+        },
+        {
+            id: 'angle_combo_5',
+            icon: '🔥',
+            zh: { name: '角度连击手', desc: '角度发射台连击达到 5' },
+            en: { name: 'Angle Streaker', desc: 'Reach a 5 combo in Angle Launcher' }
+        },
+        {
+            id: 'mirror_first_lock',
+            icon: '🪞',
+            zh: { name: '镜面初校准', desc: '在镜面对称工坊锁定一次镜面' },
+            en: { name: 'First Reflection', desc: 'Lock the mirror once' }
+        },
+        {
+            id: 'mirror_perfect',
+            icon: '💎',
+            zh: { name: '完美反射', desc: '镜面对称工坊达成一次完美反射' },
+            en: { name: 'Perfect Reflection', desc: 'Make one perfect reflection' }
+        },
+        {
+            id: 'mirror_finish',
+            icon: '🏁',
+            zh: { name: '对称毕业生', desc: '完成一整局镜面对称工坊' },
+            en: { name: 'Symmetry Graduate', desc: 'Finish a full mirror challenge' }
+        },
+        {
+            id: 'polygon_first_shape',
+            icon: '🔷',
+            zh: { name: '第一根橡皮筋', desc: '在面积橡皮筋中拖动一次顶点' },
+            en: { name: 'First Rubber Band', desc: 'Drag a vertex in Area Rubber Band' }
+        },
+        {
+            id: 'polygon_perfect',
+            icon: '📐',
+            zh: { name: '面积大师', desc: '面积橡皮筋达成一次完美塑形' },
+            en: { name: 'Area Master', desc: 'Make one perfect polygon shape' }
+        },
+        {
+            id: 'triad_player',
+            icon: '🎪',
+            zh: { name: '游乐场巡礼', desc: '三个小游戏都玩过一次' },
+            en: { name: 'Arcade Tour', desc: 'Play all three mini games' }
+        },
+        {
+            id: 'arcade_collector',
+            icon: '👑',
+            zh: { name: '徽章收藏家', desc: '解锁除本徽章外的所有小游戏成就' },
+            en: { name: 'Badge Collector', desc: 'Unlock every other arcade achievement' }
+        }
+    ];
+
+    const defaultData = {
+        unlocked: {},
+        played: { angle: false, mirror: false, polygon: false },
+        best: { angleCombo: 0, angleScore: 0, mirrorScore: 0, polygonScore: 0 },
+        lastUnlocked: ''
+    };
+
+    function loadData() {
+        try {
+            return { ...defaultData, ...JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}') };
+        } catch (error) {
+            return { ...defaultData };
+        }
+    }
+
+    let data = loadData();
+    data.played = { ...defaultData.played, ...data.played };
+    data.best = { ...defaultData.best, ...data.best };
+    data.unlocked = { ...defaultData.unlocked, ...data.unlocked };
+
+    function saveData() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    function lang() {
+        return document.getElementById('langSelect')?.value === 'en' ? 'en' : 'zh';
+    }
+
+    function copy() {
+        return lang() === 'en'
+            ? {
+                kicker: '🏅 Mini Game Achievements',
+                title: 'Geometry Arcade Badges',
+                hintEmpty: 'Play the three mini games to collect special badges.',
+                hintNext: (name) => `Next badge: ${name}`,
+                hintDone: 'All arcade badges unlocked. Excellent geometric instincts!',
+                progress: (done, total) => `${done} / ${total}`
+            }
+            : {
+                kicker: '🏅 小游戏成就',
+                title: '几何游乐场徽章',
+                hintEmpty: '完成三个小游戏，收集专属徽章。',
+                hintNext: (name) => `下一个徽章：${name}`,
+                hintDone: '小游戏徽章已全部解锁，几何手感很稳！',
+                progress: (done, total) => `${done} / ${total}`
+            };
+    }
+
+    function getUnlockedCount() {
+        return achievementList.filter((achievement) => data.unlocked[achievement.id]).length;
+    }
+
+    function maybeUnlockCollector() {
+        const allOtherUnlocked = achievementList
+            .filter((achievement) => achievement.id !== 'arcade_collector')
+            .every((achievement) => data.unlocked[achievement.id]);
+        if (allOtherUnlocked) unlock('arcade_collector', false);
+    }
+
+    function announceUnlock(id) {
+        const achievement = achievementList.find((item) => item.id === id);
+        if (!achievement) return;
+        const localized = achievement[lang()];
+        const toast = document.createElement('div');
+        toast.className = 'arcade-achievement-toast';
+        toast.innerHTML = `
+            <span>${achievement.icon}</span>
+            <strong>${lang() === 'en' ? 'Badge Unlocked' : '成就解锁'}</strong>
+            <em>${localized.name}</em>
+        `;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.classList.add('is-leaving'), 1800);
+        setTimeout(() => toast.remove(), 2300);
+    }
+
+    function unlock(id, shouldRender = true) {
+        if (!id || data.unlocked[id]) return false;
+        data.unlocked[id] = true;
+        data.lastUnlocked = id;
+        saveData();
+        announceUnlock(id);
+        if (id !== 'arcade_collector') maybeUnlockCollector();
+        if (shouldRender) render();
+        return true;
+    }
+
+    function recordPlayed(game) {
+        if (!data.played[game]) {
+            data.played[game] = true;
+            saveData();
+        }
+        if (data.played.angle && data.played.mirror && data.played.polygon) {
+            unlock('triad_player', false);
+        }
+        render();
+    }
+
+    function record(eventName, payload = {}) {
+        if (payload.game) recordPlayed(payload.game);
+        if (eventName === 'angle_shot') unlock('angle_first_shot', false);
+        if (eventName === 'angle_perfect') unlock('angle_perfect', false);
+        if (eventName === 'angle_combo') {
+            data.best.angleCombo = Math.max(data.best.angleCombo, payload.combo || 0);
+            if (data.best.angleCombo >= 5) unlock('angle_combo_5', false);
+        }
+        if (eventName === 'angle_score') {
+            data.best.angleScore = Math.max(data.best.angleScore, payload.score || 0);
+        }
+        if (eventName === 'mirror_lock') unlock('mirror_first_lock', false);
+        if (eventName === 'mirror_perfect') unlock('mirror_perfect', false);
+        if (eventName === 'mirror_finish') {
+            data.best.mirrorScore = Math.max(data.best.mirrorScore, payload.score || 0);
+            unlock('mirror_finish', false);
+        }
+        if (eventName === 'polygon_drag') unlock('polygon_first_shape', false);
+        if (eventName === 'polygon_perfect') unlock('polygon_perfect', false);
+        if (eventName === 'polygon_finish') {
+            data.best.polygonScore = Math.max(data.best.polygonScore, payload.score || 0);
+        }
+        maybeUnlockCollector();
+        saveData();
+        render();
+    }
+
+    function render() {
+        const panel = document.getElementById('arcadeAchievementsPanel');
+        const list = document.getElementById('arcadeAchievementsList');
+        if (!panel || !list) return;
+
+        const text = copy();
+        const done = getUnlockedCount();
+        const next = achievementList.find((achievement) => !data.unlocked[achievement.id]);
+        document.getElementById('arcadeAchievementsKicker').textContent = text.kicker;
+        document.getElementById('arcadeAchievementsTitle').textContent = text.title;
+        document.getElementById('arcadeAchievementsProgress').textContent = text.progress(done, achievementList.length);
+        document.getElementById('arcadeAchievementsHint').textContent = next ? text.hintNext(next[lang()].name) : text.hintDone;
+        panel.dataset.complete = String(done === achievementList.length);
+
+        list.innerHTML = achievementList.map((achievement) => {
+            const unlocked = Boolean(data.unlocked[achievement.id]);
+            const localized = achievement[lang()];
+            return `
+                <div class="arcade-achievement ${unlocked ? 'unlocked' : 'locked'}">
+                    <div class="arcade-achievement-icon">${achievement.icon}</div>
+                    <div class="arcade-achievement-copy">
+                        <strong>${localized.name}</strong>
+                        <span>${localized.desc}</span>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    window.arcadeAchievements = {
+        record,
+        recordPlayed,
+        render
+    };
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', render);
+    } else {
+        render();
+    }
+    document.getElementById('langSelect')?.addEventListener('change', render);
+})();
+
+/* =========================================================
+   Geometry Arcade: Mirror Symmetry Workshop
+   轴对称反射操作小游戏
+========================================================= */
+(() => {
+    function initMirrorArcade() {
+        const modal = document.getElementById('mirrorModal');
+        const openBtn = document.getElementById('openMirrorBtn');
+        const closeBtn = document.getElementById('mirrorCloseBtn');
+        const startBtn = document.getElementById('mirrorStartBtn');
+        const checkBtn = document.getElementById('mirrorCheckBtn');
+        const canvas = document.getElementById('mirrorCanvas');
+        const toast = document.getElementById('mirrorToast');
+        const langSelect = document.getElementById('langSelect');
+
+        if (!modal || !openBtn || !canvas) return;
+
+        const ctx = canvas.getContext('2d', { alpha: false, desynchronized: true }) || canvas.getContext('2d');
+        const center = { x: 320, y: 218 };
+        const radius = 136;
+        let canvasRect = null;
+        const state = {
+            running: false,
+            score: 0,
+            combo: 0,
+            round: 1,
+            totalRounds: 8,
+            locksLeft: 3,
+            sourceAngle: 30,
+            targetAngle: 120,
+            mirrorAngle: 75,
+            dragging: false,
+            dragStartPointerAngle: 0,
+            dragStartMirrorAngle: 75,
+            dragSensitivity: 0.34,
+            lastMood: 'idle',
+            drawRequested: false,
+            rafId: null
+        };
+
+        const text = {
+            zh: {
+                kicker: '🪞 几何操作挑战',
+                title: '镜面对称工坊',
+                desc: '旋转镜面线，让蓝色点的镜像准确落到星星目标上。',
+                open: '开始反射挑战',
+                modalKicker: '🪞 轴对称小游戏',
+                modalDesc: '拖动镜面线旋转角度。蓝点会按这条线反射，目标是让镜像点落到星星上。',
+                score: '分数',
+                round: '回合',
+                locks: '锁定次数',
+                error: '误差',
+                start: '开始',
+                restart: '重新开始',
+                check: '锁定镜面',
+                checkReady: '锁定镜面 ✓',
+                tip: '提示：镜面线会平分“原点方向”和“目标方向”的夹角。',
+                readout: (mirror, error, combo) => `镜面角：${mirror}°｜反射误差：${error}°｜连击：x${combo}`,
+                perfect: '完美反射！',
+                good: '反射成功！',
+                close: '快对齐了！',
+                miss: '镜面还要再调一调',
+                lockLost: (n) => `未命中，剩余 ${n} 次锁定机会`,
+                roundFailed: '本回合失败，进入下一组',
+                done: (score) => `挑战完成！最终分数 ${score}`
+            },
+            en: {
+                kicker: '🪞 Geometry Skill Game',
+                title: 'Mirror Symmetry Lab',
+                desc: 'Rotate the mirror line so the blue point reflects onto the star target.',
+                open: 'Start Reflection',
+                modalKicker: '🪞 Symmetry Mini Game',
+                modalDesc: 'Drag the mirror line to rotate it. The blue point reflects across this line; land it on the star.',
+                score: 'Score',
+                round: 'Round',
+                locks: 'Locks',
+                error: 'Error',
+                start: 'Start',
+                restart: 'Restart',
+                check: 'Lock Mirror',
+                checkReady: 'Lock Mirror ✓',
+                tip: 'Tip: the mirror line bisects the angle between source and target directions.',
+                readout: (mirror, error, combo) => `Mirror: ${mirror}° | Reflection error: ${error}° | Combo: x${combo}`,
+                perfect: 'Perfect Reflection!',
+                good: 'Reflection hit!',
+                close: 'Almost aligned!',
+                miss: 'Adjust the mirror more',
+                lockLost: (n) => `Missed. ${n} lock${n === 1 ? '' : 's'} left`,
+                roundFailed: 'Round failed. Moving to the next one',
+                done: (score) => `Challenge complete! Final score ${score}`
+            }
+        };
+
+        function lang() {
+            return langSelect?.value === 'en' ? 'en' : 'zh';
+        }
+
+        function t() {
+            return text[lang()];
+        }
+
+        function setText(id, value) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = value;
+        }
+
+        function normalizeAngle(deg) {
+            return ((deg % 360) + 360) % 360;
+        }
+
+        function angleDiff(a, b) {
+            const diff = Math.abs(normalizeAngle(a) - normalizeAngle(b));
+            return Math.min(diff, 360 - diff);
+        }
+
+        function signedAngleDelta(from, to) {
+            return ((to - from + 540) % 360) - 180;
+        }
+
+        function reflectedAngle() {
+            return normalizeAngle(2 * state.mirrorAngle - state.sourceAngle);
+        }
+
+        function pointOnCircle(angle, r = radius) {
+            const rad = angle * Math.PI / 180;
+            return {
+                x: center.x + r * Math.cos(rad),
+                y: center.y - r * Math.sin(rad)
+            };
+        }
+
+        function idealMirrorAngle() {
+            const sourceRad = state.sourceAngle * Math.PI / 180;
+            const targetRad = state.targetAngle * Math.PI / 180;
+            const sx = Math.cos(sourceRad), sy = Math.sin(sourceRad);
+            const tx = Math.cos(targetRad), ty = Math.sin(targetRad);
+            return normalizeAngle(Math.atan2(sy + ty, sx + tx) * 180 / Math.PI);
+        }
+
+        function currentError() {
+            return Math.round(angleDiff(reflectedAngle(), state.targetAngle));
+        }
+
+        function currentMood() {
+            const error = currentError();
+            const rules = getRoundRules();
+            return error <= rules.perfect ? 'perfect' : error <= rules.good ? 'ready' : error <= rules.close ? 'close' : 'far';
+        }
+
+        function getRoundRules() {
+            const stage = state.round;
+            return {
+                perfect: Math.max(1, 4 - Math.floor(stage / 3)),
+                good: Math.max(4, 10 - Math.floor(stage / 2)),
+                close: Math.max(8, 18 - stage),
+                locks: stage <= 3 ? 3 : stage <= 6 ? 2 : 1
+            };
+        }
+
+        function syncLanguage() {
+            const copy = t();
+            setText('mirrorKicker', copy.kicker);
+            setText('mirrorTitle', copy.title);
+            setText('mirrorDesc', copy.desc);
+            setText('openMirrorBtn', copy.open);
+            setText('mirrorModalKicker', copy.modalKicker);
+            setText('mirrorModalTitle', copy.title);
+            setText('mirrorModalDesc', copy.modalDesc);
+            setText('mirrorScoreLabel', copy.score);
+            setText('mirrorRoundLabel', copy.round);
+            setText('mirrorLocksLabel', copy.locks);
+            setText('mirrorErrorLabel', copy.error);
+            setText('mirrorStartBtn', state.running ? copy.restart : copy.start);
+            setText('mirrorTip', copy.tip);
+            updateStats();
+        }
+
+        function updateStats() {
+            const mirror = Math.round(normalizeAngle(state.mirrorAngle));
+            const error = currentError();
+            const rules = getRoundRules();
+            setText('mirrorScore', state.score);
+            setText('mirrorRound', `${state.round} / ${state.totalRounds}`);
+            setText('mirrorLocks', state.locksLeft);
+            setText('mirrorError', `${error}°`);
+            setText('mirrorReadout', t().readout(mirror, error, state.combo));
+            setText('mirrorCheckBtn', error <= rules.good ? t().checkReady : t().check);
+            checkBtn.classList.toggle('is-ready', error <= rules.good);
+            checkBtn.classList.toggle('is-perfect', error <= rules.perfect);
+            canvas.dataset.mood = currentMood();
+        }
+
+        function requestDraw() {
+            if (state.drawRequested) return;
+            state.drawRequested = true;
+            state.rafId = requestAnimationFrame(() => {
+                state.drawRequested = false;
+                state.rafId = null;
+                updateStats();
+                draw();
+            });
+        }
+
+        function randomRound() {
+            state.sourceAngle = Math.floor(Math.random() * 24) * 15;
+            let offset = 60 + Math.floor(Math.random() * 10) * 15;
+            if (Math.random() > 0.5) offset *= -1;
+            state.targetAngle = normalizeAngle(state.sourceAngle + offset);
+            state.mirrorAngle = normalizeAngle(idealMirrorAngle() + (Math.random() > 0.5 ? 24 : -24));
+            state.locksLeft = getRoundRules().locks;
+            state.lastMood = 'idle';
+            updateStats();
+            requestDraw();
+        }
+
+        function showToast(message, kind = 'hit') {
+            toast.textContent = message;
+            toast.className = `arcade-toast ${kind}`;
+            clearTimeout(showToast._timer);
+            showToast._timer = setTimeout(() => toast.classList.add('hidden'), 900);
+        }
+
+        function drawPoint(point, fill, label, radiusSize = 16) {
+            ctx.beginPath();
+            ctx.arc(point.x, point.y, radiusSize, 0, Math.PI * 2);
+            ctx.fillStyle = fill;
+            ctx.fill();
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 4;
+            ctx.stroke();
+            ctx.fillStyle = '#fff';
+            ctx.font = '900 16px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(label, point.x, point.y + 1);
+        }
+
+        function drawMirror() {
+            const rad = state.mirrorAngle * Math.PI / 180;
+            const dx = Math.cos(rad) * 220;
+            const dy = -Math.sin(rad) * 220;
+            const error = currentError();
+            const rules = getRoundRules();
+            const mirrorColor = error <= rules.perfect ? '#ffbe55' : error <= rules.good ? '#2ec4b6' : error <= rules.close ? '#68c7ff' : '#8da2cf';
+            const mirrorGlow = error <= rules.good ? 'rgba(46,196,182,0.28)' : 'rgba(141,162,207,0.14)';
+
+            ctx.beginPath();
+            ctx.moveTo(center.x - dx, center.y - dy);
+            ctx.lineTo(center.x + dx, center.y + dy);
+            ctx.strokeStyle = mirrorGlow;
+            ctx.lineWidth = 20;
+            ctx.lineCap = 'round';
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(center.x - dx, center.y - dy);
+            ctx.lineTo(center.x + dx, center.y + dy);
+            ctx.strokeStyle = mirrorColor;
+            ctx.lineWidth = 7;
+            ctx.lineCap = 'round';
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(center.x - dx, center.y - dy - 9);
+            ctx.lineTo(center.x + dx, center.y + dy - 9);
+            ctx.strokeStyle = 'rgba(255,255,255,0.55)';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+
+        function draw() {
+            const bg = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            bg.addColorStop(0, '#fff9e6');
+            bg.addColorStop(0.5, '#edfaff');
+            bg.addColorStop(1, '#fff0f7');
+            ctx.fillStyle = bg;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.beginPath();
+            ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(106, 140, 255, 0.56)';
+            ctx.lineWidth = 4;
+            ctx.stroke();
+
+            for (let a = 0; a < 360; a += 30) {
+                const p = pointOnCircle(a, radius + 12);
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, a % 90 === 0 ? 4 : 2.5, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(39, 52, 95, 0.28)';
+                ctx.fill();
+            }
+
+            const source = pointOnCircle(state.sourceAngle);
+            const target = pointOnCircle(state.targetAngle);
+            const reflection = pointOnCircle(reflectedAngle());
+            const error = currentError();
+            const rules = getRoundRules();
+
+            ctx.beginPath();
+            ctx.moveTo(source.x, source.y);
+            ctx.lineTo(reflection.x, reflection.y);
+            ctx.strokeStyle = error <= rules.good ? 'rgba(46, 196, 182, 0.42)' : 'rgba(46, 196, 182, 0.22)';
+            ctx.lineWidth = 3;
+            ctx.setLineDash([8, 8]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            drawMirror();
+            ctx.beginPath();
+            ctx.arc(target.x, target.y, 34, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(255, 143, 184, 0.16)';
+            ctx.lineWidth = Math.max(2, 7 - Math.floor(state.round / 2));
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(reflection.x, reflection.y, error <= rules.good ? 24 : 18, 0, Math.PI * 2);
+            ctx.strokeStyle = error <= rules.perfect ? 'rgba(255,190,85,0.72)' : error <= rules.good ? 'rgba(46,196,182,0.54)' : 'rgba(104,199,255,0.24)';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+            drawPoint(target, '#ff8fb8', '★', 19);
+            drawPoint(source, '#6a8cff', 'A', 17);
+            drawPoint(reflection, '#2ec4b6', 'A′', 15);
+
+            ctx.beginPath();
+            ctx.arc(center.x, center.y, 10, 0, Math.PI * 2);
+            ctx.fillStyle = '#27345f';
+            ctx.fill();
+        }
+
+        function startGame() {
+            state.running = true;
+            state.score = 0;
+            state.combo = 0;
+            state.round = 1;
+            window.arcadeAchievements?.recordPlayed('mirror');
+            randomRound();
+            syncLanguage();
+            requestDraw();
+        }
+
+        function finishRound() {
+            if (!state.running) {
+                startGame();
+                showToast(t().tip, 'close');
+                return;
+            }
+            const error = currentError();
+            const rules = getRoundRules();
+            let gain = 0;
+            let message = t().miss;
+            let kind = 'miss';
+
+            if (error <= rules.perfect) {
+                state.combo++;
+                gain = 22 + state.combo * 3 + state.locksLeft * 2;
+                message = t().perfect;
+                kind = 'perfect';
+                window.arcadeAchievements?.record('mirror_perfect', { game: 'mirror' });
+            } else if (error <= rules.good) {
+                state.combo++;
+                gain = 14 + state.combo * 2 + state.locksLeft;
+                message = t().good;
+                kind = 'hit';
+            } else if (error <= rules.close) {
+                state.combo = 0;
+                state.locksLeft--;
+                gain = 4;
+                message = t().close;
+                kind = 'close';
+            } else {
+                state.combo = 0;
+                state.locksLeft--;
+            }
+
+            if (gain > 0) state.score += gain;
+            window.arcadeAchievements?.record('mirror_lock', { game: 'mirror' });
+
+            if (error > rules.good && state.locksLeft > 0) {
+                showToast(t().lockLost(state.locksLeft), kind);
+                updateStats();
+                requestDraw();
+                return;
+            }
+
+            if (error > rules.good && state.locksLeft <= 0) {
+                showToast(t().roundFailed, 'miss');
+            } else {
+                showToast(`${message} +${gain}`, kind);
+            }
+
+            if (state.round >= state.totalRounds) {
+                state.running = false;
+                showToast(t().done(state.score), 'perfect');
+                window.arcadeAchievements?.record('mirror_finish', { game: 'mirror', score: state.score });
+                syncLanguage();
+                requestDraw();
+                return;
+            }
+
+            state.round++;
+            randomRound();
+        }
+
+        function updateRect() {
+            canvasRect = canvas.getBoundingClientRect();
+        }
+
+        function getPointerAngle(event) {
+            if (!canvasRect) updateRect();
+            const samples = typeof event.getCoalescedEvents === 'function' ? event.getCoalescedEvents() : null;
+            const point = event.touches ? event.touches[0] : (samples && samples.length ? samples[samples.length - 1] : event);
+            const x = (point.clientX - canvasRect.left) * (canvas.width / canvasRect.width);
+            const y = (point.clientY - canvasRect.top) * (canvas.height / canvasRect.height);
+            return normalizeAngle(Math.atan2(center.y - y, x - center.x) * 180 / Math.PI);
+        }
+
+        function beginMirrorDrag(event) {
+            updateRect();
+            state.dragging = true;
+            state.dragStartPointerAngle = getPointerAngle(event);
+            state.dragStartMirrorAngle = state.mirrorAngle;
+            canvas.classList.add('is-dragging');
+            setMirrorFromEvent(event);
+        }
+
+        function endMirrorDrag() {
+            state.dragging = false;
+            canvas.classList.remove('is-dragging');
+            requestDraw();
+        }
+
+        function setMirrorFromEvent(event) {
+            if (!state.dragging) return;
+            const pointerAngle = getPointerAngle(event);
+            const delta = signedAngleDelta(state.dragStartPointerAngle, pointerAngle);
+            state.mirrorAngle = normalizeAngle(state.dragStartMirrorAngle + delta * state.dragSensitivity);
+            requestDraw();
+
+            const mood = currentMood();
+            if (mood !== state.lastMood && (mood === 'ready' || mood === 'perfect')) {
+                state.lastMood = mood;
+                showToast(mood === 'perfect' ? t().perfect : t().good, mood === 'perfect' ? 'perfect' : 'hit');
+            } else if (mood !== state.lastMood) {
+                state.lastMood = mood;
+            }
+        }
+
+        openBtn.addEventListener('click', () => {
+            modal.classList.remove('hidden');
+            updateRect();
+            syncLanguage();
+            requestDraw();
+        });
+
+        function close() {
+            modal.classList.add('hidden');
+            if (state.rafId) {
+                cancelAnimationFrame(state.rafId);
+                state.rafId = null;
+            }
+            state.drawRequested = false;
+            state.dragging = false;
+            canvas.classList.remove('is-dragging');
+        }
+
+        closeBtn.addEventListener('click', close);
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) close();
+        });
+        startBtn.addEventListener('click', startGame);
+        checkBtn.addEventListener('click', finishRound);
+
+        if (window.PointerEvent) {
+            canvas.addEventListener('pointerenter', updateRect);
+            canvas.addEventListener('pointerdown', (event) => {
+                canvas.setPointerCapture?.(event.pointerId);
+                beginMirrorDrag(event);
+            });
+            canvas.addEventListener('pointerup', (event) => {
+                endMirrorDrag();
+                canvas.releasePointerCapture?.(event.pointerId);
+            });
+            canvas.addEventListener('pointercancel', () => {
+                endMirrorDrag();
+            });
+            if ('onpointerrawupdate' in window) {
+                canvas.addEventListener('pointerrawupdate', setMirrorFromEvent);
+            } else {
+                canvas.addEventListener('pointermove', setMirrorFromEvent);
+            }
+        } else {
+            canvas.addEventListener('mousedown', (event) => {
+                beginMirrorDrag(event);
+            });
+            window.addEventListener('mouseup', () => {
+                endMirrorDrag();
+            });
+            canvas.addEventListener('mousemove', setMirrorFromEvent);
+            canvas.addEventListener('touchstart', (event) => {
+                event.preventDefault();
+                beginMirrorDrag(event);
+            }, { passive: false });
+            canvas.addEventListener('touchmove', (event) => {
+                event.preventDefault();
+                setMirrorFromEvent(event);
+            }, { passive: false });
+            canvas.addEventListener('touchend', () => {
+                endMirrorDrag();
+            }, { passive: false });
+        }
+
+        langSelect?.addEventListener('change', syncLanguage);
+        window.addEventListener('resize', () => {
+            canvasRect = null;
+        });
+
+        syncLanguage();
+        randomRound();
+        draw();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initMirrorArcade);
+    } else {
+        initMirrorArcade();
+    }
+})();
+
+/* =========================================================
+   Geometry Arcade: Polygon Rubber Band
+   拖拽多边形顶点，校准面积和周长
+========================================================= */
+(() => {
+    function initPolygonArcade() {
+        const modal = document.getElementById('polygonModal');
+        const openBtn = document.getElementById('openPolygonBtn');
+        const closeBtn = document.getElementById('polygonCloseBtn');
+        const startBtn = document.getElementById('polygonStartBtn');
+        const checkBtn = document.getElementById('polygonCheckBtn');
+        const canvas = document.getElementById('polygonCanvas');
+        const toast = document.getElementById('polygonToast');
+        const langSelect = document.getElementById('langSelect');
+
+        if (!modal || !openBtn || !canvas) return;
+
+        const ctx = canvas.getContext('2d', { alpha: false, desynchronized: true }) || canvas.getContext('2d');
+        const unit = 20;
+        const bounds = { left: 78, top: 62, right: 562, bottom: 338 };
+        let canvasRect = null;
+        const state = {
+            running: false,
+            score: 0,
+            round: 1,
+            totalRounds: 7,
+            targetArea: 42,
+            targetPerimeter: 28,
+            points: [],
+            draggingIndex: -1,
+            lastMood: 'idle',
+            drawRequested: false,
+            rafId: null
+        };
+
+        const text = {
+            zh: {
+                cardKicker: '🔷 几何操作挑战',
+                cardTitle: '面积橡皮筋',
+                cardDesc: '拖动四个顶点，调整多边形的面积和周长，完成目标校准。',
+                open: '开始塑形挑战',
+                modalKicker: '🔷 多边形操作小游戏',
+                modalTitle: '面积橡皮筋',
+                modalDesc: '拖动四个顶点，把橡皮筋围出的图形调到目标面积和目标周长。越接近，得分越高。',
+                score: '分数',
+                round: '回合',
+                areaDiff: '面积差',
+                perimeterDiff: '周长差',
+                start: '开始',
+                restart: '重新开始',
+                check: '锁定形状',
+                checkReady: '锁定形状 ✓',
+                tip: '提示：拉开顶点通常会增加面积，折成长条会增加周长但面积不一定变大。',
+                readout: (area, targetArea, perimeter, targetPerimeter) => `面积：${area} / ${targetArea}｜周长：${perimeter} / ${targetPerimeter}`,
+                perfect: '完美塑形！',
+                good: '校准成功！',
+                close: '很接近了！',
+                miss: '形状还需要调整',
+                done: (score) => `挑战完成！最终分数 ${score}`
+            },
+            en: {
+                cardKicker: '🔷 Geometry Skill Game',
+                cardTitle: 'Area Rubber Band',
+                cardDesc: 'Drag four vertices to tune the polygon area and perimeter.',
+                open: 'Start Shaping',
+                modalKicker: '🔷 Polygon Mini Game',
+                modalTitle: 'Area Rubber Band',
+                modalDesc: 'Drag four vertices so the rubber-band polygon matches the target area and perimeter.',
+                score: 'Score',
+                round: 'Round',
+                areaDiff: 'Area Gap',
+                perimeterDiff: 'Perimeter Gap',
+                start: 'Start',
+                restart: 'Restart',
+                check: 'Lock Shape',
+                checkReady: 'Lock Shape ✓',
+                tip: 'Tip: spreading vertices usually increases area; a long thin shape can increase perimeter without much area.',
+                readout: (area, targetArea, perimeter, targetPerimeter) => `Area: ${area} / ${targetArea} | Perimeter: ${perimeter} / ${targetPerimeter}`,
+                perfect: 'Perfect shape!',
+                good: 'Shape locked!',
+                close: 'Very close!',
+                miss: 'Keep reshaping',
+                done: (score) => `Challenge complete! Final score ${score}`
+            }
+        };
+
+        function lang() {
+            return langSelect?.value === 'en' ? 'en' : 'zh';
+        }
+
+        function t() {
+            return text[lang()];
+        }
+
+        function setText(id, value) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = value;
+        }
+
+        function clamp(value, min, max) {
+            return Math.max(min, Math.min(max, value));
+        }
+
+        function polygonArea(points = state.points) {
+            if (points.length < 3) return 0;
+            let sum = 0;
+            points.forEach((point, index) => {
+                const next = points[(index + 1) % points.length];
+                sum += point.x * next.y - next.x * point.y;
+            });
+            return Math.abs(sum) / 2 / (unit * unit);
+        }
+
+        function polygonPerimeter(points = state.points) {
+            if (points.length < 2) return 0;
+            return points.reduce((total, point, index) => {
+                const next = points[(index + 1) % points.length];
+                return total + Math.hypot(point.x - next.x, point.y - next.y);
+            }, 0) / unit;
+        }
+
+        function roundValue(value) {
+            return Math.round(value * 10) / 10;
+        }
+
+        function currentMetrics() {
+            const area = roundValue(polygonArea());
+            const perimeter = roundValue(polygonPerimeter());
+            const areaGap = roundValue(Math.abs(area - state.targetArea));
+            const perimeterGap = roundValue(Math.abs(perimeter - state.targetPerimeter));
+            const areaPct = areaGap / Math.max(1, state.targetArea);
+            const perimeterPct = perimeterGap / Math.max(1, state.targetPerimeter);
+            return {
+                area,
+                perimeter,
+                areaGap,
+                perimeterGap,
+                scoreGap: areaPct * 0.62 + perimeterPct * 0.38
+            };
+        }
+
+        function currentMood() {
+            const gap = currentMetrics().scoreGap;
+            if (gap <= 0.035) return 'perfect';
+            if (gap <= 0.08) return 'ready';
+            if (gap <= 0.16) return 'close';
+            return 'far';
+        }
+
+        function syncLanguage() {
+            const copy = t();
+            setText('polygonKicker', copy.cardKicker);
+            setText('polygonTitle', copy.cardTitle);
+            setText('polygonDesc', copy.cardDesc);
+            setText('openPolygonBtn', copy.open);
+            setText('polygonModalKicker', copy.modalKicker);
+            setText('polygonModalTitle', copy.modalTitle);
+            setText('polygonModalDesc', copy.modalDesc);
+            setText('polygonScoreLabel', copy.score);
+            setText('polygonRoundLabel', copy.round);
+            setText('polygonAreaLabel', copy.areaDiff);
+            setText('polygonPerimeterLabel', copy.perimeterDiff);
+            setText('polygonStartBtn', state.running ? copy.restart : copy.start);
+            setText('polygonTip', copy.tip);
+            updateStats();
+        }
+
+        function updateStats() {
+            const metrics = currentMetrics();
+            const mood = currentMood();
+            setText('polygonScore', state.score);
+            setText('polygonRound', `${state.round} / ${state.totalRounds}`);
+            setText('polygonArea', metrics.areaGap);
+            setText('polygonPerimeter', metrics.perimeterGap);
+            setText('polygonReadout', t().readout(metrics.area, state.targetArea, metrics.perimeter, state.targetPerimeter));
+            setText('polygonCheckBtn', mood === 'ready' || mood === 'perfect' ? t().checkReady : t().check);
+            checkBtn.classList.toggle('is-ready', mood === 'ready' || mood === 'perfect');
+            checkBtn.classList.toggle('is-perfect', mood === 'perfect');
+            canvas.dataset.mood = mood;
+        }
+
+        function requestDraw() {
+            if (state.drawRequested) return;
+            state.drawRequested = true;
+            state.rafId = requestAnimationFrame(() => {
+                state.drawRequested = false;
+                state.rafId = null;
+                updateStats();
+                draw();
+            });
+        }
+
+        function makeTargetShape() {
+            const shiftX = Math.random() * 42 - 21;
+            const shiftY = Math.random() * 26 - 13;
+            const widen = 0.9 + Math.random() * 0.28;
+            const tall = 0.9 + Math.random() * 0.3;
+            return [
+                { x: 205 + shiftX, y: 118 + shiftY },
+                { x: 425 + shiftX * 0.4, y: 104 + shiftY * 0.4 },
+                { x: 462 + shiftX, y: 272 - shiftY * 0.3 },
+                { x: 178 - shiftX * 0.2, y: 292 + shiftY * 0.5 }
+            ].map((point) => ({
+                x: clamp(320 + (point.x - 320) * widen, bounds.left, bounds.right),
+                y: clamp(210 + (point.y - 210) * tall, bounds.top, bounds.bottom)
+            }));
+        }
+
+        function randomRound() {
+            const target = makeTargetShape();
+            state.targetArea = roundValue(polygonArea(target));
+            state.targetPerimeter = roundValue(polygonPerimeter(target));
+            state.points = target.map((point, index) => {
+                const angle = (index * 90 + 35 + Math.random() * 30) * Math.PI / 180;
+                const distance = 34 + Math.random() * 36;
+                return {
+                    x: clamp(point.x + Math.cos(angle) * distance, bounds.left, bounds.right),
+                    y: clamp(point.y + Math.sin(angle) * distance, bounds.top, bounds.bottom)
+                };
+            });
+            state.draggingIndex = -1;
+            state.lastMood = 'idle';
+            updateStats();
+            requestDraw();
+        }
+
+        function showToast(message, kind = 'hit') {
+            toast.textContent = message;
+            toast.className = `arcade-toast ${kind}`;
+            clearTimeout(showToast._timer);
+            showToast._timer = setTimeout(() => toast.classList.add('hidden'), 900);
+        }
+
+        function drawRoundedRect(x, y, width, height, radius, fillStyle) {
+            ctx.save();
+            ctx.fillStyle = fillStyle;
+            ctx.beginPath();
+            if (typeof ctx.roundRect === 'function') {
+                ctx.roundRect(x, y, width, height, radius);
+            } else {
+                ctx.rect(x, y, width, height);
+            }
+            ctx.fill();
+            ctx.restore();
+        }
+
+        function drawGauge(label, value, target, x, y, color) {
+            const pct = clamp(1 - Math.abs(value - target) / Math.max(1, target), 0, 1);
+            drawRoundedRect(x, y, 194, 30, 15, 'rgba(255,255,255,0.72)');
+            drawRoundedRect(x + 5, y + 6, 184 * pct, 18, 9, color);
+            ctx.fillStyle = '#27345f';
+            ctx.font = '900 13px sans-serif';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(`${label} ${value}/${target}`, x + 14, y + 15);
+        }
+
+        function draw() {
+            const bg = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            bg.addColorStop(0, '#f3fff5');
+            bg.addColorStop(0.52, '#eef8ff');
+            bg.addColorStop(1, '#fff3dd');
+            ctx.fillStyle = bg;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.save();
+            ctx.strokeStyle = 'rgba(67, 97, 238, 0.10)';
+            ctx.lineWidth = 1;
+            for (let x = bounds.left; x <= bounds.right; x += unit) {
+                ctx.beginPath();
+                ctx.moveTo(x, bounds.top);
+                ctx.lineTo(x, bounds.bottom);
+                ctx.stroke();
+            }
+            for (let y = bounds.top; y <= bounds.bottom; y += unit) {
+                ctx.beginPath();
+                ctx.moveTo(bounds.left, y);
+                ctx.lineTo(bounds.right, y);
+                ctx.stroke();
+            }
+            ctx.restore();
+
+            drawRoundedRect(24, 18, 592, 38, 19, 'rgba(255,255,255,0.72)');
+            ctx.fillStyle = '#44527e';
+            ctx.font = '900 15px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            const targetText = lang() === 'zh'
+                ? `目标面积 ${state.targetArea}   ·   目标周长 ${state.targetPerimeter}`
+                : `Target Area ${state.targetArea}   ·   Target Perimeter ${state.targetPerimeter}`;
+            ctx.fillText(targetText, 320, 37);
+
+            const metrics = currentMetrics();
+            const mood = currentMood();
+            const fill = mood === 'perfect'
+                ? 'rgba(255, 190, 85, 0.36)'
+                : mood === 'ready'
+                    ? 'rgba(46, 196, 182, 0.34)'
+                    : 'rgba(106, 140, 255, 0.25)';
+
+            ctx.beginPath();
+            state.points.forEach((point, index) => {
+                if (index === 0) ctx.moveTo(point.x, point.y);
+                else ctx.lineTo(point.x, point.y);
+            });
+            ctx.closePath();
+            ctx.fillStyle = fill;
+            ctx.fill();
+            ctx.strokeStyle = mood === 'perfect' ? '#ffbe55' : mood === 'ready' ? '#2ec4b6' : '#6a8cff';
+            ctx.lineWidth = 6;
+            ctx.lineJoin = 'round';
+            ctx.stroke();
+
+            state.points.forEach((point, index) => {
+                const active = index === state.draggingIndex;
+                ctx.beginPath();
+                ctx.arc(point.x, point.y, active ? 18 : 15, 0, Math.PI * 2);
+                ctx.fillStyle = active ? '#ffbe55' : '#fff';
+                ctx.fill();
+                ctx.strokeStyle = ['#6a8cff', '#2ec4b6', '#ff8fb8', '#ffbe55'][index];
+                ctx.lineWidth = 5;
+                ctx.stroke();
+                ctx.fillStyle = '#27345f';
+                ctx.font = '900 13px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(String.fromCharCode(65 + index), point.x, point.y + 1);
+            });
+
+            drawGauge(lang() === 'zh' ? '面积' : 'Area', metrics.area, state.targetArea, 62, 364, 'rgba(46,196,182,0.58)');
+            drawGauge(lang() === 'zh' ? '周长' : 'Perimeter', metrics.perimeter, state.targetPerimeter, 384, 364, 'rgba(255,190,85,0.64)');
+        }
+
+        function startGame() {
+            state.running = true;
+            state.score = 0;
+            state.round = 1;
+            window.arcadeAchievements?.recordPlayed('polygon');
+            randomRound();
+            syncLanguage();
+            requestDraw();
+        }
+
+        function finishRound() {
+            if (!state.running) {
+                startGame();
+                showToast(t().tip, 'close');
+                return;
+            }
+
+            const mood = currentMood();
+            let gain = 0;
+            let kind = 'miss';
+            let message = t().miss;
+
+            if (mood === 'perfect') {
+                gain = 28 + state.round * 2;
+                kind = 'perfect';
+                message = t().perfect;
+                window.arcadeAchievements?.record('polygon_perfect', { game: 'polygon' });
+            } else if (mood === 'ready') {
+                gain = 18 + state.round;
+                kind = 'hit';
+                message = t().good;
+            } else if (mood === 'close') {
+                gain = 6;
+                kind = 'close';
+                message = t().close;
+            }
+
+            state.score += gain;
+            showToast(gain ? `${message} +${gain}` : message, kind);
+
+            if (state.round >= state.totalRounds) {
+                state.running = false;
+                showToast(t().done(state.score), 'perfect');
+                window.arcadeAchievements?.record('polygon_finish', { game: 'polygon', score: state.score });
+                syncLanguage();
+                requestDraw();
+                return;
+            }
+
+            state.round++;
+            randomRound();
+        }
+
+        function updateRect() {
+            canvasRect = canvas.getBoundingClientRect();
+        }
+
+        function getPointer(event) {
+            if (!canvasRect) updateRect();
+            const samples = typeof event.getCoalescedEvents === 'function' ? event.getCoalescedEvents() : null;
+            const point = event.touches ? event.touches[0] : (samples && samples.length ? samples[samples.length - 1] : event);
+            return {
+                x: (point.clientX - canvasRect.left) * (canvas.width / canvasRect.width),
+                y: (point.clientY - canvasRect.top) * (canvas.height / canvasRect.height)
+            };
+        }
+
+        function nearestPointIndex(pointer) {
+            let bestIndex = -1;
+            let bestDistance = Infinity;
+            state.points.forEach((point, index) => {
+                const distance = Math.hypot(pointer.x - point.x, pointer.y - point.y);
+                if (distance < bestDistance) {
+                    bestDistance = distance;
+                    bestIndex = index;
+                }
+            });
+            return bestDistance <= 34 ? bestIndex : -1;
+        }
+
+        function beginDrag(event) {
+            updateRect();
+            const pointer = getPointer(event);
+            const index = nearestPointIndex(pointer);
+            if (index < 0) return;
+            state.draggingIndex = index;
+            window.arcadeAchievements?.record('polygon_drag', { game: 'polygon' });
+            canvas.classList.add('is-dragging');
+            moveDrag(event);
+        }
+
+        function moveDrag(event) {
+            if (state.draggingIndex < 0) return;
+            const pointer = getPointer(event);
+            const point = state.points[state.draggingIndex];
+            point.x = clamp(pointer.x, bounds.left, bounds.right);
+            point.y = clamp(pointer.y, bounds.top, bounds.bottom);
+            requestDraw();
+
+            const mood = currentMood();
+            if (mood !== state.lastMood && (mood === 'ready' || mood === 'perfect')) {
+                state.lastMood = mood;
+                showToast(mood === 'perfect' ? t().perfect : t().good, mood === 'perfect' ? 'perfect' : 'hit');
+            } else if (mood !== state.lastMood) {
+                state.lastMood = mood;
+            }
+        }
+
+        function endDrag() {
+            state.draggingIndex = -1;
+            canvas.classList.remove('is-dragging');
+            requestDraw();
+        }
+
+        openBtn.addEventListener('click', () => {
+            modal.classList.remove('hidden');
+            updateRect();
+            syncLanguage();
+            requestDraw();
+        });
+
+        function close() {
+            modal.classList.add('hidden');
+            if (state.rafId) {
+                cancelAnimationFrame(state.rafId);
+                state.rafId = null;
+            }
+            state.drawRequested = false;
+            state.draggingIndex = -1;
+            canvas.classList.remove('is-dragging');
+            syncLanguage();
+        }
+
+        closeBtn.addEventListener('click', close);
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) close();
+        });
+        startBtn.addEventListener('click', startGame);
+        checkBtn.addEventListener('click', finishRound);
+
+        if (window.PointerEvent) {
+            canvas.addEventListener('pointerenter', updateRect);
+            canvas.addEventListener('pointerdown', (event) => {
+                canvas.setPointerCapture?.(event.pointerId);
+                beginDrag(event);
+            });
+            canvas.addEventListener('pointerup', (event) => {
+                endDrag();
+                canvas.releasePointerCapture?.(event.pointerId);
+            });
+            canvas.addEventListener('pointercancel', endDrag);
+            if ('onpointerrawupdate' in window) {
+                canvas.addEventListener('pointerrawupdate', moveDrag);
+            } else {
+                canvas.addEventListener('pointermove', moveDrag);
+            }
+        } else {
+            canvas.addEventListener('mousedown', beginDrag);
+            window.addEventListener('mouseup', endDrag);
+            canvas.addEventListener('mousemove', moveDrag);
+            canvas.addEventListener('touchstart', (event) => {
+                event.preventDefault();
+                beginDrag(event);
+            }, { passive: false });
+            canvas.addEventListener('touchmove', (event) => {
+                event.preventDefault();
+                moveDrag(event);
+            }, { passive: false });
+            canvas.addEventListener('touchend', endDrag, { passive: false });
+        }
+
+        langSelect?.addEventListener('change', syncLanguage);
+        window.addEventListener('resize', () => {
+            canvasRect = null;
+        });
+
+        syncLanguage();
+        randomRound();
+        draw();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initPolygonArcade);
+    } else {
+        initPolygonArcade();
+    }
+})();
+
+/* =========================================================
+   Geometry Arcade: Angle Launcher
+   独立几何操作小游戏，不影响主线关卡
+========================================================= */
+(() => {
+    function initGeometryArcade() {
+        const modal = document.getElementById('arcadeModal');
+        const openBtn = document.getElementById('openArcadeBtn');
+        const closeBtn = document.getElementById('arcadeCloseBtn');
+        const startBtn = document.getElementById('arcadeStartBtn');
+        const shootBtn = document.getElementById('arcadeShootBtn');
+        const canvas = document.getElementById('arcadeCanvas');
+        const aimRay = document.getElementById('arcadeAimRay');
+        const toast = document.getElementById('arcadeToast');
+        const langSelect = document.getElementById('langSelect');
+
+        if (!modal || !openBtn || !canvas) return;
+
+        const ctx = canvas.getContext('2d', { alpha: false, desynchronized: true }) || canvas.getContext('2d');
+        const staticCanvas = document.createElement('canvas');
+        staticCanvas.width = canvas.width;
+        staticCanvas.height = canvas.height;
+        const staticCtx = staticCanvas.getContext('2d');
+        const center = { x: 320, y: 220 };
+        const radius = 148;
+        let arcadeRect = null;
+        const state = {
+            running: false,
+            score: 0,
+            combo: 0,
+            bestScore: Number(localStorage.getItem('angleArcadeBestScore') || 0),
+            timeLeft: 45,
+            aimAngle: 0,
+            targetAimAngle: 0,
+            targetAngle: 35,
+            projectile: null,
+            targetPulse: 0,
+            hitFlash: 0,
+            aimCssAngle: 0,
+            statsDirty: true,
+            aimPaintRequested: false,
+            rafId: null,
+            timerId: null
+        };
+
+        const text = {
+            zh: {
+                cardKicker: '🎮 几何小游戏',
+                cardTitle: '角度发射台',
+                cardDesc: '移动准星估计角度，发射射线击中圆周目标。',
+                open: '开始小游戏',
+                modalKicker: '🎯 操作小游戏',
+                modalTitle: '角度发射台',
+                modalDesc: '移动鼠标或手指瞄准，点击画布或按钮发射。越接近目标角度，连击越高。',
+                score: '分数',
+                combo: '连击',
+                time: '时间',
+                best: '最佳',
+                start: '开始',
+                restart: '重新开始',
+                shoot: '发射射线',
+                tip: '提示：观察圆心到目标点的方向，估计对应角度。',
+                readout: (aim, target, error) => `当前角度：${aim}°｜目标：${target}°｜误差：${error}°｜最佳：${state.bestScore}`,
+                perfect: '完美命中！',
+                hit: '命中！',
+                close: '差一点！',
+                miss: '偏离目标',
+                done: (score) => `时间到！最终分数 ${score}`
+            },
+            en: {
+                cardKicker: '🎮 Geometry Arcade',
+                cardTitle: 'Angle Launcher',
+                cardDesc: 'Aim by estimating angles, then fire a ray to hit the circular target.',
+                open: 'Play Arcade',
+                modalKicker: '🎯 Action Mini Game',
+                modalTitle: 'Angle Launcher',
+                modalDesc: 'Move the mouse or finger to aim, then click the canvas or button to fire. Closer angles build bigger combos.',
+                score: 'Score',
+                combo: 'Combo',
+                time: 'Time',
+                best: 'Best',
+                start: 'Start',
+                restart: 'Restart',
+                shoot: 'Fire Ray',
+                tip: 'Tip: estimate the angle from the circle center to the target.',
+                readout: (aim, target, error) => `Aim: ${aim}° | Target: ${target}° | Error: ${error}° | Best: ${state.bestScore}`,
+                perfect: 'Perfect!',
+                hit: 'Hit!',
+                close: 'So close!',
+                miss: 'Off target',
+                done: (score) => `Time up! Final score ${score}`
+            }
+        };
+
+        function lang() {
+            return langSelect?.value === 'en' ? 'en' : 'zh';
+        }
+
+        function t() {
+            return text[lang()];
+        }
+
+        function setText(id, value) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = value;
+        }
+
+        function syncArcadeLanguage() {
+            const copy = t();
+            setText('arcadeKicker', copy.cardKicker);
+            setText('arcadeTitle', copy.cardTitle);
+            setText('arcadeDesc', copy.cardDesc);
+            setText('openArcadeBtn', copy.open);
+            setText('arcadeModalKicker', copy.modalKicker);
+            setText('arcadeModalTitle', copy.modalTitle);
+            setText('arcadeModalDesc', copy.modalDesc);
+            setText('arcadeScoreLabel', copy.score);
+            setText('arcadeComboLabel', copy.combo);
+            setText('arcadeTimeLabel', copy.time);
+            setText('arcadeStartBtn', state.running ? copy.restart : copy.start);
+            setText('arcadeShootBtn', copy.shoot);
+            setText('arcadeTip', copy.tip);
+            updateStats();
+        }
+
+        function normalizeAngle(deg) {
+            return ((deg % 360) + 360) % 360;
+        }
+
+        function angleDiff(a, b) {
+            const diff = Math.abs(normalizeAngle(a) - normalizeAngle(b));
+            return Math.round(Math.min(diff, 360 - diff));
+        }
+
+        function targetPoint() {
+            const rad = state.targetAngle * Math.PI / 180;
+            return {
+                x: center.x + radius * Math.cos(rad),
+                y: center.y - radius * Math.sin(rad)
+            };
+        }
+
+        function aimPoint(length = radius + 28) {
+            const rad = state.aimAngle * Math.PI / 180;
+            return {
+                x: center.x + length * Math.cos(rad),
+                y: center.y - length * Math.sin(rad)
+            };
+        }
+
+        function updateStats() {
+            const aim = Math.round(normalizeAngle(state.aimAngle));
+            const target = Math.round(normalizeAngle(state.targetAngle));
+            const error = angleDiff(aim, target);
+            setText('arcadeScore', state.score);
+            setText('arcadeCombo', state.combo);
+            setText('arcadeTime', `${state.timeLeft}s`);
+            setText('arcadeReadout', t().readout(aim, target, error));
+            state.statsDirty = false;
+        }
+
+        function updateAimOverlay() {
+            if (!aimRay) return;
+            aimRay.style.transform = `translateZ(0) rotate(${state.aimCssAngle}deg)`;
+            state.aimPaintRequested = false;
+        }
+
+        function requestAimOverlayPaint() {
+            if (state.aimPaintRequested) return;
+            state.aimPaintRequested = true;
+            requestAnimationFrame(updateAimOverlay);
+        }
+
+        function updateArcadeRect() {
+            arcadeRect = canvas.getBoundingClientRect();
+        }
+
+        function getFastPointer(event) {
+            const samples = typeof event.getCoalescedEvents === 'function' ? event.getCoalescedEvents() : null;
+            if (samples && samples.length) return samples[samples.length - 1];
+            return event.touches ? event.touches[event.touches.length - 1] : event;
+        }
+
+        function randomTarget() {
+            const next = Math.floor(Math.random() * 24) * 15;
+            state.targetAngle = Math.abs(angleDiff(next, state.aimAngle)) < 20 ? normalizeAngle(next + 75) : next;
+        }
+
+        function showToast(message, kind = 'hit') {
+            toast.textContent = message;
+            toast.className = `arcade-toast ${kind}`;
+            clearTimeout(showToast._timer);
+            showToast._timer = setTimeout(() => toast.classList.add('hidden'), 900);
+        }
+
+        function drawBadge(targetCtx, textValue, x, y, color) {
+            targetCtx.save();
+            targetCtx.fillStyle = color;
+            targetCtx.strokeStyle = 'rgba(255,255,255,0.88)';
+            targetCtx.lineWidth = 3;
+            targetCtx.beginPath();
+            if (typeof targetCtx.roundRect === 'function') {
+                targetCtx.roundRect(x - 28, y - 16, 56, 32, 16);
+            } else {
+                targetCtx.rect(x - 28, y - 16, 56, 32);
+            }
+            targetCtx.fill();
+            targetCtx.stroke();
+            targetCtx.fillStyle = '#27345f';
+            targetCtx.font = '800 14px sans-serif';
+            targetCtx.textAlign = 'center';
+            targetCtx.textBaseline = 'middle';
+            targetCtx.fillText(textValue, x, y + 1);
+            targetCtx.restore();
+        }
+
+        function drawStaticArcade() {
+            staticCtx.clearRect(0, 0, staticCanvas.width, staticCanvas.height);
+            const bg = staticCtx.createLinearGradient(0, 0, staticCanvas.width, staticCanvas.height);
+            bg.addColorStop(0, '#fff8df');
+            bg.addColorStop(0.45, '#f1fbff');
+            bg.addColorStop(1, '#fff0f7');
+            staticCtx.fillStyle = bg;
+            staticCtx.fillRect(0, 0, staticCanvas.width, staticCanvas.height);
+
+            staticCtx.save();
+            staticCtx.globalAlpha = 0.26;
+            for (let x = 20; x < staticCanvas.width; x += 38) {
+                staticCtx.beginPath();
+                staticCtx.moveTo(x, 0);
+                staticCtx.lineTo(x + 80, staticCanvas.height);
+                staticCtx.strokeStyle = '#8bb8ff';
+                staticCtx.lineWidth = 1;
+                staticCtx.stroke();
+            }
+            staticCtx.restore();
+
+            staticCtx.save();
+            staticCtx.translate(center.x, center.y);
+            for (let a = 0; a < 360; a += 15) {
+                const rad = a * Math.PI / 180;
+                const outer = radius + (a % 45 === 0 ? 16 : 8);
+                staticCtx.beginPath();
+                staticCtx.moveTo(Math.cos(rad) * radius, -Math.sin(rad) * radius);
+                staticCtx.lineTo(Math.cos(rad) * outer, -Math.sin(rad) * outer);
+                staticCtx.strokeStyle = a % 45 === 0 ? 'rgba(55,72,130,0.42)' : 'rgba(55,72,130,0.18)';
+                staticCtx.lineWidth = a % 45 === 0 ? 2 : 1;
+                staticCtx.stroke();
+            }
+            staticCtx.restore();
+
+            staticCtx.beginPath();
+            staticCtx.arc(center.x, center.y, radius, 0, Math.PI * 2);
+            staticCtx.strokeStyle = 'rgba(106, 140, 255, 0.9)';
+            staticCtx.lineWidth = 5;
+            staticCtx.stroke();
+            staticCtx.beginPath();
+            staticCtx.arc(center.x, center.y, radius - 42, 0, Math.PI * 2);
+            staticCtx.strokeStyle = 'rgba(46, 196, 182, 0.16)';
+            staticCtx.lineWidth = 2;
+            staticCtx.setLineDash([8, 10]);
+            staticCtx.stroke();
+            staticCtx.setLineDash([]);
+
+            for (let a = 0; a < 360; a += 45) {
+                const rad = a * Math.PI / 180;
+                const x = center.x + (radius + 34) * Math.cos(rad);
+                const y = center.y - (radius + 34) * Math.sin(rad);
+                drawBadge(staticCtx, `${a}°`, x, y, a === 0 ? '#ffe083' : '#e9f0ff');
+            }
+        }
+
+        function drawArcade() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(staticCanvas, 0, 0);
+
+            if (state.hitFlash > 0) {
+                ctx.save();
+                ctx.globalAlpha = state.hitFlash;
+                ctx.fillStyle = '#fff2a6';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.restore();
+            }
+
+            const target = targetPoint();
+            ctx.beginPath();
+            ctx.arc(target.x, target.y, 28 + state.targetPulse * 10, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 143, 184, ${0.14 + state.targetPulse * 0.12})`;
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(target.x, target.y, 21, 0, Math.PI * 2);
+            ctx.fillStyle = '#ff7faa';
+            ctx.fill();
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 5;
+            ctx.stroke();
+            ctx.fillStyle = '#fff';
+            ctx.font = '900 20px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('★', target.x, target.y + 1);
+
+            if (state.projectile) {
+                const p = state.projectile;
+                const rad = p.angle * Math.PI / 180;
+                const x = center.x + p.distance * Math.cos(rad);
+                const y = center.y - p.distance * Math.sin(rad);
+                ctx.beginPath();
+                ctx.arc(x, y, 9, 0, Math.PI * 2);
+                ctx.fillStyle = '#ffe083';
+                ctx.fill();
+                ctx.strokeStyle = '#ff8f5f';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+            }
+
+        }
+
+        function loop() {
+            state.targetPulse = (state.targetPulse + 0.025) % 1;
+            state.hitFlash = Math.max(0, state.hitFlash - 0.04);
+            if (state.projectile) {
+                state.projectile.distance += 16;
+                if (state.projectile.distance > radius + 34) state.projectile = null;
+            }
+            drawArcade();
+            if (state.statsDirty) updateStats();
+            state.rafId = requestAnimationFrame(loop);
+        }
+
+        function startGame() {
+            state.running = true;
+            state.score = 0;
+            state.combo = 0;
+            state.timeLeft = 45;
+            state.projectile = null;
+            window.arcadeAchievements?.recordPlayed('angle');
+            randomTarget();
+            syncArcadeLanguage();
+            updateStats();
+            clearInterval(state.timerId);
+            state.timerId = setInterval(() => {
+                state.timeLeft--;
+                if (state.timeLeft <= 0) {
+                    state.timeLeft = 0;
+                    endGame();
+                }
+                updateStats();
+            }, 1000);
+        }
+
+        function endGame() {
+            state.running = false;
+            clearInterval(state.timerId);
+            state.projectile = null;
+            if (state.score > state.bestScore) {
+                state.bestScore = state.score;
+                localStorage.setItem('angleArcadeBestScore', String(state.bestScore));
+            }
+            window.arcadeAchievements?.record('angle_score', { game: 'angle', score: state.score });
+            showToast(t().done(state.score), 'perfect');
+            syncArcadeLanguage();
+        }
+
+        function shoot() {
+            if (!state.running) startGame();
+            window.arcadeAchievements?.record('angle_shot', { game: 'angle' });
+
+            const error = angleDiff(state.aimAngle, state.targetAngle);
+            let gain = 0;
+            let message = t().miss;
+            let kind = 'miss';
+
+            if (error <= 4) {
+                state.combo++;
+                gain = 18 + state.combo * 2;
+                message = t().perfect;
+                kind = 'perfect';
+                window.arcadeAchievements?.record('angle_perfect', { game: 'angle' });
+            } else if (error <= 10) {
+                state.combo++;
+                gain = 10 + state.combo;
+                message = t().hit;
+                kind = 'hit';
+            } else if (error <= 18) {
+                state.combo = 0;
+                gain = 3;
+                message = t().close;
+                kind = 'close';
+            } else {
+                state.combo = 0;
+            }
+
+            state.score += gain;
+            window.arcadeAchievements?.record('angle_combo', { game: 'angle', combo: state.combo });
+            state.projectile = { angle: state.aimAngle, distance: 0 };
+            if (gain > 0) state.hitFlash = Math.min(0.34, 0.16 + gain / 100);
+            showToast(gain ? `${message} +${gain}` : message, kind);
+            randomTarget();
+            updateStats();
+        }
+
+        function setAimFromEvent(event) {
+            if (!arcadeRect) updateArcadeRect();
+            const rect = arcadeRect;
+            const point = getFastPointer(event);
+            const cssX = point.clientX - rect.left;
+            const cssY = point.clientY - rect.top;
+            const x = cssX * (canvas.width / rect.width);
+            const y = cssY * (canvas.height / rect.height);
+            const dxCanvas = x - center.x;
+            const dyCanvas = y - center.y;
+            const screenAngle = Math.atan2(dyCanvas, dxCanvas) * 180 / Math.PI;
+            state.targetAimAngle = normalizeAngle(-screenAngle);
+            state.aimAngle = state.targetAimAngle;
+            state.aimCssAngle = screenAngle;
+            state.statsDirty = true;
+            requestAimOverlayPaint();
+        }
+
+        openBtn.addEventListener('click', () => {
+            modal.classList.remove('hidden');
+            updateArcadeRect();
+            drawStaticArcade();
+            syncArcadeLanguage();
+            drawArcade();
+            updateStats();
+            if (!state.rafId) loop();
+        });
+
+        function closeArcade() {
+            modal.classList.add('hidden');
+            clearInterval(state.timerId);
+            state.running = false;
+            if (state.rafId) {
+                cancelAnimationFrame(state.rafId);
+                state.rafId = null;
+            }
+            syncArcadeLanguage();
+        }
+
+        closeBtn.addEventListener('click', closeArcade);
+
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                closeArcade();
+            }
+        });
+
+        startBtn.addEventListener('click', startGame);
+        shootBtn.addEventListener('click', shoot);
+        if (window.PointerEvent) {
+            canvas.addEventListener('pointerenter', updateArcadeRect);
+            canvas.addEventListener('pointerdown', (event) => {
+                updateArcadeRect();
+                canvas.classList.add('is-aiming');
+                canvas.setPointerCapture?.(event.pointerId);
+                setAimFromEvent(event);
+            });
+            canvas.addEventListener('pointerup', () => canvas.classList.remove('is-aiming'));
+            canvas.addEventListener('pointercancel', () => canvas.classList.remove('is-aiming'));
+            if ('onpointerrawupdate' in window) {
+                canvas.addEventListener('pointerrawupdate', setAimFromEvent);
+            } else {
+                canvas.addEventListener('pointermove', setAimFromEvent);
+            }
+        } else {
+            canvas.addEventListener('mousemove', setAimFromEvent);
+            canvas.addEventListener('touchmove', (event) => {
+                event.preventDefault();
+                setAimFromEvent(event);
+            }, { passive: false });
+        }
+        canvas.addEventListener('click', shoot);
+        langSelect?.addEventListener('change', syncArcadeLanguage);
+        window.addEventListener('resize', () => {
+            arcadeRect = null;
+        });
+
+        syncArcadeLanguage();
+        drawStaticArcade();
+        drawArcade();
+        updateAimOverlay();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initGeometryArcade);
+    } else {
+        initGeometryArcade();
     }
 })();

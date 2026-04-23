@@ -63,10 +63,49 @@
             <li id="guideItem3">完成挑战获得星星奖励</li>
         </ul>
     </div>
-</div>
+		</div>
 
-<div class="level-path-strip" id="levelPathStrip">
-    <span class="path-node active" id="pathNode0">关卡 1</span>
+		<div class="geometry-arcade-card" id="geometryArcadeCard">
+		    <div class="arcade-copy">
+		        <span class="arcade-kicker" id="arcadeKicker">🎮 几何小游戏</span>
+		        <h3 id="arcadeTitle">角度发射台</h3>
+		        <p id="arcadeDesc">移动准星估计角度，发射射线击中圆周目标。</p>
+		    </div>
+		    <button id="openArcadeBtn">开始小游戏</button>
+		</div>
+
+		<div class="geometry-arcade-card mirror-card" id="mirrorArcadeCard">
+		    <div class="arcade-copy">
+		        <span class="arcade-kicker" id="mirrorKicker">🪞 几何操作挑战</span>
+		        <h3 id="mirrorTitle">镜面对称工坊</h3>
+		        <p id="mirrorDesc">旋转镜面线，让蓝色点的镜像准确落到星星目标上。</p>
+		    </div>
+		    <button id="openMirrorBtn">开始反射挑战</button>
+		</div>
+
+		<div class="geometry-arcade-card polygon-card" id="polygonArcadeCard">
+		    <div class="arcade-copy">
+		        <span class="arcade-kicker" id="polygonKicker">🔷 几何操作挑战</span>
+		        <h3 id="polygonTitle">面积橡皮筋</h3>
+		        <p id="polygonDesc">拖动四个顶点，调整多边形的面积和周长，完成目标校准。</p>
+		    </div>
+		    <button id="openPolygonBtn">开始塑形挑战</button>
+		</div>
+
+		<div class="arcade-achievements-panel" id="arcadeAchievementsPanel">
+		    <div class="arcade-achievements-head">
+		        <div>
+		            <span class="arcade-kicker" id="arcadeAchievementsKicker">🏅 小游戏成就</span>
+		            <h3 id="arcadeAchievementsTitle">几何游乐场徽章</h3>
+		        </div>
+		        <div class="arcade-achievements-progress" id="arcadeAchievementsProgress">0 / 10</div>
+		    </div>
+		    <div class="arcade-achievements-grid" id="arcadeAchievementsList"></div>
+		    <div class="arcade-achievements-hint" id="arcadeAchievementsHint">完成三个小游戏，收集专属徽章。</div>
+		</div>
+
+	<div class="level-path-strip" id="levelPathStrip">
+	    <span class="path-node active" id="pathNode0">关卡 1</span>
     <span class="path-line"></span>
     <span class="path-node" id="pathNode1">关卡 2</span>
     <span class="path-line"></span>
@@ -120,6 +159,44 @@
             <p id="missionDesc">拖动点完成挑战</p>
         </div>
 
+        <div class="interaction-panel" id="interactionPanel" data-mood="idle">
+            <div class="coach-card">
+                <div class="coach-avatar">
+                    <span id="coachEmoji">🧭</span>
+                </div>
+                <div class="coach-copy">
+                    <div class="coach-name" id="coachName">几何小导游</div>
+                    <div class="coach-status" id="coachStatus">拖动一个点，看看规律会不会一直成立。</div>
+                </div>
+            </div>
+
+            <div class="play-metrics">
+                <div class="metric-chip">
+                    <span class="metric-label" id="focusLabel">目标热度</span>
+                    <strong class="metric-value" id="focusValue">0%</strong>
+                </div>
+                <div class="metric-chip">
+                    <span class="metric-label" id="streakLabel">连贯探索</span>
+                    <strong class="metric-value" id="streakValue">0 连</strong>
+                </div>
+                <div class="metric-chip">
+                    <span class="metric-label" id="discoveriesLabel">发现数</span>
+                    <strong class="metric-value" id="discoveriesValue">0</strong>
+                </div>
+            </div>
+
+            <div class="goal-radar">
+                <div class="goal-radar-head">
+                    <span id="goalLabel">当前目标</span>
+                    <strong id="goalTitle">开始探索</strong>
+                </div>
+                <div class="goal-progress">
+                    <div class="goal-progress-fill" id="goalProgressFill"></div>
+                </div>
+                <div class="goal-hint" id="goalHint">先拖动任意可移动点，观察右侧数据变化。</div>
+            </div>
+        </div>
+
         <div class="canvas-container">
             <canvas id="gameCanvas" width="800" height="600"></canvas>
             <div id="popFeedback" class="pop-feedback hidden">+10</div>
@@ -144,6 +221,123 @@
             <p id="resultDesc">✨ 恭喜你完成挑战 ✨</p>
             <button id="nextLevelBtn">🚀 下一关</button>
             <button id="backToSelectBtn">🗂️ 返回关卡选择</button>
+        </div>
+    </div>
+
+    <div id="arcadeModal" class="modal hidden">
+        <div class="modal-content arcade-modal-content">
+            <button class="arcade-close" id="arcadeCloseBtn" aria-label="关闭小游戏">&times;</button>
+            <div class="arcade-modal-head">
+                <span class="arcade-kicker" id="arcadeModalKicker">🎯 操作小游戏</span>
+                <h2 id="arcadeModalTitle">角度发射台</h2>
+                <p id="arcadeModalDesc">移动鼠标或手指瞄准，点击画布或按钮发射。越接近目标角度，连击越高。</p>
+            </div>
+            <div class="arcade-layout">
+                <div class="arcade-stage">
+                    <canvas id="arcadeCanvas" width="640" height="420"></canvas>
+                    <div class="arcade-live-aim" id="arcadeLiveAim">
+                        <div class="arcade-aim-ray" id="arcadeAimRay"></div>
+                        <div class="arcade-aim-core"></div>
+                    </div>
+                    <div class="arcade-toast hidden" id="arcadeToast">Perfect!</div>
+                </div>
+                <div class="arcade-side">
+                    <div class="arcade-stat">
+                        <span id="arcadeScoreLabel">分数</span>
+                        <strong id="arcadeScore">0</strong>
+                    </div>
+                    <div class="arcade-stat">
+                        <span id="arcadeComboLabel">连击</span>
+                        <strong id="arcadeCombo">0</strong>
+                    </div>
+                    <div class="arcade-stat">
+                        <span id="arcadeTimeLabel">时间</span>
+                        <strong id="arcadeTime">45s</strong>
+                    </div>
+                    <div class="arcade-readout" id="arcadeReadout">当前角度：0°｜目标：0°</div>
+                    <button id="arcadeStartBtn">开始</button>
+                    <button id="arcadeShootBtn">发射射线</button>
+                    <p class="arcade-tip" id="arcadeTip">提示：观察圆心到目标点的方向，估计对应角度。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="mirrorModal" class="modal hidden">
+        <div class="modal-content arcade-modal-content mirror-modal-content">
+            <button class="arcade-close" id="mirrorCloseBtn" aria-label="关闭镜面对称工坊">&times;</button>
+            <div class="arcade-modal-head">
+                <span class="arcade-kicker" id="mirrorModalKicker">🪞 轴对称小游戏</span>
+                <h2 id="mirrorModalTitle">镜面对称工坊</h2>
+                <p id="mirrorModalDesc">拖动镜面线旋转角度。蓝点会按这条线反射，目标是让镜像点落到星星上。</p>
+            </div>
+            <div class="arcade-layout mirror-layout">
+                <div class="arcade-stage mirror-stage">
+                    <canvas id="mirrorCanvas" width="640" height="420"></canvas>
+                    <div class="arcade-toast hidden" id="mirrorToast">Perfect!</div>
+                </div>
+                <div class="arcade-side">
+                    <div class="arcade-stat">
+                        <span id="mirrorScoreLabel">分数</span>
+                        <strong id="mirrorScore">0</strong>
+                    </div>
+                    <div class="arcade-stat">
+                        <span id="mirrorRoundLabel">回合</span>
+                        <strong id="mirrorRound">1 / 8</strong>
+                    </div>
+                    <div class="arcade-stat">
+                        <span id="mirrorLocksLabel">锁定次数</span>
+                        <strong id="mirrorLocks">3</strong>
+                    </div>
+                    <div class="arcade-stat">
+                        <span id="mirrorErrorLabel">误差</span>
+                        <strong id="mirrorError">0°</strong>
+                    </div>
+                    <div class="arcade-readout" id="mirrorReadout">镜面角：0°｜目标角：0°</div>
+                    <button id="mirrorStartBtn">开始</button>
+                    <button id="mirrorCheckBtn">锁定镜面</button>
+                    <p class="arcade-tip" id="mirrorTip">提示：镜面线会平分“原点方向”和“目标方向”的夹角。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="polygonModal" class="modal hidden">
+        <div class="modal-content arcade-modal-content polygon-modal-content">
+            <button class="arcade-close" id="polygonCloseBtn" aria-label="关闭面积橡皮筋">&times;</button>
+            <div class="arcade-modal-head">
+                <span class="arcade-kicker" id="polygonModalKicker">🔷 多边形操作小游戏</span>
+                <h2 id="polygonModalTitle">面积橡皮筋</h2>
+                <p id="polygonModalDesc">拖动四个顶点，把橡皮筋围出的图形调到目标面积和目标周长。越接近，得分越高。</p>
+            </div>
+            <div class="arcade-layout polygon-layout">
+                <div class="arcade-stage polygon-stage">
+                    <canvas id="polygonCanvas" width="640" height="420"></canvas>
+                    <div class="arcade-toast hidden" id="polygonToast">Perfect!</div>
+                </div>
+                <div class="arcade-side">
+                    <div class="arcade-stat">
+                        <span id="polygonScoreLabel">分数</span>
+                        <strong id="polygonScore">0</strong>
+                    </div>
+                    <div class="arcade-stat">
+                        <span id="polygonRoundLabel">回合</span>
+                        <strong id="polygonRound">1 / 7</strong>
+                    </div>
+                    <div class="arcade-stat">
+                        <span id="polygonAreaLabel">面积差</span>
+                        <strong id="polygonArea">0</strong>
+                    </div>
+                    <div class="arcade-stat">
+                        <span id="polygonPerimeterLabel">周长差</span>
+                        <strong id="polygonPerimeter">0</strong>
+                    </div>
+                    <div class="arcade-readout" id="polygonReadout">面积：0｜周长：0</div>
+                    <button id="polygonStartBtn">开始</button>
+                    <button id="polygonCheckBtn">锁定形状</button>
+                    <p class="arcade-tip" id="polygonTip">提示：拉开顶点通常会增加面积，折成长条会增加周长但面积不一定变大。</p>
+                </div>
+            </div>
         </div>
     </div>
 
