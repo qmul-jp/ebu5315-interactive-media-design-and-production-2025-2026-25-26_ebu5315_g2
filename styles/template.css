@@ -11,22 +11,48 @@
   --theme-green: #39c985;
   --theme-cyan: #7ed7ff;
   
-  /* Background Colors */
+  /* Background Colors - Light Mode */
   --bg-gradient-start: #edf3ff;
   --bg-gradient-mid: #dfe9ff;
   --bg-gradient-end: #f7f1ff;
-  --bg-white: #ffffff;
+  --bg-card: #ffffff;
+  --bg-surface: #fafbfc;
+  --bg-hover: #f0f4ff;
   
-  /* Text Colors */
+  /* Text Colors - Light Mode */
   --text-primary: #23325f;
   --text-secondary: #55658f;
   --text-muted: #7d88a8;
+  --text-inverse: #ffffff;
   
-  /* Border & Shadow */
+  /* Border & Shadow - Light Mode */
+  --border-color: rgba(132, 152, 255, 0.16);
   --border-light: rgba(132, 152, 255, 0.16);
   --shadow-sm: 0 8px 20px rgba(88, 110, 196, 0.1);
   --shadow-md: 0 14px 32px rgba(88, 110, 196, 0.14);
   --shadow-lg: 0 24px 48px rgba(88, 110, 196, 0.18);
+  
+  /* Dark Mode Colors */
+  --dark-bg-body: #0a0a0f;
+  --dark-bg-card: #14141f;
+  --dark-bg-surface: #1a1a24;
+  --dark-bg-hover: #252532;
+  
+  --dark-text-primary: #ffffff;
+  --dark-text-secondary: #a0a8c0;
+  --dark-text-muted: #6b728a;
+  --dark-text-inverse: #0a0a0f;
+  
+  --dark-border-color: rgba(255, 255, 255, 0.1);
+  --dark-border-light: rgba(255, 255, 255, 0.08);
+  --dark-shadow-sm: 0 8px 20px rgba(0, 0, 0, 0.3);
+  --dark-shadow-md: 0 14px 32px rgba(0, 0, 0, 0.4);
+  --dark-shadow-lg: 0 24px 48px rgba(0, 0, 0, 0.5);
+  
+  --dark-accent-gold: #ffd700;
+  --dark-accent-cyan: #00ffff;
+  --dark-accent-green: #00ff88;
+  --dark-accent-red: #ff4444;
   
   /* Border Radius */
   --radius-sm: 16px;
@@ -517,13 +543,13 @@ textarea.form-control {
    ========================================= */
 
 body.high-contrast {
-  background: #000000 !important;
-  color: #ffffff !important;
+  background: var(--dark-bg-body) !important;
+  color: var(--dark-text-primary) !important;
 }
 
 body.high-contrast * {
   background-color: transparent !important;
-  border-color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
 }
 
 body.high-contrast .header,
@@ -534,40 +560,40 @@ body.high-contrast .features-grid,
 body.high-contrast .rules-section,
 body.high-contrast .ai-section,
 body.high-contrast .contact-section {
-  background: #0d0d0d !important;
-  border-color: #ffffff !important;
-  color: #ffffff !important;
-  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1) !important;
+  background: var(--dark-bg-card) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  color: var(--dark-text-primary) !important;
+  box-shadow: var(--dark-shadow-md) !important;
 }
 
 body.high-contrast .hero-visual,
 body.high-contrast .geogebra-wrapper,
 body.high-contrast .ggb-element {
-  background: #000000 !important;
+  background: var(--dark-bg-body) !important;
 }
 
 body.high-contrast .brand-title {
-  color: #ffd700 !important;
+  color: var(--dark-accent-gold) !important;
   text-shadow: 0 0 10px rgba(255, 215, 0, 0.5) !important;
 }
 
 body.high-contrast .nav-links a {
-  background: #1a1a1a !important;
-  color: #ffffff !important;
-  border: 2px solid #ffffff !important;
+  background: var(--dark-bg-surface) !important;
+  color: var(--dark-text-primary) !important;
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
 }
 
 body.high-contrast .nav-links a:hover,
 body.high-contrast .nav-links a.active {
-  background: #ffd700 !important;
-  color: #000000 !important;
-  border-color: #ffd700 !important;
+  background: var(--dark-accent-gold) !important;
+  color: var(--dark-text-inverse) !important;
+  border-color: var(--dark-accent-gold) !important;
 }
 
 body.high-contrast .btn-primary {
-  background: #ffd700 !important;
-  color: #000000 !important;
-  border-color: #ffd700 !important;
+  background: var(--dark-accent-gold) !important;
+  color: var(--dark-text-inverse) !important;
+  border-color: var(--dark-accent-gold) !important;
   box-shadow: 0 0 20px rgba(255, 215, 0, 0.5) !important;
 }
 
@@ -577,42 +603,42 @@ body.high-contrast .btn-primary:hover {
 }
 
 body.high-contrast .btn-secondary {
-  background: #1a1a1a !important;
-  color: #ffffff !important;
-  border-color: #ffffff !important;
+  background: var(--dark-bg-surface) !important;
+  color: var(--dark-text-primary) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
 }
 
 body.high-contrast .btn-secondary:hover {
-  background: #ffffff !important;
-  color: #000000 !important;
-  border-color: #ffffff !important;
+  background: var(--dark-text-primary) !important;
+  color: var(--dark-text-inverse) !important;
+  border-color: var(--dark-text-primary) !important;
 }
 
 body.high-contrast .btn-outline {
   background: transparent !important;
-  color: #ffffff !important;
-  border-color: #ffffff !important;
+  color: var(--dark-text-primary) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
 }
 
 body.high-contrast .btn-outline:hover {
-  background: #ffffff !important;
-  color: #000000 !important;
-  border-color: #ffffff !important;
+  background: var(--dark-text-primary) !important;
+  color: var(--dark-text-inverse) !important;
+  border-color: var(--dark-text-primary) !important;
 }
 
 body.high-contrast .form-control {
-  background: #1a1a1a !important;
-  color: #ffffff !important;
-  border-color: #ffffff !important;
+  background: var(--dark-bg-surface) !important;
+  color: var(--dark-text-primary) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
 }
 
 body.high-contrast .form-control:focus {
-  border-color: #ffd700 !important;
+  border-color: var(--dark-accent-gold) !important;
   box-shadow: 0 0 15px rgba(255, 215, 0, 0.5) !important;
 }
 
 body.high-contrast .form-control::placeholder {
-  color: #aaaaaa !important;
+  color: var(--dark-text-muted) !important;
 }
 
 body.high-contrast h1,
@@ -621,128 +647,128 @@ body.high-contrast h3,
 body.high-contrast h4,
 body.high-contrast h5,
 body.high-contrast h6 {
-  color: #ffd700 !important;
+  color: var(--dark-accent-gold) !important;
   text-shadow: 0 0 10px rgba(255, 215, 0, 0.3) !important;
 }
 
 body.high-contrast p,
 body.high-contrast li,
 body.high-contrast span {
-  color: #ffffff !important;
+  color: var(--dark-text-primary) !important;
 }
 
 body.high-contrast a {
-  color: #00ffff !important;
+  color: var(--dark-accent-cyan) !important;
 }
 
 body.high-contrast a:hover {
-  color: #ffd700 !important;
+  color: var(--dark-accent-gold) !important;
 }
 
 body.high-contrast .badge-primary {
-  background: #ffd700 !important;
-  color: #000000 !important;
+  background: var(--dark-accent-gold) !important;
+  color: var(--dark-text-inverse) !important;
 }
 
 body.high-contrast .badge-success {
-  background: #00ff00 !important;
-  color: #000000 !important;
+  background: var(--dark-accent-green) !important;
+  color: var(--dark-text-inverse) !important;
 }
 
 body.high-contrast .badge-warning {
   background: #ff8c00 !important;
-  color: #000000 !important;
+  color: var(--dark-text-inverse) !important;
 }
 
 body.high-contrast .badge-danger {
-  background: #ff0000 !important;
-  color: #ffffff !important;
+  background: var(--dark-accent-red) !important;
+  color: var(--dark-text-primary) !important;
 }
 
 body.high-contrast .progress-fill {
-  background: #ffd700 !important;
+  background: var(--dark-accent-gold) !important;
   box-shadow: 0 0 10px rgba(255, 215, 0, 0.5) !important;
 }
 
 body.high-contrast .rule-content {
-  background: #1a1a1a !important;
-  border-color: #ffd700 !important;
+  background: var(--dark-bg-surface) !important;
+  border-color: var(--dark-accent-gold) !important;
 }
 
 body.high-contrast .rule-title {
-  color: #ffd700 !important;
+  color: var(--dark-accent-gold) !important;
 }
 
 body.high-contrast .rule-text {
-  color: #ffffff !important;
+  color: var(--dark-text-primary) !important;
 }
 
 body.high-contrast .slider-btn {
-  background: #1a1a1a !important;
-  color: #ffffff !important;
-  border: 2px solid #ffffff !important;
+  background: var(--dark-bg-surface) !important;
+  color: var(--dark-text-primary) !important;
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
 }
 
 body.high-contrast .slider-btn:hover {
-  background: #ffffff !important;
-  color: #000000 !important;
+  background: var(--dark-text-primary) !important;
+  color: var(--dark-text-inverse) !important;
 }
 
 body.high-contrast .visual-badge {
-  background: #1a1a1a !important;
-  color: #ffd700 !important;
-  border: 2px solid #ffd700 !important;
+  background: var(--dark-bg-surface) !important;
+  color: var(--dark-accent-gold) !important;
+  border: 2px solid var(--dark-accent-gold) !important;
 }
 
 body.high-contrast .status-success {
-  background: rgba(0, 255, 0, 0.15) !important;
-  color: #00ff00 !important;
-  border-color: #00ff00 !important;
+  background: rgba(0, 255, 136, 0.15) !important;
+  color: var(--dark-accent-green) !important;
+  border-color: var(--dark-accent-green) !important;
 }
 
 body.high-contrast .status-error {
-  background: rgba(255, 0, 0, 0.15) !important;
-  color: #ff0000 !important;
-  border-color: #ff0000 !important;
+  background: rgba(255, 68, 68, 0.15) !important;
+  color: var(--dark-accent-red) !important;
+  border-color: var(--dark-accent-red) !important;
 }
 
 body.high-contrast .status-info {
-  background: rgba(0, 212, 255, 0.15) !important;
-  color: #00ffff !important;
-  border-color: #00ffff !important;
+  background: rgba(0, 255, 255, 0.15) !important;
+  color: var(--dark-accent-cyan) !important;
+  border-color: var(--dark-accent-cyan) !important;
 }
 
 body.high-contrast .feature-card {
-  background: #0d0d0d !important;
-  border-color: #ffffff !important;
+  background: var(--dark-bg-card) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
 }
 
 body.high-contrast .feature-card:hover {
-  background: #1a1a1a !important;
-  border-color: #ffd700 !important;
+  background: var(--dark-bg-surface) !important;
+  border-color: var(--dark-accent-gold) !important;
 }
 
 body.high-contrast .feature-icon {
-  color: #ffd700 !important;
+  color: var(--dark-accent-gold) !important;
 }
 
 body.high-contrast input[type="text"],
 body.high-contrast input[type="email"],
 body.high-contrast textarea {
-  background: #1a1a1a !important;
-  color: #ffffff !important;
-  border-color: #ffffff !important;
+  background: var(--dark-bg-surface) !important;
+  color: var(--dark-text-primary) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
 }
 
 body.high-contrast select {
-  background: #1a1a1a !important;
-  color: #ffffff !important;
-  border-color: #ffffff !important;
+  background: var(--dark-bg-surface) !important;
+  color: var(--dark-text-primary) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
 }
 
 body.high-contrast option {
-  background: #1a1a1a !important;
-  color: #ffffff !important;
+  background: var(--dark-bg-surface) !important;
+  color: var(--dark-text-primary) !important;
 }
 
 /* =========================================
